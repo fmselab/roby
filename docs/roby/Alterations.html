@@ -1,0 +1,2751 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.9.1" />
+<title>roby.Alterations API documentation</title>
+<meta name="description" content="The **Alteration** module defines the general framework that can be used to
+define alterations and provides: …" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>roby.Alterations</code></h1>
+</header>
+<section id="section-intro">
+<p>The <strong>Alteration</strong> module defines the general framework that can be used to
+define alterations and provides:</p>
+<ul>
+<li>The basic class <strong>Alteration</strong> that can be extended to create customized
+domain-specific alterations.</li>
+<li>A set of default alterations.</li>
+</ul>
+<p>If you want to create your own domain-specific alteration, you have just
+to extend the class <em>Alteration</em> and implement the methods <code>name(self)</code> and
+<code>applyAlterationImage(self, img, alteration_level)</code> to comply with your own
+alteration.</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#34;&#34;&#34;
+The **Alteration** module defines the general framework that can be used to
+define alterations and provides:
+
+- The basic class **Alteration** that can be extended to create customized
+    domain-specific alterations.
+- A set of default alterations.
+
+If you want to create your own domain-specific alteration, you have just
+to extend the class _Alteration_ and implement the methods `name(self)` and
+`applyAlterationImage(self, img, alteration_level)` to comply with your own
+alteration.
+&#34;&#34;&#34;
+
+import cv2   # type: ignore
+from PIL import Image, ImageEnhance, ImageFilter   # type: ignore
+import numpy as np   # type: ignore
+# For abstract classes
+from abc import ABC, abstractmethod
+from scipy.ndimage.interpolation import zoom   # type: ignore
+import sys
+import warnings
+
+if not sys.warnoptions:
+    warnings.simplefilter(&#34;ignore&#34;)
+
+
+class Alteration(ABC):
+    &#34;&#34;&#34;Abstract Class defining the basic structure for a customized
+    alteration.&#34;&#34;&#34;
+
+    def __init__(self, value_from: float, value_to: float):
+        &#34;&#34;&#34;
+        Constructs all the necessary attributes for the Alteration object.
+
+        Parameters
+        ----------
+            value_from : float
+                the minimum alteration value that can be applied
+            value_to : float
+                the maximum alteration value that can be applied
+        &#34;&#34;&#34;
+        self.value_from = value_from
+        self.value_to = value_to
+
+    @abstractmethod
+    def name(self):
+        &#34;&#34;&#34;
+        Abstract method to get the alteration name
+
+        Returns
+        -------
+            alterationName : str
+                the name of the alteration type
+        &#34;&#34;&#34;
+
+    def get_range(self, n_values: int):
+        &#34;&#34;&#34;
+        Method giving the range of the alteration, starting from &#39;value_from&#39;
+        to &#39;value_to&#39; with step &#39;step&#39;
+
+        Parameters
+        ----------
+            n_values : int
+                the values for contained in the range between &#39;value_from&#39; and
+                &#39;value_to&#39;, included
+
+        Returns
+        -------
+            range : range
+                the range of the alteration, starting from &#39;value_from&#39; to
+                &#39;value_to&#39;
+        &#34;&#34;&#34;
+        step = (self.value_to - self.value_from) / n_values
+        values = np.arange(self.value_from, self.value_to, step)
+        return np.append(values, self.value_to)
+
+    @abstractmethod
+    def apply_alteration_image(self, img: np.ndarray,
+                               alteration_level: float) -&gt; np.ndarray:
+        &#34;&#34;&#34;
+        Abstract method that applies a given alteration with a given value to
+        the image
+
+        Parameters
+        ----------
+            img : np.ndarray
+                the image on which the alteration should be applied
+            alteration_level : float
+                the level of the alteration that should be applied. It must be
+                contained in the range given by the getRange method
+
+        Returns
+        -------
+            img : np.ndarray
+                the altered image on which the alteration has been applied
+        &#34;&#34;&#34;
+
+    def apply_alteration(self,
+                         file_name: str,
+                         alteration_level: float) -&gt; np.ndarray:
+        &#34;&#34;&#34;
+        Method that applies a given alteration with a given value to the image,
+        whose fileName is given as a parameter
+
+        Parameters
+        ----------
+            file_name : str
+                the path of the image on which the alteration should be applied
+            alteration_level : float
+                the level of the alteration that should be applied. It must be
+                contained in the range given by the get_range method
+
+        Returns
+        -------
+            image : np.ndarray
+                the altered image on which the alteration has been applied
+        &#34;&#34;&#34;
+        img = cv2.imread(file_name)
+        assert(isinstance(img, np.ndarray))
+        return self.apply_alteration_image(img, alteration_level)
+
+
+class VerticalTranslation(Alteration):
+    &#34;&#34;&#34;
+    Class defining the Vertical Translation alteration
+
+    In our experiments we have used (-1, 1) as usual range
+    &#34;&#34;&#34;
+
+    def name(self):
+        &#34;&#34;&#34;
+        Method to get the alteration name
+
+        Returns
+        -------
+            alterationName : str
+                the name of the alteration type
+        &#34;&#34;&#34;
+        return &#34;VerticalTranslation&#34;
+
+    def apply_alteration_image(self, img, alteration_level):
+        &#34;&#34;&#34;
+        Method that applies the vertical translation with a given value to the
+        image
+        The image is transformed in a (200x200) image to use a standard format
+        when the alteration is applied
+
+        Parameters
+        ----------
+            img : np.ndarray
+                the image on which the vertical translation should be applied
+            alteration_level : float
+                the level of the vertical translation that should be applied.
+                It must be contained in the range given by the get_range method
+
+        Returns
+        -------
+            img : np.ndarray
+                the altered image on which the vertical translation has been
+                applied
+        &#34;&#34;&#34;
+        assert(isinstance(img, np.ndarray))
+        # Zoom the image to be cropped, and then crop it
+        if not(-0.000001 &lt;= float(alteration_level) &lt;= 0.000001):
+            old_rows, old_cols = img.shape[:-1]
+            img = cv2.resize(img, (200, 200))
+            img = img[:, 20:-20]
+            img = img[20 + int(alteration_level * 20):179 +
+                      int(alteration_level * 20), :]
+            img = cv2.resize(img, (old_rows, old_cols))
+
+        assert(isinstance(img, np.ndarray))
+        return img
+
+
+class HorizontalTranslation(Alteration):
+    &#34;&#34;&#34;
+    Class defining the Horizontal Translation alteration
+
+    In our experiments we have used (-1, 1) as usual range
+    &#34;&#34;&#34;
+
+    def name(self):
+        &#34;&#34;&#34;
+        Method to get the alteration name
+
+        Returns
+        -------
+            alterationName : str
+                the name of the alteration type
+        &#34;&#34;&#34;
+        return &#34;HorizontalTranslation&#34;
+
+    def apply_alteration_image(self, img, alteration_level):
+        &#34;&#34;&#34;
+        Method that applies the horizontal translation with a given value to
+        the image.
+        The image is transformed in a (200x200) image to use a standard
+        format when the alteration is applied
+
+        Parameters
+        ----------
+            img : np.ndarray
+                the image on which the horizontal translation should be applied
+            alteration_level : float
+                the level of the horizontal translation that should be applied.
+                It must be contained in the range given by the get_range method
+
+        Returns
+        -------
+            img : np.ndarray
+                the altered image on which the horizontal translation has been
+                applied
+        &#34;&#34;&#34;
+        assert(isinstance(img, np.ndarray))
+        if not(-0.000001 &lt;= float(alteration_level) &lt;= 0.000001):
+            old_rows, old_cols = img.shape[:-1]
+            # Zoom the image to be cropped, and then crop it
+            img = cv2.resize(img, (200, 200))
+            img = img[20:-20, ]
+            img = img[:, 20 + int(alteration_level * 20):179 +
+                      int(alteration_level * 20)]
+            img = cv2.resize(img, (old_rows, old_cols))
+
+        assert(isinstance(img, np.ndarray))
+        return img
+
+
+class Compression(Alteration):
+    &#34;&#34;&#34;
+    Class defining the Compression alteration
+
+    In our experiments we have used (0, 1) as usual range
+    &#34;&#34;&#34;
+
+    def name(self):
+        &#34;&#34;&#34;
+        Method to get the alteration name
+
+        Returns
+        -------
+            alterationName : str
+                the name of the alteration type
+        &#34;&#34;&#34;
+        return &#34;Compression&#34;
+
+    def apply_alteration_image(self,
+                               img: np.ndarray,
+                               alteration_level: float) -&gt; np.ndarray:
+        &#34;&#34;&#34;
+        Method that applies the jpeg compression with a given value to the
+        image
+
+        Parameters
+        ----------
+            img : np.ndarray
+                the image on which the jpeg compression should be applied
+            alteration_level : float
+                the level of the jpeg compression that should be applied.
+                It must be contained in the range given by the get_range
+                method
+
+        Returns
+        -------
+            img : np.ndarray
+                the altered image on which the jpeg compression has been
+                applied
+        &#34;&#34;&#34;
+        assert(isinstance(img, np.ndarray))
+        if alteration_level != 0:
+            encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 100 -
+                            (alteration_level * 100)]
+            img = cv2.imencode(&#39;.jpg&#39;, img, encode_param)[1]
+            img = cv2.imdecode(img, 1)
+
+        assert(isinstance(img, np.ndarray))
+        return img
+
+
+class GaussianNoise(Alteration):
+    &#34;&#34;&#34;
+    Class defining the Gaussian Noise alteration. Tha Gaussian Noise is defined
+    as a zero-mean addition with variance 200*alteration_level
+
+    In our experiments we have used (0, 1, 0.025) as usual range
+    &#34;&#34;&#34;
+
+    def __init__(self, value_from, value_to, variance):
+        &#34;&#34;&#34;
+        Constructs all the necessary attributes for the Gaussian Noise object.
+
+        Parameters
+        ----------
+            value_from : float
+                the minimum alteration value that can be applied
+            value_to : float
+                the maximum alteration value that can be applied
+            variance : float
+                the variance to be used in the Gaussian Noise generation
+        &#34;&#34;&#34;
+        super().__init__(value_from, value_to)
+        self.variance = variance
+
+    def name(self):
+        &#34;&#34;&#34;
+        Method to get the alteration name
+
+        Returns
+        -------
+            alterationName : str
+                the name of the alteration type
+        &#34;&#34;&#34;
+        return &#34;GaussianNoise&#34;
+
+    def apply_alteration_image(self, img, alteration_level):
+        &#34;&#34;&#34;
+        Method that applies the Gaussian Noise with a given value to the image
+
+        Parameters
+        ----------
+            img : np.ndarray
+                the image on which the Gaussian Noise should be applied
+            alteration_level : float
+                the level of the Gaussian Noise that should be applied. It must
+                be contained in the range given
+                by the get_range method
+
+        Returns
+        -------
+            img : np.ndarray
+                the altered image on which the Gaussian Noise has been applied
+        &#34;&#34;&#34;
+        assert(isinstance(img, np.ndarray))
+        if not(-0.000001 &lt;= float(alteration_level) &lt;= 0.000001):
+            row, col, ch = img.shape
+            mean = 0
+            var = self.variance * alteration_level
+            sigma = var**0.5
+            gauss = np.random.normal(mean, sigma, (row, col, ch))
+            gauss = gauss.reshape(row, col, ch)
+            img = img + gauss
+
+        assert(isinstance(img, np.ndarray))
+        return img
+
+
+class Blur(Alteration):
+    &#34;&#34;&#34;
+    Class defining the blur alteration.
+    The Blur is defined with radius 2 * alteration_level
+
+    In our experiments we have used (0, 1, 0.025) as usual range
+    &#34;&#34;&#34;
+
+    def __init__(self, value_from, value_to, radius=2, picture_mode=&#39;RGB&#39;):
+        &#34;&#34;&#34;
+        Constructs all the necessary attributes for the Gaussian Noise object.
+
+        Parameters
+        ----------
+            value_from : float
+                the minimum alteration value that can be applied
+            value_to : float
+                the maximum alteration value that can be applied
+            radius : float, optional
+                the radius to be used to apply the blur. Equals to 2 by default
+            picture_mode : str, optional
+                the picture mode used to represent the images in the
+                np.ndarray.
+                It is &#39;RGB&#39; by default. Set this value to &#39;L&#39; if your image is
+                represented using a np.ndarray with values float32
+                and scaled within 0 and 1
+        &#34;&#34;&#34;
+        super().__init__(value_from, value_to)
+        self.radius = radius
+        self.picture_mode = picture_mode
+
+    def name(self):
+        &#34;&#34;&#34;
+        Method to get the alteration name
+
+        Returns
+        -------
+            alterationName : str
+                the name of the alteration type
+        &#34;&#34;&#34;
+        return &#34;Blur&#34;
+
+    def apply_alteration_image(self, img, alteration_level):
+        &#34;&#34;&#34;
+        Method that applies the Blur with a given value to the image
+
+        Parameters
+        ----------
+            img : np.ndarray
+                the image on which the Blur should be applied
+            alteration_level : float
+                the level of the Blur that should be applied. It must be
+                contained in the range given by the
+                get_range method
+
+        Returns
+        -------
+            img : np.ndarray
+                the altered image on which the Blur has been applied
+        &#34;&#34;&#34;
+        assert(isinstance(img, np.ndarray))
+        if alteration_level != 0:
+            if isinstance(img, np.ndarray):
+                if self.picture_mode == &#39;RGB&#39;:
+                    img = Image.fromarray(img, &#39;RGB&#39;)
+                elif self.picture_mode == &#39;L&#39;:
+                    img = Image.fromarray((img[:, :, 0]*255).astype(&#39;uint8&#39;),
+                                          &#39;L&#39;)
+                else:
+                    raise RuntimeError(&#34;pictureMode not supported for blur &#34; +
+                                       &#34;alteration&#34;)
+
+            img = img.filter(ImageFilter.GaussianBlur(radius=self.radius *
+                                                      alteration_level))
+            img = np.array(img)
+            img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
+
+        assert(isinstance(img, np.ndarray))
+        return img
+
+    def apply_alteration(self, file_name, alteration_level):
+        &#34;&#34;&#34;
+        Method that applies a blur alteration with a given value to the image,
+        whose fileName is given as a parameter
+
+        Parameters
+        ----------
+            file_name : str
+                the path of the image on which the blur alteration should be
+                applied
+            alteration_level : float
+                the level of the blur alteration that should be applied.
+                It must be contained in the range given by
+                the get_range method
+
+        Returns
+        -------
+            image : np.ndarray
+                the altered image on which the blur alteration has been applied
+        &#34;&#34;&#34;
+        if alteration_level != 0:
+            img = Image.open(file_name)
+            img = np.asarray(img)
+        else:
+            img = cv2.imread(file_name)
+        assert(isinstance(img, np.ndarray))
+        return self.apply_alteration_image(img, alteration_level)
+
+
+class Brightness(Alteration):
+    &#34;&#34;&#34;
+    Class defining the Brightness Variation alteration.
+    It is defined as a brightness enhancement of 0.5*alteration_level
+
+    In our experiments we have used (-1, 1, 0.05) as usual range
+    &#34;&#34;&#34;
+
+    def __init__(self, value_from, value_to, picture_mode=&#39;RGB&#39;):
+        &#34;&#34;&#34;
+        Constructs all the necessary attributes for the Gaussian Noise object.
+
+        Parameters
+        ----------
+            value_from : float
+                the minimum alteration value that can be applied
+            value_to : float
+                the maximum alteration value that can be applied
+            picture_mode : str, optional
+                the picture mode used to represent the images in the
+                np.ndarray.
+                It is &#39;RGB&#39; by default.
+                Set this value to &#39;L&#39; if your image is represented using a
+                np.ndarray with values float32 and scaled within 0 and 1
+        &#34;&#34;&#34;
+        super().__init__(value_from, value_to)
+        self.picture_mode = picture_mode
+
+    def name(self):
+        &#34;&#34;&#34;
+        Method to get the alteration name
+
+        Returns
+        -------
+            alterationName : str
+                the name of the alteration type
+        &#34;&#34;&#34;
+        return &#34;Brightness&#34;
+
+    def apply_alteration_image(self, img, alteration_level):
+        &#34;&#34;&#34;
+        Method that applies the Brightness Variation with a given value to the
+        image
+
+        Parameters
+        ----------
+            img : np.ndarray
+                the image on which the Brightness Variation should be applied
+            alteration_level : float
+                the level of the Brightness Variation that should be applied.
+                It must be contained in the range
+                given by the get_range method
+
+        Returns
+        -------
+            img : np.ndarray
+                the altered image on which the Brightness Variation has been
+                applied
+        &#34;&#34;&#34;
+        assert(isinstance(img, np.ndarray))
+        if not (-0.00001 &lt;= float(alteration_level) &lt;= 0.00001):
+            if isinstance(img, np.ndarray):
+                if self.picture_mode == &#39;RGB&#39;:
+                    img = Image.fromarray(img, &#39;RGB&#39;)
+                elif self.picture_mode == &#39;L&#39;:
+                    img = Image.fromarray((img[:, :, 0]*255).astype(&#39;uint8&#39;),
+                                          &#39;L&#39;)
+                else:
+                    raise RuntimeError(&#34;picture_mode not supported for &#34; +
+                                       &#34;brightness alteration&#34;)
+            enhancer = ImageEnhance.Brightness(img)
+            img = enhancer.enhance(1 + (alteration_level * 0.5))
+            img = np.array(img)
+            img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
+
+        assert(isinstance(img, np.ndarray))
+        return img
+
+    def apply_alteration(self, file_name, alteration_level):
+        &#34;&#34;&#34;
+        Method that applies a Brightness Variation with a given value to the
+        image, whose fileName is given as a parameter
+
+        Parameters
+        ----------
+            file_name : str
+                the path of the image on which the Brightness Variation should
+                be applied
+            alteration_level : float
+                the level of the Brightness Variation that should be applied.
+                It must be contained in the range given by the get_range method
+
+        Returns
+        -------
+            image : np.ndarray
+                the altered image on which the Brightness Variation has been
+                applied
+        &#34;&#34;&#34;
+        if alteration_level != 0:
+            img = Image.open(file_name)
+            img = np.asarray(img)
+        else:
+            img = cv2.imread(file_name)
+        assert(isinstance(img, np.ndarray))
+        return self.apply_alteration_image(img, alteration_level)
+
+
+class Zoom(Alteration):
+    &#34;&#34;&#34;
+    Class defining the Zoom alteration.
+    The image is zoomed and, after that, cut to obtain an image with the same
+    dimensions than the initial one.
+
+    In our experiments we have used (0, 1, 0.025) as usual range
+    &#34;&#34;&#34;
+
+    def name(self):
+        &#34;&#34;&#34;
+        Method to get the alteration name
+
+        Returns
+        -------
+            alterationName : str
+                the name of the alteration type
+        &#34;&#34;&#34;
+        return &#34;Zoom&#34;
+
+    def apply_alteration_image(self, img, alteration_level):
+        &#34;&#34;&#34;
+        Method that applies the Zoom with a given value to the image
+
+        Parameters
+        ----------
+            img : np.ndarray
+                the image on which the Zoom should be applied
+            alteration_level : float
+                the level of the Zoom that should be applied. It must be
+                contained in the range given by the get_range method
+
+        Returns
+        -------
+            img : np.ndarray
+                the altered image on which the Zoom has been applied
+        &#34;&#34;&#34;
+        assert(isinstance(img, np.ndarray))
+        if -0.000001 &lt;= float(alteration_level) &lt;= 0.000001:
+            return img
+
+        # For multi-channel images we don&#39;t want to apply the zoom factor to
+        # the RGB dimension, so instead we create a tuple of zoom factors,
+        # one per array dimension, with 1&#39;s for any trailing dimensions after
+        # the width and height.
+        h, w = img.shape[:2]
+        zoom_tuple = (float(1 + alteration_level),) * 2 + (1,) * (img.ndim - 2)
+        # Bounding box of the zoomed-in region within the input array
+        zh = int(np.round(h / float(1 + alteration_level)))
+        zw = int(np.round(w / float(1 + alteration_level)))
+        top = (h - zh) // 2
+        left = (w - zw) // 2
+
+        out = zoom(img[top:top+zh, left:left+zw], zoom_tuple)
+
+        # `out` might still be slightly larger than `img` due to rounding, so
+        # trim off any extra pixels at the edges
+        trim_top = ((out.shape[0] - h) // 2)
+        trim_left = ((out.shape[1] - w) // 2)
+        out = out[trim_top:trim_top+h, trim_left:trim_left+w]
+
+        img = out
+
+        assert(isinstance(img, np.ndarray))
+        return img
+
+
+class AlterationSequence:
+    &#34;&#34;&#34;
+    Class defining the a sequence of alterations, each one with its own
+    alteration_level
+    &#34;&#34;&#34;
+
+    def __init__(self, alterations, alteration_levels):
+        &#34;&#34;&#34;
+        Constructs all the necessary attributes for the AlterationSequence
+        object.
+
+        Parameters
+        ----------
+            alterations : list
+                list of alterations to be applied
+            alteration_levels : list
+                list of alteration levels
+        Raises
+        ------
+            ValueError
+                when alterations and alteration_levels have different sizes
+        &#34;&#34;&#34;
+        if len(alterations) != len(alteration_levels):
+            raise ValueError(&#34;alterations and alteration_levels must be of &#34; +
+                             &#34;the same size&#34;)
+        self.alterations = alterations
+        self.alteration_levels = alteration_levels
+
+    def name(self):
+        &#34;&#34;&#34;
+        Method to get the alteration sequence name
+
+        Returns
+        -------
+            alteration_name : str
+                the name of the alteration type
+        &#34;&#34;&#34;
+        alteration_name = &#34;Seq:&#34;
+        for a in self.alterations:
+            alteration_name = alteration_name + &#34; &#34; + a.name() + &#34;,&#34;
+        return alteration_name
+
+    def apply_alteration(self, img):
+        &#34;&#34;&#34;
+        Method that applies a given sequence of alterations with given values
+        to the image
+
+        Parameters
+        ----------
+            img : np.ndarray
+                the image on which the alterations should be applied
+
+        Returns
+        -------
+            img : np.ndarray
+                the altered image on which the alterations have been applied
+        &#34;&#34;&#34;
+        alteration_counter = 0
+        for a in self.alterations:
+            img = a.apply_alteration_image(img, self.alteration_levels[
+                alteration_counter])
+            alteration_counter = alteration_counter + 1
+        return img</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="roby.Alterations.Alteration"><code class="flex name class">
+<span>class <span class="ident">Alteration</span></span>
+<span>(</span><span>value_from: float, value_to: float)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Abstract Class defining the basic structure for a customized
+alteration.</p>
+<p>Constructs all the necessary attributes for the Alteration object.</p>
+<h2 id="parameters">Parameters</h2>
+<pre><code>value_from : float
+    the minimum alteration value that can be applied
+value_to : float
+    the maximum alteration value that can be applied
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Alteration(ABC):
+    &#34;&#34;&#34;Abstract Class defining the basic structure for a customized
+    alteration.&#34;&#34;&#34;
+
+    def __init__(self, value_from: float, value_to: float):
+        &#34;&#34;&#34;
+        Constructs all the necessary attributes for the Alteration object.
+
+        Parameters
+        ----------
+            value_from : float
+                the minimum alteration value that can be applied
+            value_to : float
+                the maximum alteration value that can be applied
+        &#34;&#34;&#34;
+        self.value_from = value_from
+        self.value_to = value_to
+
+    @abstractmethod
+    def name(self):
+        &#34;&#34;&#34;
+        Abstract method to get the alteration name
+
+        Returns
+        -------
+            alterationName : str
+                the name of the alteration type
+        &#34;&#34;&#34;
+
+    def get_range(self, n_values: int):
+        &#34;&#34;&#34;
+        Method giving the range of the alteration, starting from &#39;value_from&#39;
+        to &#39;value_to&#39; with step &#39;step&#39;
+
+        Parameters
+        ----------
+            n_values : int
+                the values for contained in the range between &#39;value_from&#39; and
+                &#39;value_to&#39;, included
+
+        Returns
+        -------
+            range : range
+                the range of the alteration, starting from &#39;value_from&#39; to
+                &#39;value_to&#39;
+        &#34;&#34;&#34;
+        step = (self.value_to - self.value_from) / n_values
+        values = np.arange(self.value_from, self.value_to, step)
+        return np.append(values, self.value_to)
+
+    @abstractmethod
+    def apply_alteration_image(self, img: np.ndarray,
+                               alteration_level: float) -&gt; np.ndarray:
+        &#34;&#34;&#34;
+        Abstract method that applies a given alteration with a given value to
+        the image
+
+        Parameters
+        ----------
+            img : np.ndarray
+                the image on which the alteration should be applied
+            alteration_level : float
+                the level of the alteration that should be applied. It must be
+                contained in the range given by the getRange method
+
+        Returns
+        -------
+            img : np.ndarray
+                the altered image on which the alteration has been applied
+        &#34;&#34;&#34;
+
+    def apply_alteration(self,
+                         file_name: str,
+                         alteration_level: float) -&gt; np.ndarray:
+        &#34;&#34;&#34;
+        Method that applies a given alteration with a given value to the image,
+        whose fileName is given as a parameter
+
+        Parameters
+        ----------
+            file_name : str
+                the path of the image on which the alteration should be applied
+            alteration_level : float
+                the level of the alteration that should be applied. It must be
+                contained in the range given by the get_range method
+
+        Returns
+        -------
+            image : np.ndarray
+                the altered image on which the alteration has been applied
+        &#34;&#34;&#34;
+        img = cv2.imread(file_name)
+        assert(isinstance(img, np.ndarray))
+        return self.apply_alteration_image(img, alteration_level)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>abc.ABC</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="roby.Alterations.Blur" href="#roby.Alterations.Blur">Blur</a></li>
+<li><a title="roby.Alterations.Brightness" href="#roby.Alterations.Brightness">Brightness</a></li>
+<li><a title="roby.Alterations.Compression" href="#roby.Alterations.Compression">Compression</a></li>
+<li><a title="roby.Alterations.GaussianNoise" href="#roby.Alterations.GaussianNoise">GaussianNoise</a></li>
+<li><a title="roby.Alterations.HorizontalTranslation" href="#roby.Alterations.HorizontalTranslation">HorizontalTranslation</a></li>
+<li><a title="roby.Alterations.VerticalTranslation" href="#roby.Alterations.VerticalTranslation">VerticalTranslation</a></li>
+<li><a title="roby.Alterations.Zoom" href="#roby.Alterations.Zoom">Zoom</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="roby.Alterations.Alteration.apply_alteration"><code class="name flex">
+<span>def <span class="ident">apply_alteration</span></span>(<span>self, file_name: str, alteration_level: float) ‑> numpy.ndarray</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Method that applies a given alteration with a given value to the image,
+whose fileName is given as a parameter</p>
+<h2 id="parameters">Parameters</h2>
+<pre><code>file_name : str
+    the path of the image on which the alteration should be applied
+alteration_level : float
+    the level of the alteration that should be applied. It must be
+    contained in the range given by the get_range method
+</code></pre>
+<h2 id="returns">Returns</h2>
+<pre><code>image : np.ndarray
+    the altered image on which the alteration has been applied
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def apply_alteration(self,
+                     file_name: str,
+                     alteration_level: float) -&gt; np.ndarray:
+    &#34;&#34;&#34;
+    Method that applies a given alteration with a given value to the image,
+    whose fileName is given as a parameter
+
+    Parameters
+    ----------
+        file_name : str
+            the path of the image on which the alteration should be applied
+        alteration_level : float
+            the level of the alteration that should be applied. It must be
+            contained in the range given by the get_range method
+
+    Returns
+    -------
+        image : np.ndarray
+            the altered image on which the alteration has been applied
+    &#34;&#34;&#34;
+    img = cv2.imread(file_name)
+    assert(isinstance(img, np.ndarray))
+    return self.apply_alteration_image(img, alteration_level)</code></pre>
+</details>
+</dd>
+<dt id="roby.Alterations.Alteration.apply_alteration_image"><code class="name flex">
+<span>def <span class="ident">apply_alteration_image</span></span>(<span>self, img: numpy.ndarray, alteration_level: float) ‑> numpy.ndarray</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Abstract method that applies a given alteration with a given value to
+the image</p>
+<h2 id="parameters">Parameters</h2>
+<pre><code>img : np.ndarray
+    the image on which the alteration should be applied
+alteration_level : float
+    the level of the alteration that should be applied. It must be
+    contained in the range given by the getRange method
+</code></pre>
+<h2 id="returns">Returns</h2>
+<pre><code>img : np.ndarray
+    the altered image on which the alteration has been applied
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@abstractmethod
+def apply_alteration_image(self, img: np.ndarray,
+                           alteration_level: float) -&gt; np.ndarray:
+    &#34;&#34;&#34;
+    Abstract method that applies a given alteration with a given value to
+    the image
+
+    Parameters
+    ----------
+        img : np.ndarray
+            the image on which the alteration should be applied
+        alteration_level : float
+            the level of the alteration that should be applied. It must be
+            contained in the range given by the getRange method
+
+    Returns
+    -------
+        img : np.ndarray
+            the altered image on which the alteration has been applied
+    &#34;&#34;&#34;</code></pre>
+</details>
+</dd>
+<dt id="roby.Alterations.Alteration.get_range"><code class="name flex">
+<span>def <span class="ident">get_range</span></span>(<span>self, n_values: int)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Method giving the range of the alteration, starting from 'value_from'
+to 'value_to' with step 'step'</p>
+<h2 id="parameters">Parameters</h2>
+<pre><code>n_values : int
+    the values for contained in the range between 'value_from' and
+    'value_to', included
+</code></pre>
+<h2 id="returns">Returns</h2>
+<pre><code>range : range
+    the range of the alteration, starting from 'value_from' to
+    'value_to'
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_range(self, n_values: int):
+    &#34;&#34;&#34;
+    Method giving the range of the alteration, starting from &#39;value_from&#39;
+    to &#39;value_to&#39; with step &#39;step&#39;
+
+    Parameters
+    ----------
+        n_values : int
+            the values for contained in the range between &#39;value_from&#39; and
+            &#39;value_to&#39;, included
+
+    Returns
+    -------
+        range : range
+            the range of the alteration, starting from &#39;value_from&#39; to
+            &#39;value_to&#39;
+    &#34;&#34;&#34;
+    step = (self.value_to - self.value_from) / n_values
+    values = np.arange(self.value_from, self.value_to, step)
+    return np.append(values, self.value_to)</code></pre>
+</details>
+</dd>
+<dt id="roby.Alterations.Alteration.name"><code class="name flex">
+<span>def <span class="ident">name</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Abstract method to get the alteration name</p>
+<h2 id="returns">Returns</h2>
+<pre><code>alterationName : str
+    the name of the alteration type
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@abstractmethod
+def name(self):
+    &#34;&#34;&#34;
+    Abstract method to get the alteration name
+
+    Returns
+    -------
+        alterationName : str
+            the name of the alteration type
+    &#34;&#34;&#34;</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="roby.Alterations.AlterationSequence"><code class="flex name class">
+<span>class <span class="ident">AlterationSequence</span></span>
+<span>(</span><span>alterations, alteration_levels)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Class defining the a sequence of alterations, each one with its own
+alteration_level</p>
+<p>Constructs all the necessary attributes for the AlterationSequence
+object.</p>
+<h2 id="parameters">Parameters</h2>
+<pre><code>alterations : list
+    list of alterations to be applied
+alteration_levels : list
+    list of alteration levels
+</code></pre>
+<h2 id="raises">Raises</h2>
+<pre><code>ValueError
+    when alterations and alteration_levels have different sizes
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class AlterationSequence:
+    &#34;&#34;&#34;
+    Class defining the a sequence of alterations, each one with its own
+    alteration_level
+    &#34;&#34;&#34;
+
+    def __init__(self, alterations, alteration_levels):
+        &#34;&#34;&#34;
+        Constructs all the necessary attributes for the AlterationSequence
+        object.
+
+        Parameters
+        ----------
+            alterations : list
+                list of alterations to be applied
+            alteration_levels : list
+                list of alteration levels
+        Raises
+        ------
+            ValueError
+                when alterations and alteration_levels have different sizes
+        &#34;&#34;&#34;
+        if len(alterations) != len(alteration_levels):
+            raise ValueError(&#34;alterations and alteration_levels must be of &#34; +
+                             &#34;the same size&#34;)
+        self.alterations = alterations
+        self.alteration_levels = alteration_levels
+
+    def name(self):
+        &#34;&#34;&#34;
+        Method to get the alteration sequence name
+
+        Returns
+        -------
+            alteration_name : str
+                the name of the alteration type
+        &#34;&#34;&#34;
+        alteration_name = &#34;Seq:&#34;
+        for a in self.alterations:
+            alteration_name = alteration_name + &#34; &#34; + a.name() + &#34;,&#34;
+        return alteration_name
+
+    def apply_alteration(self, img):
+        &#34;&#34;&#34;
+        Method that applies a given sequence of alterations with given values
+        to the image
+
+        Parameters
+        ----------
+            img : np.ndarray
+                the image on which the alterations should be applied
+
+        Returns
+        -------
+            img : np.ndarray
+                the altered image on which the alterations have been applied
+        &#34;&#34;&#34;
+        alteration_counter = 0
+        for a in self.alterations:
+            img = a.apply_alteration_image(img, self.alteration_levels[
+                alteration_counter])
+            alteration_counter = alteration_counter + 1
+        return img</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="roby.Alterations.AlterationSequence.apply_alteration"><code class="name flex">
+<span>def <span class="ident">apply_alteration</span></span>(<span>self, img)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Method that applies a given sequence of alterations with given values
+to the image</p>
+<h2 id="parameters">Parameters</h2>
+<pre><code>img : np.ndarray
+    the image on which the alterations should be applied
+</code></pre>
+<h2 id="returns">Returns</h2>
+<pre><code>img : np.ndarray
+    the altered image on which the alterations have been applied
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def apply_alteration(self, img):
+    &#34;&#34;&#34;
+    Method that applies a given sequence of alterations with given values
+    to the image
+
+    Parameters
+    ----------
+        img : np.ndarray
+            the image on which the alterations should be applied
+
+    Returns
+    -------
+        img : np.ndarray
+            the altered image on which the alterations have been applied
+    &#34;&#34;&#34;
+    alteration_counter = 0
+    for a in self.alterations:
+        img = a.apply_alteration_image(img, self.alteration_levels[
+            alteration_counter])
+        alteration_counter = alteration_counter + 1
+    return img</code></pre>
+</details>
+</dd>
+<dt id="roby.Alterations.AlterationSequence.name"><code class="name flex">
+<span>def <span class="ident">name</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Method to get the alteration sequence name</p>
+<h2 id="returns">Returns</h2>
+<pre><code>alteration_name : str
+    the name of the alteration type
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def name(self):
+    &#34;&#34;&#34;
+    Method to get the alteration sequence name
+
+    Returns
+    -------
+        alteration_name : str
+            the name of the alteration type
+    &#34;&#34;&#34;
+    alteration_name = &#34;Seq:&#34;
+    for a in self.alterations:
+        alteration_name = alteration_name + &#34; &#34; + a.name() + &#34;,&#34;
+    return alteration_name</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="roby.Alterations.Blur"><code class="flex name class">
+<span>class <span class="ident">Blur</span></span>
+<span>(</span><span>value_from, value_to, radius=2, picture_mode='RGB')</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Class defining the blur alteration.
+The Blur is defined with radius 2 * alteration_level</p>
+<p>In our experiments we have used (0, 1, 0.025) as usual range</p>
+<p>Constructs all the necessary attributes for the Gaussian Noise object.</p>
+<h2 id="parameters">Parameters</h2>
+<pre><code>value_from : float
+    the minimum alteration value that can be applied
+value_to : float
+    the maximum alteration value that can be applied
+radius : float, optional
+    the radius to be used to apply the blur. Equals to 2 by default
+picture_mode : str, optional
+    the picture mode used to represent the images in the
+    np.ndarray.
+    It is 'RGB' by default. Set this value to 'L' if your image is
+    represented using a np.ndarray with values float32
+    and scaled within 0 and 1
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Blur(Alteration):
+    &#34;&#34;&#34;
+    Class defining the blur alteration.
+    The Blur is defined with radius 2 * alteration_level
+
+    In our experiments we have used (0, 1, 0.025) as usual range
+    &#34;&#34;&#34;
+
+    def __init__(self, value_from, value_to, radius=2, picture_mode=&#39;RGB&#39;):
+        &#34;&#34;&#34;
+        Constructs all the necessary attributes for the Gaussian Noise object.
+
+        Parameters
+        ----------
+            value_from : float
+                the minimum alteration value that can be applied
+            value_to : float
+                the maximum alteration value that can be applied
+            radius : float, optional
+                the radius to be used to apply the blur. Equals to 2 by default
+            picture_mode : str, optional
+                the picture mode used to represent the images in the
+                np.ndarray.
+                It is &#39;RGB&#39; by default. Set this value to &#39;L&#39; if your image is
+                represented using a np.ndarray with values float32
+                and scaled within 0 and 1
+        &#34;&#34;&#34;
+        super().__init__(value_from, value_to)
+        self.radius = radius
+        self.picture_mode = picture_mode
+
+    def name(self):
+        &#34;&#34;&#34;
+        Method to get the alteration name
+
+        Returns
+        -------
+            alterationName : str
+                the name of the alteration type
+        &#34;&#34;&#34;
+        return &#34;Blur&#34;
+
+    def apply_alteration_image(self, img, alteration_level):
+        &#34;&#34;&#34;
+        Method that applies the Blur with a given value to the image
+
+        Parameters
+        ----------
+            img : np.ndarray
+                the image on which the Blur should be applied
+            alteration_level : float
+                the level of the Blur that should be applied. It must be
+                contained in the range given by the
+                get_range method
+
+        Returns
+        -------
+            img : np.ndarray
+                the altered image on which the Blur has been applied
+        &#34;&#34;&#34;
+        assert(isinstance(img, np.ndarray))
+        if alteration_level != 0:
+            if isinstance(img, np.ndarray):
+                if self.picture_mode == &#39;RGB&#39;:
+                    img = Image.fromarray(img, &#39;RGB&#39;)
+                elif self.picture_mode == &#39;L&#39;:
+                    img = Image.fromarray((img[:, :, 0]*255).astype(&#39;uint8&#39;),
+                                          &#39;L&#39;)
+                else:
+                    raise RuntimeError(&#34;pictureMode not supported for blur &#34; +
+                                       &#34;alteration&#34;)
+
+            img = img.filter(ImageFilter.GaussianBlur(radius=self.radius *
+                                                      alteration_level))
+            img = np.array(img)
+            img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
+
+        assert(isinstance(img, np.ndarray))
+        return img
+
+    def apply_alteration(self, file_name, alteration_level):
+        &#34;&#34;&#34;
+        Method that applies a blur alteration with a given value to the image,
+        whose fileName is given as a parameter
+
+        Parameters
+        ----------
+            file_name : str
+                the path of the image on which the blur alteration should be
+                applied
+            alteration_level : float
+                the level of the blur alteration that should be applied.
+                It must be contained in the range given by
+                the get_range method
+
+        Returns
+        -------
+            image : np.ndarray
+                the altered image on which the blur alteration has been applied
+        &#34;&#34;&#34;
+        if alteration_level != 0:
+            img = Image.open(file_name)
+            img = np.asarray(img)
+        else:
+            img = cv2.imread(file_name)
+        assert(isinstance(img, np.ndarray))
+        return self.apply_alteration_image(img, alteration_level)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="roby.Alterations.Alteration" href="#roby.Alterations.Alteration">Alteration</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="roby.Alterations.Blur.apply_alteration"><code class="name flex">
+<span>def <span class="ident">apply_alteration</span></span>(<span>self, file_name, alteration_level)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Method that applies a blur alteration with a given value to the image,
+whose fileName is given as a parameter</p>
+<h2 id="parameters">Parameters</h2>
+<pre><code>file_name : str
+    the path of the image on which the blur alteration should be
+    applied
+alteration_level : float
+    the level of the blur alteration that should be applied.
+    It must be contained in the range given by
+    the get_range method
+</code></pre>
+<h2 id="returns">Returns</h2>
+<pre><code>image : np.ndarray
+    the altered image on which the blur alteration has been applied
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def apply_alteration(self, file_name, alteration_level):
+    &#34;&#34;&#34;
+    Method that applies a blur alteration with a given value to the image,
+    whose fileName is given as a parameter
+
+    Parameters
+    ----------
+        file_name : str
+            the path of the image on which the blur alteration should be
+            applied
+        alteration_level : float
+            the level of the blur alteration that should be applied.
+            It must be contained in the range given by
+            the get_range method
+
+    Returns
+    -------
+        image : np.ndarray
+            the altered image on which the blur alteration has been applied
+    &#34;&#34;&#34;
+    if alteration_level != 0:
+        img = Image.open(file_name)
+        img = np.asarray(img)
+    else:
+        img = cv2.imread(file_name)
+    assert(isinstance(img, np.ndarray))
+    return self.apply_alteration_image(img, alteration_level)</code></pre>
+</details>
+</dd>
+<dt id="roby.Alterations.Blur.apply_alteration_image"><code class="name flex">
+<span>def <span class="ident">apply_alteration_image</span></span>(<span>self, img, alteration_level)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Method that applies the Blur with a given value to the image</p>
+<h2 id="parameters">Parameters</h2>
+<pre><code>img : np.ndarray
+    the image on which the Blur should be applied
+alteration_level : float
+    the level of the Blur that should be applied. It must be
+    contained in the range given by the
+    get_range method
+</code></pre>
+<h2 id="returns">Returns</h2>
+<pre><code>img : np.ndarray
+    the altered image on which the Blur has been applied
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def apply_alteration_image(self, img, alteration_level):
+    &#34;&#34;&#34;
+    Method that applies the Blur with a given value to the image
+
+    Parameters
+    ----------
+        img : np.ndarray
+            the image on which the Blur should be applied
+        alteration_level : float
+            the level of the Blur that should be applied. It must be
+            contained in the range given by the
+            get_range method
+
+    Returns
+    -------
+        img : np.ndarray
+            the altered image on which the Blur has been applied
+    &#34;&#34;&#34;
+    assert(isinstance(img, np.ndarray))
+    if alteration_level != 0:
+        if isinstance(img, np.ndarray):
+            if self.picture_mode == &#39;RGB&#39;:
+                img = Image.fromarray(img, &#39;RGB&#39;)
+            elif self.picture_mode == &#39;L&#39;:
+                img = Image.fromarray((img[:, :, 0]*255).astype(&#39;uint8&#39;),
+                                      &#39;L&#39;)
+            else:
+                raise RuntimeError(&#34;pictureMode not supported for blur &#34; +
+                                   &#34;alteration&#34;)
+
+        img = img.filter(ImageFilter.GaussianBlur(radius=self.radius *
+                                                  alteration_level))
+        img = np.array(img)
+        img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
+
+    assert(isinstance(img, np.ndarray))
+    return img</code></pre>
+</details>
+</dd>
+<dt id="roby.Alterations.Blur.name"><code class="name flex">
+<span>def <span class="ident">name</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Method to get the alteration name</p>
+<h2 id="returns">Returns</h2>
+<pre><code>alterationName : str
+    the name of the alteration type
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def name(self):
+    &#34;&#34;&#34;
+    Method to get the alteration name
+
+    Returns
+    -------
+        alterationName : str
+            the name of the alteration type
+    &#34;&#34;&#34;
+    return &#34;Blur&#34;</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="roby.Alterations.Alteration" href="#roby.Alterations.Alteration">Alteration</a></b></code>:
+<ul class="hlist">
+<li><code><a title="roby.Alterations.Alteration.get_range" href="#roby.Alterations.Alteration.get_range">get_range</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="roby.Alterations.Brightness"><code class="flex name class">
+<span>class <span class="ident">Brightness</span></span>
+<span>(</span><span>value_from, value_to, picture_mode='RGB')</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Class defining the Brightness Variation alteration.
+It is defined as a brightness enhancement of 0.5*alteration_level</p>
+<p>In our experiments we have used (-1, 1, 0.05) as usual range</p>
+<p>Constructs all the necessary attributes for the Gaussian Noise object.</p>
+<h2 id="parameters">Parameters</h2>
+<pre><code>value_from : float
+    the minimum alteration value that can be applied
+value_to : float
+    the maximum alteration value that can be applied
+picture_mode : str, optional
+    the picture mode used to represent the images in the
+    np.ndarray.
+    It is 'RGB' by default.
+    Set this value to 'L' if your image is represented using a
+    np.ndarray with values float32 and scaled within 0 and 1
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Brightness(Alteration):
+    &#34;&#34;&#34;
+    Class defining the Brightness Variation alteration.
+    It is defined as a brightness enhancement of 0.5*alteration_level
+
+    In our experiments we have used (-1, 1, 0.05) as usual range
+    &#34;&#34;&#34;
+
+    def __init__(self, value_from, value_to, picture_mode=&#39;RGB&#39;):
+        &#34;&#34;&#34;
+        Constructs all the necessary attributes for the Gaussian Noise object.
+
+        Parameters
+        ----------
+            value_from : float
+                the minimum alteration value that can be applied
+            value_to : float
+                the maximum alteration value that can be applied
+            picture_mode : str, optional
+                the picture mode used to represent the images in the
+                np.ndarray.
+                It is &#39;RGB&#39; by default.
+                Set this value to &#39;L&#39; if your image is represented using a
+                np.ndarray with values float32 and scaled within 0 and 1
+        &#34;&#34;&#34;
+        super().__init__(value_from, value_to)
+        self.picture_mode = picture_mode
+
+    def name(self):
+        &#34;&#34;&#34;
+        Method to get the alteration name
+
+        Returns
+        -------
+            alterationName : str
+                the name of the alteration type
+        &#34;&#34;&#34;
+        return &#34;Brightness&#34;
+
+    def apply_alteration_image(self, img, alteration_level):
+        &#34;&#34;&#34;
+        Method that applies the Brightness Variation with a given value to the
+        image
+
+        Parameters
+        ----------
+            img : np.ndarray
+                the image on which the Brightness Variation should be applied
+            alteration_level : float
+                the level of the Brightness Variation that should be applied.
+                It must be contained in the range
+                given by the get_range method
+
+        Returns
+        -------
+            img : np.ndarray
+                the altered image on which the Brightness Variation has been
+                applied
+        &#34;&#34;&#34;
+        assert(isinstance(img, np.ndarray))
+        if not (-0.00001 &lt;= float(alteration_level) &lt;= 0.00001):
+            if isinstance(img, np.ndarray):
+                if self.picture_mode == &#39;RGB&#39;:
+                    img = Image.fromarray(img, &#39;RGB&#39;)
+                elif self.picture_mode == &#39;L&#39;:
+                    img = Image.fromarray((img[:, :, 0]*255).astype(&#39;uint8&#39;),
+                                          &#39;L&#39;)
+                else:
+                    raise RuntimeError(&#34;picture_mode not supported for &#34; +
+                                       &#34;brightness alteration&#34;)
+            enhancer = ImageEnhance.Brightness(img)
+            img = enhancer.enhance(1 + (alteration_level * 0.5))
+            img = np.array(img)
+            img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
+
+        assert(isinstance(img, np.ndarray))
+        return img
+
+    def apply_alteration(self, file_name, alteration_level):
+        &#34;&#34;&#34;
+        Method that applies a Brightness Variation with a given value to the
+        image, whose fileName is given as a parameter
+
+        Parameters
+        ----------
+            file_name : str
+                the path of the image on which the Brightness Variation should
+                be applied
+            alteration_level : float
+                the level of the Brightness Variation that should be applied.
+                It must be contained in the range given by the get_range method
+
+        Returns
+        -------
+            image : np.ndarray
+                the altered image on which the Brightness Variation has been
+                applied
+        &#34;&#34;&#34;
+        if alteration_level != 0:
+            img = Image.open(file_name)
+            img = np.asarray(img)
+        else:
+            img = cv2.imread(file_name)
+        assert(isinstance(img, np.ndarray))
+        return self.apply_alteration_image(img, alteration_level)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="roby.Alterations.Alteration" href="#roby.Alterations.Alteration">Alteration</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="roby.Alterations.Brightness.apply_alteration"><code class="name flex">
+<span>def <span class="ident">apply_alteration</span></span>(<span>self, file_name, alteration_level)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Method that applies a Brightness Variation with a given value to the
+image, whose fileName is given as a parameter</p>
+<h2 id="parameters">Parameters</h2>
+<pre><code>file_name : str
+    the path of the image on which the Brightness Variation should
+    be applied
+alteration_level : float
+    the level of the Brightness Variation that should be applied.
+    It must be contained in the range given by the get_range method
+</code></pre>
+<h2 id="returns">Returns</h2>
+<pre><code>image : np.ndarray
+    the altered image on which the Brightness Variation has been
+    applied
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def apply_alteration(self, file_name, alteration_level):
+    &#34;&#34;&#34;
+    Method that applies a Brightness Variation with a given value to the
+    image, whose fileName is given as a parameter
+
+    Parameters
+    ----------
+        file_name : str
+            the path of the image on which the Brightness Variation should
+            be applied
+        alteration_level : float
+            the level of the Brightness Variation that should be applied.
+            It must be contained in the range given by the get_range method
+
+    Returns
+    -------
+        image : np.ndarray
+            the altered image on which the Brightness Variation has been
+            applied
+    &#34;&#34;&#34;
+    if alteration_level != 0:
+        img = Image.open(file_name)
+        img = np.asarray(img)
+    else:
+        img = cv2.imread(file_name)
+    assert(isinstance(img, np.ndarray))
+    return self.apply_alteration_image(img, alteration_level)</code></pre>
+</details>
+</dd>
+<dt id="roby.Alterations.Brightness.apply_alteration_image"><code class="name flex">
+<span>def <span class="ident">apply_alteration_image</span></span>(<span>self, img, alteration_level)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Method that applies the Brightness Variation with a given value to the
+image</p>
+<h2 id="parameters">Parameters</h2>
+<pre><code>img : np.ndarray
+    the image on which the Brightness Variation should be applied
+alteration_level : float
+    the level of the Brightness Variation that should be applied.
+    It must be contained in the range
+    given by the get_range method
+</code></pre>
+<h2 id="returns">Returns</h2>
+<pre><code>img : np.ndarray
+    the altered image on which the Brightness Variation has been
+    applied
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def apply_alteration_image(self, img, alteration_level):
+    &#34;&#34;&#34;
+    Method that applies the Brightness Variation with a given value to the
+    image
+
+    Parameters
+    ----------
+        img : np.ndarray
+            the image on which the Brightness Variation should be applied
+        alteration_level : float
+            the level of the Brightness Variation that should be applied.
+            It must be contained in the range
+            given by the get_range method
+
+    Returns
+    -------
+        img : np.ndarray
+            the altered image on which the Brightness Variation has been
+            applied
+    &#34;&#34;&#34;
+    assert(isinstance(img, np.ndarray))
+    if not (-0.00001 &lt;= float(alteration_level) &lt;= 0.00001):
+        if isinstance(img, np.ndarray):
+            if self.picture_mode == &#39;RGB&#39;:
+                img = Image.fromarray(img, &#39;RGB&#39;)
+            elif self.picture_mode == &#39;L&#39;:
+                img = Image.fromarray((img[:, :, 0]*255).astype(&#39;uint8&#39;),
+                                      &#39;L&#39;)
+            else:
+                raise RuntimeError(&#34;picture_mode not supported for &#34; +
+                                   &#34;brightness alteration&#34;)
+        enhancer = ImageEnhance.Brightness(img)
+        img = enhancer.enhance(1 + (alteration_level * 0.5))
+        img = np.array(img)
+        img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
+
+    assert(isinstance(img, np.ndarray))
+    return img</code></pre>
+</details>
+</dd>
+<dt id="roby.Alterations.Brightness.name"><code class="name flex">
+<span>def <span class="ident">name</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Method to get the alteration name</p>
+<h2 id="returns">Returns</h2>
+<pre><code>alterationName : str
+    the name of the alteration type
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def name(self):
+    &#34;&#34;&#34;
+    Method to get the alteration name
+
+    Returns
+    -------
+        alterationName : str
+            the name of the alteration type
+    &#34;&#34;&#34;
+    return &#34;Brightness&#34;</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="roby.Alterations.Alteration" href="#roby.Alterations.Alteration">Alteration</a></b></code>:
+<ul class="hlist">
+<li><code><a title="roby.Alterations.Alteration.get_range" href="#roby.Alterations.Alteration.get_range">get_range</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="roby.Alterations.Compression"><code class="flex name class">
+<span>class <span class="ident">Compression</span></span>
+<span>(</span><span>value_from: float, value_to: float)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Class defining the Compression alteration</p>
+<p>In our experiments we have used (0, 1) as usual range</p>
+<p>Constructs all the necessary attributes for the Alteration object.</p>
+<h2 id="parameters">Parameters</h2>
+<pre><code>value_from : float
+    the minimum alteration value that can be applied
+value_to : float
+    the maximum alteration value that can be applied
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Compression(Alteration):
+    &#34;&#34;&#34;
+    Class defining the Compression alteration
+
+    In our experiments we have used (0, 1) as usual range
+    &#34;&#34;&#34;
+
+    def name(self):
+        &#34;&#34;&#34;
+        Method to get the alteration name
+
+        Returns
+        -------
+            alterationName : str
+                the name of the alteration type
+        &#34;&#34;&#34;
+        return &#34;Compression&#34;
+
+    def apply_alteration_image(self,
+                               img: np.ndarray,
+                               alteration_level: float) -&gt; np.ndarray:
+        &#34;&#34;&#34;
+        Method that applies the jpeg compression with a given value to the
+        image
+
+        Parameters
+        ----------
+            img : np.ndarray
+                the image on which the jpeg compression should be applied
+            alteration_level : float
+                the level of the jpeg compression that should be applied.
+                It must be contained in the range given by the get_range
+                method
+
+        Returns
+        -------
+            img : np.ndarray
+                the altered image on which the jpeg compression has been
+                applied
+        &#34;&#34;&#34;
+        assert(isinstance(img, np.ndarray))
+        if alteration_level != 0:
+            encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 100 -
+                            (alteration_level * 100)]
+            img = cv2.imencode(&#39;.jpg&#39;, img, encode_param)[1]
+            img = cv2.imdecode(img, 1)
+
+        assert(isinstance(img, np.ndarray))
+        return img</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="roby.Alterations.Alteration" href="#roby.Alterations.Alteration">Alteration</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="roby.Alterations.Compression.apply_alteration_image"><code class="name flex">
+<span>def <span class="ident">apply_alteration_image</span></span>(<span>self, img: numpy.ndarray, alteration_level: float) ‑> numpy.ndarray</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Method that applies the jpeg compression with a given value to the
+image</p>
+<h2 id="parameters">Parameters</h2>
+<pre><code>img : np.ndarray
+    the image on which the jpeg compression should be applied
+alteration_level : float
+    the level of the jpeg compression that should be applied.
+    It must be contained in the range given by the get_range
+    method
+</code></pre>
+<h2 id="returns">Returns</h2>
+<pre><code>img : np.ndarray
+    the altered image on which the jpeg compression has been
+    applied
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def apply_alteration_image(self,
+                           img: np.ndarray,
+                           alteration_level: float) -&gt; np.ndarray:
+    &#34;&#34;&#34;
+    Method that applies the jpeg compression with a given value to the
+    image
+
+    Parameters
+    ----------
+        img : np.ndarray
+            the image on which the jpeg compression should be applied
+        alteration_level : float
+            the level of the jpeg compression that should be applied.
+            It must be contained in the range given by the get_range
+            method
+
+    Returns
+    -------
+        img : np.ndarray
+            the altered image on which the jpeg compression has been
+            applied
+    &#34;&#34;&#34;
+    assert(isinstance(img, np.ndarray))
+    if alteration_level != 0:
+        encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 100 -
+                        (alteration_level * 100)]
+        img = cv2.imencode(&#39;.jpg&#39;, img, encode_param)[1]
+        img = cv2.imdecode(img, 1)
+
+    assert(isinstance(img, np.ndarray))
+    return img</code></pre>
+</details>
+</dd>
+<dt id="roby.Alterations.Compression.name"><code class="name flex">
+<span>def <span class="ident">name</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Method to get the alteration name</p>
+<h2 id="returns">Returns</h2>
+<pre><code>alterationName : str
+    the name of the alteration type
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def name(self):
+    &#34;&#34;&#34;
+    Method to get the alteration name
+
+    Returns
+    -------
+        alterationName : str
+            the name of the alteration type
+    &#34;&#34;&#34;
+    return &#34;Compression&#34;</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="roby.Alterations.Alteration" href="#roby.Alterations.Alteration">Alteration</a></b></code>:
+<ul class="hlist">
+<li><code><a title="roby.Alterations.Alteration.apply_alteration" href="#roby.Alterations.Alteration.apply_alteration">apply_alteration</a></code></li>
+<li><code><a title="roby.Alterations.Alteration.get_range" href="#roby.Alterations.Alteration.get_range">get_range</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="roby.Alterations.GaussianNoise"><code class="flex name class">
+<span>class <span class="ident">GaussianNoise</span></span>
+<span>(</span><span>value_from, value_to, variance)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Class defining the Gaussian Noise alteration. Tha Gaussian Noise is defined
+as a zero-mean addition with variance 200*alteration_level</p>
+<p>In our experiments we have used (0, 1, 0.025) as usual range</p>
+<p>Constructs all the necessary attributes for the Gaussian Noise object.</p>
+<h2 id="parameters">Parameters</h2>
+<pre><code>value_from : float
+    the minimum alteration value that can be applied
+value_to : float
+    the maximum alteration value that can be applied
+variance : float
+    the variance to be used in the Gaussian Noise generation
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class GaussianNoise(Alteration):
+    &#34;&#34;&#34;
+    Class defining the Gaussian Noise alteration. Tha Gaussian Noise is defined
+    as a zero-mean addition with variance 200*alteration_level
+
+    In our experiments we have used (0, 1, 0.025) as usual range
+    &#34;&#34;&#34;
+
+    def __init__(self, value_from, value_to, variance):
+        &#34;&#34;&#34;
+        Constructs all the necessary attributes for the Gaussian Noise object.
+
+        Parameters
+        ----------
+            value_from : float
+                the minimum alteration value that can be applied
+            value_to : float
+                the maximum alteration value that can be applied
+            variance : float
+                the variance to be used in the Gaussian Noise generation
+        &#34;&#34;&#34;
+        super().__init__(value_from, value_to)
+        self.variance = variance
+
+    def name(self):
+        &#34;&#34;&#34;
+        Method to get the alteration name
+
+        Returns
+        -------
+            alterationName : str
+                the name of the alteration type
+        &#34;&#34;&#34;
+        return &#34;GaussianNoise&#34;
+
+    def apply_alteration_image(self, img, alteration_level):
+        &#34;&#34;&#34;
+        Method that applies the Gaussian Noise with a given value to the image
+
+        Parameters
+        ----------
+            img : np.ndarray
+                the image on which the Gaussian Noise should be applied
+            alteration_level : float
+                the level of the Gaussian Noise that should be applied. It must
+                be contained in the range given
+                by the get_range method
+
+        Returns
+        -------
+            img : np.ndarray
+                the altered image on which the Gaussian Noise has been applied
+        &#34;&#34;&#34;
+        assert(isinstance(img, np.ndarray))
+        if not(-0.000001 &lt;= float(alteration_level) &lt;= 0.000001):
+            row, col, ch = img.shape
+            mean = 0
+            var = self.variance * alteration_level
+            sigma = var**0.5
+            gauss = np.random.normal(mean, sigma, (row, col, ch))
+            gauss = gauss.reshape(row, col, ch)
+            img = img + gauss
+
+        assert(isinstance(img, np.ndarray))
+        return img</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="roby.Alterations.Alteration" href="#roby.Alterations.Alteration">Alteration</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="roby.Alterations.GaussianNoise.apply_alteration_image"><code class="name flex">
+<span>def <span class="ident">apply_alteration_image</span></span>(<span>self, img, alteration_level)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Method that applies the Gaussian Noise with a given value to the image</p>
+<h2 id="parameters">Parameters</h2>
+<pre><code>img : np.ndarray
+    the image on which the Gaussian Noise should be applied
+alteration_level : float
+    the level of the Gaussian Noise that should be applied. It must
+    be contained in the range given
+    by the get_range method
+</code></pre>
+<h2 id="returns">Returns</h2>
+<pre><code>img : np.ndarray
+    the altered image on which the Gaussian Noise has been applied
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def apply_alteration_image(self, img, alteration_level):
+    &#34;&#34;&#34;
+    Method that applies the Gaussian Noise with a given value to the image
+
+    Parameters
+    ----------
+        img : np.ndarray
+            the image on which the Gaussian Noise should be applied
+        alteration_level : float
+            the level of the Gaussian Noise that should be applied. It must
+            be contained in the range given
+            by the get_range method
+
+    Returns
+    -------
+        img : np.ndarray
+            the altered image on which the Gaussian Noise has been applied
+    &#34;&#34;&#34;
+    assert(isinstance(img, np.ndarray))
+    if not(-0.000001 &lt;= float(alteration_level) &lt;= 0.000001):
+        row, col, ch = img.shape
+        mean = 0
+        var = self.variance * alteration_level
+        sigma = var**0.5
+        gauss = np.random.normal(mean, sigma, (row, col, ch))
+        gauss = gauss.reshape(row, col, ch)
+        img = img + gauss
+
+    assert(isinstance(img, np.ndarray))
+    return img</code></pre>
+</details>
+</dd>
+<dt id="roby.Alterations.GaussianNoise.name"><code class="name flex">
+<span>def <span class="ident">name</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Method to get the alteration name</p>
+<h2 id="returns">Returns</h2>
+<pre><code>alterationName : str
+    the name of the alteration type
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def name(self):
+    &#34;&#34;&#34;
+    Method to get the alteration name
+
+    Returns
+    -------
+        alterationName : str
+            the name of the alteration type
+    &#34;&#34;&#34;
+    return &#34;GaussianNoise&#34;</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="roby.Alterations.Alteration" href="#roby.Alterations.Alteration">Alteration</a></b></code>:
+<ul class="hlist">
+<li><code><a title="roby.Alterations.Alteration.apply_alteration" href="#roby.Alterations.Alteration.apply_alteration">apply_alteration</a></code></li>
+<li><code><a title="roby.Alterations.Alteration.get_range" href="#roby.Alterations.Alteration.get_range">get_range</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="roby.Alterations.HorizontalTranslation"><code class="flex name class">
+<span>class <span class="ident">HorizontalTranslation</span></span>
+<span>(</span><span>value_from: float, value_to: float)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Class defining the Horizontal Translation alteration</p>
+<p>In our experiments we have used (-1, 1) as usual range</p>
+<p>Constructs all the necessary attributes for the Alteration object.</p>
+<h2 id="parameters">Parameters</h2>
+<pre><code>value_from : float
+    the minimum alteration value that can be applied
+value_to : float
+    the maximum alteration value that can be applied
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class HorizontalTranslation(Alteration):
+    &#34;&#34;&#34;
+    Class defining the Horizontal Translation alteration
+
+    In our experiments we have used (-1, 1) as usual range
+    &#34;&#34;&#34;
+
+    def name(self):
+        &#34;&#34;&#34;
+        Method to get the alteration name
+
+        Returns
+        -------
+            alterationName : str
+                the name of the alteration type
+        &#34;&#34;&#34;
+        return &#34;HorizontalTranslation&#34;
+
+    def apply_alteration_image(self, img, alteration_level):
+        &#34;&#34;&#34;
+        Method that applies the horizontal translation with a given value to
+        the image.
+        The image is transformed in a (200x200) image to use a standard
+        format when the alteration is applied
+
+        Parameters
+        ----------
+            img : np.ndarray
+                the image on which the horizontal translation should be applied
+            alteration_level : float
+                the level of the horizontal translation that should be applied.
+                It must be contained in the range given by the get_range method
+
+        Returns
+        -------
+            img : np.ndarray
+                the altered image on which the horizontal translation has been
+                applied
+        &#34;&#34;&#34;
+        assert(isinstance(img, np.ndarray))
+        if not(-0.000001 &lt;= float(alteration_level) &lt;= 0.000001):
+            old_rows, old_cols = img.shape[:-1]
+            # Zoom the image to be cropped, and then crop it
+            img = cv2.resize(img, (200, 200))
+            img = img[20:-20, ]
+            img = img[:, 20 + int(alteration_level * 20):179 +
+                      int(alteration_level * 20)]
+            img = cv2.resize(img, (old_rows, old_cols))
+
+        assert(isinstance(img, np.ndarray))
+        return img</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="roby.Alterations.Alteration" href="#roby.Alterations.Alteration">Alteration</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="roby.Alterations.HorizontalTranslation.apply_alteration_image"><code class="name flex">
+<span>def <span class="ident">apply_alteration_image</span></span>(<span>self, img, alteration_level)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Method that applies the horizontal translation with a given value to
+the image.
+The image is transformed in a (200x200) image to use a standard
+format when the alteration is applied</p>
+<h2 id="parameters">Parameters</h2>
+<pre><code>img : np.ndarray
+    the image on which the horizontal translation should be applied
+alteration_level : float
+    the level of the horizontal translation that should be applied.
+    It must be contained in the range given by the get_range method
+</code></pre>
+<h2 id="returns">Returns</h2>
+<pre><code>img : np.ndarray
+    the altered image on which the horizontal translation has been
+    applied
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def apply_alteration_image(self, img, alteration_level):
+    &#34;&#34;&#34;
+    Method that applies the horizontal translation with a given value to
+    the image.
+    The image is transformed in a (200x200) image to use a standard
+    format when the alteration is applied
+
+    Parameters
+    ----------
+        img : np.ndarray
+            the image on which the horizontal translation should be applied
+        alteration_level : float
+            the level of the horizontal translation that should be applied.
+            It must be contained in the range given by the get_range method
+
+    Returns
+    -------
+        img : np.ndarray
+            the altered image on which the horizontal translation has been
+            applied
+    &#34;&#34;&#34;
+    assert(isinstance(img, np.ndarray))
+    if not(-0.000001 &lt;= float(alteration_level) &lt;= 0.000001):
+        old_rows, old_cols = img.shape[:-1]
+        # Zoom the image to be cropped, and then crop it
+        img = cv2.resize(img, (200, 200))
+        img = img[20:-20, ]
+        img = img[:, 20 + int(alteration_level * 20):179 +
+                  int(alteration_level * 20)]
+        img = cv2.resize(img, (old_rows, old_cols))
+
+    assert(isinstance(img, np.ndarray))
+    return img</code></pre>
+</details>
+</dd>
+<dt id="roby.Alterations.HorizontalTranslation.name"><code class="name flex">
+<span>def <span class="ident">name</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Method to get the alteration name</p>
+<h2 id="returns">Returns</h2>
+<pre><code>alterationName : str
+    the name of the alteration type
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def name(self):
+    &#34;&#34;&#34;
+    Method to get the alteration name
+
+    Returns
+    -------
+        alterationName : str
+            the name of the alteration type
+    &#34;&#34;&#34;
+    return &#34;HorizontalTranslation&#34;</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="roby.Alterations.Alteration" href="#roby.Alterations.Alteration">Alteration</a></b></code>:
+<ul class="hlist">
+<li><code><a title="roby.Alterations.Alteration.apply_alteration" href="#roby.Alterations.Alteration.apply_alteration">apply_alteration</a></code></li>
+<li><code><a title="roby.Alterations.Alteration.get_range" href="#roby.Alterations.Alteration.get_range">get_range</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="roby.Alterations.VerticalTranslation"><code class="flex name class">
+<span>class <span class="ident">VerticalTranslation</span></span>
+<span>(</span><span>value_from: float, value_to: float)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Class defining the Vertical Translation alteration</p>
+<p>In our experiments we have used (-1, 1) as usual range</p>
+<p>Constructs all the necessary attributes for the Alteration object.</p>
+<h2 id="parameters">Parameters</h2>
+<pre><code>value_from : float
+    the minimum alteration value that can be applied
+value_to : float
+    the maximum alteration value that can be applied
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class VerticalTranslation(Alteration):
+    &#34;&#34;&#34;
+    Class defining the Vertical Translation alteration
+
+    In our experiments we have used (-1, 1) as usual range
+    &#34;&#34;&#34;
+
+    def name(self):
+        &#34;&#34;&#34;
+        Method to get the alteration name
+
+        Returns
+        -------
+            alterationName : str
+                the name of the alteration type
+        &#34;&#34;&#34;
+        return &#34;VerticalTranslation&#34;
+
+    def apply_alteration_image(self, img, alteration_level):
+        &#34;&#34;&#34;
+        Method that applies the vertical translation with a given value to the
+        image
+        The image is transformed in a (200x200) image to use a standard format
+        when the alteration is applied
+
+        Parameters
+        ----------
+            img : np.ndarray
+                the image on which the vertical translation should be applied
+            alteration_level : float
+                the level of the vertical translation that should be applied.
+                It must be contained in the range given by the get_range method
+
+        Returns
+        -------
+            img : np.ndarray
+                the altered image on which the vertical translation has been
+                applied
+        &#34;&#34;&#34;
+        assert(isinstance(img, np.ndarray))
+        # Zoom the image to be cropped, and then crop it
+        if not(-0.000001 &lt;= float(alteration_level) &lt;= 0.000001):
+            old_rows, old_cols = img.shape[:-1]
+            img = cv2.resize(img, (200, 200))
+            img = img[:, 20:-20]
+            img = img[20 + int(alteration_level * 20):179 +
+                      int(alteration_level * 20), :]
+            img = cv2.resize(img, (old_rows, old_cols))
+
+        assert(isinstance(img, np.ndarray))
+        return img</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="roby.Alterations.Alteration" href="#roby.Alterations.Alteration">Alteration</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="roby.Alterations.VerticalTranslation.apply_alteration_image"><code class="name flex">
+<span>def <span class="ident">apply_alteration_image</span></span>(<span>self, img, alteration_level)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Method that applies the vertical translation with a given value to the
+image
+The image is transformed in a (200x200) image to use a standard format
+when the alteration is applied</p>
+<h2 id="parameters">Parameters</h2>
+<pre><code>img : np.ndarray
+    the image on which the vertical translation should be applied
+alteration_level : float
+    the level of the vertical translation that should be applied.
+    It must be contained in the range given by the get_range method
+</code></pre>
+<h2 id="returns">Returns</h2>
+<pre><code>img : np.ndarray
+    the altered image on which the vertical translation has been
+    applied
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def apply_alteration_image(self, img, alteration_level):
+    &#34;&#34;&#34;
+    Method that applies the vertical translation with a given value to the
+    image
+    The image is transformed in a (200x200) image to use a standard format
+    when the alteration is applied
+
+    Parameters
+    ----------
+        img : np.ndarray
+            the image on which the vertical translation should be applied
+        alteration_level : float
+            the level of the vertical translation that should be applied.
+            It must be contained in the range given by the get_range method
+
+    Returns
+    -------
+        img : np.ndarray
+            the altered image on which the vertical translation has been
+            applied
+    &#34;&#34;&#34;
+    assert(isinstance(img, np.ndarray))
+    # Zoom the image to be cropped, and then crop it
+    if not(-0.000001 &lt;= float(alteration_level) &lt;= 0.000001):
+        old_rows, old_cols = img.shape[:-1]
+        img = cv2.resize(img, (200, 200))
+        img = img[:, 20:-20]
+        img = img[20 + int(alteration_level * 20):179 +
+                  int(alteration_level * 20), :]
+        img = cv2.resize(img, (old_rows, old_cols))
+
+    assert(isinstance(img, np.ndarray))
+    return img</code></pre>
+</details>
+</dd>
+<dt id="roby.Alterations.VerticalTranslation.name"><code class="name flex">
+<span>def <span class="ident">name</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Method to get the alteration name</p>
+<h2 id="returns">Returns</h2>
+<pre><code>alterationName : str
+    the name of the alteration type
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def name(self):
+    &#34;&#34;&#34;
+    Method to get the alteration name
+
+    Returns
+    -------
+        alterationName : str
+            the name of the alteration type
+    &#34;&#34;&#34;
+    return &#34;VerticalTranslation&#34;</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="roby.Alterations.Alteration" href="#roby.Alterations.Alteration">Alteration</a></b></code>:
+<ul class="hlist">
+<li><code><a title="roby.Alterations.Alteration.apply_alteration" href="#roby.Alterations.Alteration.apply_alteration">apply_alteration</a></code></li>
+<li><code><a title="roby.Alterations.Alteration.get_range" href="#roby.Alterations.Alteration.get_range">get_range</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="roby.Alterations.Zoom"><code class="flex name class">
+<span>class <span class="ident">Zoom</span></span>
+<span>(</span><span>value_from: float, value_to: float)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Class defining the Zoom alteration.
+The image is zoomed and, after that, cut to obtain an image with the same
+dimensions than the initial one.</p>
+<p>In our experiments we have used (0, 1, 0.025) as usual range</p>
+<p>Constructs all the necessary attributes for the Alteration object.</p>
+<h2 id="parameters">Parameters</h2>
+<pre><code>value_from : float
+    the minimum alteration value that can be applied
+value_to : float
+    the maximum alteration value that can be applied
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Zoom(Alteration):
+    &#34;&#34;&#34;
+    Class defining the Zoom alteration.
+    The image is zoomed and, after that, cut to obtain an image with the same
+    dimensions than the initial one.
+
+    In our experiments we have used (0, 1, 0.025) as usual range
+    &#34;&#34;&#34;
+
+    def name(self):
+        &#34;&#34;&#34;
+        Method to get the alteration name
+
+        Returns
+        -------
+            alterationName : str
+                the name of the alteration type
+        &#34;&#34;&#34;
+        return &#34;Zoom&#34;
+
+    def apply_alteration_image(self, img, alteration_level):
+        &#34;&#34;&#34;
+        Method that applies the Zoom with a given value to the image
+
+        Parameters
+        ----------
+            img : np.ndarray
+                the image on which the Zoom should be applied
+            alteration_level : float
+                the level of the Zoom that should be applied. It must be
+                contained in the range given by the get_range method
+
+        Returns
+        -------
+            img : np.ndarray
+                the altered image on which the Zoom has been applied
+        &#34;&#34;&#34;
+        assert(isinstance(img, np.ndarray))
+        if -0.000001 &lt;= float(alteration_level) &lt;= 0.000001:
+            return img
+
+        # For multi-channel images we don&#39;t want to apply the zoom factor to
+        # the RGB dimension, so instead we create a tuple of zoom factors,
+        # one per array dimension, with 1&#39;s for any trailing dimensions after
+        # the width and height.
+        h, w = img.shape[:2]
+        zoom_tuple = (float(1 + alteration_level),) * 2 + (1,) * (img.ndim - 2)
+        # Bounding box of the zoomed-in region within the input array
+        zh = int(np.round(h / float(1 + alteration_level)))
+        zw = int(np.round(w / float(1 + alteration_level)))
+        top = (h - zh) // 2
+        left = (w - zw) // 2
+
+        out = zoom(img[top:top+zh, left:left+zw], zoom_tuple)
+
+        # `out` might still be slightly larger than `img` due to rounding, so
+        # trim off any extra pixels at the edges
+        trim_top = ((out.shape[0] - h) // 2)
+        trim_left = ((out.shape[1] - w) // 2)
+        out = out[trim_top:trim_top+h, trim_left:trim_left+w]
+
+        img = out
+
+        assert(isinstance(img, np.ndarray))
+        return img</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="roby.Alterations.Alteration" href="#roby.Alterations.Alteration">Alteration</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="roby.Alterations.Zoom.apply_alteration_image"><code class="name flex">
+<span>def <span class="ident">apply_alteration_image</span></span>(<span>self, img, alteration_level)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Method that applies the Zoom with a given value to the image</p>
+<h2 id="parameters">Parameters</h2>
+<pre><code>img : np.ndarray
+    the image on which the Zoom should be applied
+alteration_level : float
+    the level of the Zoom that should be applied. It must be
+    contained in the range given by the get_range method
+</code></pre>
+<h2 id="returns">Returns</h2>
+<pre><code>img : np.ndarray
+    the altered image on which the Zoom has been applied
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def apply_alteration_image(self, img, alteration_level):
+    &#34;&#34;&#34;
+    Method that applies the Zoom with a given value to the image
+
+    Parameters
+    ----------
+        img : np.ndarray
+            the image on which the Zoom should be applied
+        alteration_level : float
+            the level of the Zoom that should be applied. It must be
+            contained in the range given by the get_range method
+
+    Returns
+    -------
+        img : np.ndarray
+            the altered image on which the Zoom has been applied
+    &#34;&#34;&#34;
+    assert(isinstance(img, np.ndarray))
+    if -0.000001 &lt;= float(alteration_level) &lt;= 0.000001:
+        return img
+
+    # For multi-channel images we don&#39;t want to apply the zoom factor to
+    # the RGB dimension, so instead we create a tuple of zoom factors,
+    # one per array dimension, with 1&#39;s for any trailing dimensions after
+    # the width and height.
+    h, w = img.shape[:2]
+    zoom_tuple = (float(1 + alteration_level),) * 2 + (1,) * (img.ndim - 2)
+    # Bounding box of the zoomed-in region within the input array
+    zh = int(np.round(h / float(1 + alteration_level)))
+    zw = int(np.round(w / float(1 + alteration_level)))
+    top = (h - zh) // 2
+    left = (w - zw) // 2
+
+    out = zoom(img[top:top+zh, left:left+zw], zoom_tuple)
+
+    # `out` might still be slightly larger than `img` due to rounding, so
+    # trim off any extra pixels at the edges
+    trim_top = ((out.shape[0] - h) // 2)
+    trim_left = ((out.shape[1] - w) // 2)
+    out = out[trim_top:trim_top+h, trim_left:trim_left+w]
+
+    img = out
+
+    assert(isinstance(img, np.ndarray))
+    return img</code></pre>
+</details>
+</dd>
+<dt id="roby.Alterations.Zoom.name"><code class="name flex">
+<span>def <span class="ident">name</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Method to get the alteration name</p>
+<h2 id="returns">Returns</h2>
+<pre><code>alterationName : str
+    the name of the alteration type
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def name(self):
+    &#34;&#34;&#34;
+    Method to get the alteration name
+
+    Returns
+    -------
+        alterationName : str
+            the name of the alteration type
+    &#34;&#34;&#34;
+    return &#34;Zoom&#34;</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="roby.Alterations.Alteration" href="#roby.Alterations.Alteration">Alteration</a></b></code>:
+<ul class="hlist">
+<li><code><a title="roby.Alterations.Alteration.apply_alteration" href="#roby.Alterations.Alteration.apply_alteration">apply_alteration</a></code></li>
+<li><code><a title="roby.Alterations.Alteration.get_range" href="#roby.Alterations.Alteration.get_range">get_range</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="roby" href="index.html">roby</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="roby.Alterations.Alteration" href="#roby.Alterations.Alteration">Alteration</a></code></h4>
+<ul class="">
+<li><code><a title="roby.Alterations.Alteration.apply_alteration" href="#roby.Alterations.Alteration.apply_alteration">apply_alteration</a></code></li>
+<li><code><a title="roby.Alterations.Alteration.apply_alteration_image" href="#roby.Alterations.Alteration.apply_alteration_image">apply_alteration_image</a></code></li>
+<li><code><a title="roby.Alterations.Alteration.get_range" href="#roby.Alterations.Alteration.get_range">get_range</a></code></li>
+<li><code><a title="roby.Alterations.Alteration.name" href="#roby.Alterations.Alteration.name">name</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="roby.Alterations.AlterationSequence" href="#roby.Alterations.AlterationSequence">AlterationSequence</a></code></h4>
+<ul class="">
+<li><code><a title="roby.Alterations.AlterationSequence.apply_alteration" href="#roby.Alterations.AlterationSequence.apply_alteration">apply_alteration</a></code></li>
+<li><code><a title="roby.Alterations.AlterationSequence.name" href="#roby.Alterations.AlterationSequence.name">name</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="roby.Alterations.Blur" href="#roby.Alterations.Blur">Blur</a></code></h4>
+<ul class="">
+<li><code><a title="roby.Alterations.Blur.apply_alteration" href="#roby.Alterations.Blur.apply_alteration">apply_alteration</a></code></li>
+<li><code><a title="roby.Alterations.Blur.apply_alteration_image" href="#roby.Alterations.Blur.apply_alteration_image">apply_alteration_image</a></code></li>
+<li><code><a title="roby.Alterations.Blur.name" href="#roby.Alterations.Blur.name">name</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="roby.Alterations.Brightness" href="#roby.Alterations.Brightness">Brightness</a></code></h4>
+<ul class="">
+<li><code><a title="roby.Alterations.Brightness.apply_alteration" href="#roby.Alterations.Brightness.apply_alteration">apply_alteration</a></code></li>
+<li><code><a title="roby.Alterations.Brightness.apply_alteration_image" href="#roby.Alterations.Brightness.apply_alteration_image">apply_alteration_image</a></code></li>
+<li><code><a title="roby.Alterations.Brightness.name" href="#roby.Alterations.Brightness.name">name</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="roby.Alterations.Compression" href="#roby.Alterations.Compression">Compression</a></code></h4>
+<ul class="">
+<li><code><a title="roby.Alterations.Compression.apply_alteration_image" href="#roby.Alterations.Compression.apply_alteration_image">apply_alteration_image</a></code></li>
+<li><code><a title="roby.Alterations.Compression.name" href="#roby.Alterations.Compression.name">name</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="roby.Alterations.GaussianNoise" href="#roby.Alterations.GaussianNoise">GaussianNoise</a></code></h4>
+<ul class="">
+<li><code><a title="roby.Alterations.GaussianNoise.apply_alteration_image" href="#roby.Alterations.GaussianNoise.apply_alteration_image">apply_alteration_image</a></code></li>
+<li><code><a title="roby.Alterations.GaussianNoise.name" href="#roby.Alterations.GaussianNoise.name">name</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="roby.Alterations.HorizontalTranslation" href="#roby.Alterations.HorizontalTranslation">HorizontalTranslation</a></code></h4>
+<ul class="">
+<li><code><a title="roby.Alterations.HorizontalTranslation.apply_alteration_image" href="#roby.Alterations.HorizontalTranslation.apply_alteration_image">apply_alteration_image</a></code></li>
+<li><code><a title="roby.Alterations.HorizontalTranslation.name" href="#roby.Alterations.HorizontalTranslation.name">name</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="roby.Alterations.VerticalTranslation" href="#roby.Alterations.VerticalTranslation">VerticalTranslation</a></code></h4>
+<ul class="">
+<li><code><a title="roby.Alterations.VerticalTranslation.apply_alteration_image" href="#roby.Alterations.VerticalTranslation.apply_alteration_image">apply_alteration_image</a></code></li>
+<li><code><a title="roby.Alterations.VerticalTranslation.name" href="#roby.Alterations.VerticalTranslation.name">name</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="roby.Alterations.Zoom" href="#roby.Alterations.Zoom">Zoom</a></code></h4>
+<ul class="">
+<li><code><a title="roby.Alterations.Zoom.apply_alteration_image" href="#roby.Alterations.Zoom.apply_alteration_image">apply_alteration_image</a></code></li>
+<li><code><a title="roby.Alterations.Zoom.name" href="#roby.Alterations.Zoom.name">name</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.1</a>.</p>
+</footer>
+</body>
+</html>
