@@ -1,0 +1,11 @@
+ - Results (For the first 200 pictures) -
+Successes: 180
+Failures: 20
+Accuracy: 0.9
+Robustness w.r.t GaussianNoise: 1.0
+Robustness w.r.t Compression: 0.047619047619047616
+Robustness w.r.t VerticalTranslation: 1.0
+Robustness w.r.t HorizontalTranslation: 1.0
+Robustness w.r.t Blur: 0.047619047619047616
+Robustness w.r.t Brightness: 0.047619047619047616
+Robustness w.r.t Zoom: 0.7619047619047619
