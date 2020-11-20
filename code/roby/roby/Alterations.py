@@ -20,6 +20,7 @@ from abc import ABC, abstractmethod
 from scipy.ndimage.interpolation import zoom   # type: ignore
 import sys
 import warnings
+from typing import List
 
 if not sys.warnoptions:
     warnings.simplefilter("ignore")
@@ -44,7 +45,7 @@ class Alteration(ABC):
         self.value_to = value_to
 
     @abstractmethod
-    def name(self):
+    def name(self) -> str:
         """
         Abstract method to get the alteration name
 
@@ -54,7 +55,7 @@ class Alteration(ABC):
                 the name of the alteration type
         """
 
-    def get_range(self, n_values: int):
+    def get_range(self, n_values: int) -> np.ndarray:
         """
         Method giving the range of the alteration, starting from 'value_from'
         to 'value_to' with step 'step'
@@ -67,7 +68,7 @@ class Alteration(ABC):
 
         Returns
         -------
-            range : range
+            range : np.ndarray
                 the range of the alteration, starting from 'value_from' to
                 'value_to'
         """
@@ -128,7 +129,7 @@ class VerticalTranslation(Alteration):
     In our experiments we have used (-1, 1) as usual range
     """
 
-    def name(self):
+    def name(self) -> str:
         """
         Method to get the alteration name
 
@@ -139,7 +140,8 @@ class VerticalTranslation(Alteration):
         """
         return "VerticalTranslation"
 
-    def apply_alteration_image(self, img, alteration_level):
+    def apply_alteration_image(self, img: np.ndarray,
+                               alteration_level: float) -> np.ndarray:
         """
         Method that applies the vertical translation with a given value to the
         image
@@ -181,7 +183,7 @@ class HorizontalTranslation(Alteration):
     In our experiments we have used (-1, 1) as usual range
     """
 
-    def name(self):
+    def name(self) -> str:
         """
         Method to get the alteration name
 
@@ -192,7 +194,8 @@ class HorizontalTranslation(Alteration):
         """
         return "HorizontalTranslation"
 
-    def apply_alteration_image(self, img, alteration_level):
+    def apply_alteration_image(self, img: np.ndarray,
+                               alteration_level: float) -> np.ndarray:
         """
         Method that applies the horizontal translation with a given value to
         the image.
@@ -234,7 +237,7 @@ class Compression(Alteration):
     In our experiments we have used (0, 1) as usual range
     """
 
-    def name(self):
+    def name(self) -> str:
         """
         Method to get the alteration name
 
@@ -286,7 +289,7 @@ class GaussianNoise(Alteration):
     In our experiments we have used (0, 1, 0.025) as usual range
     """
 
-    def __init__(self, value_from, value_to, variance):
+    def __init__(self, value_from: float, value_to: float, variance: float):
         """
         Constructs all the necessary attributes for the Gaussian Noise object.
 
@@ -302,7 +305,7 @@ class GaussianNoise(Alteration):
         super().__init__(value_from, value_to)
         self.variance = variance
 
-    def name(self):
+    def name(self) -> str:
         """
         Method to get the alteration name
 
@@ -313,7 +316,8 @@ class GaussianNoise(Alteration):
         """
         return "GaussianNoise"
 
-    def apply_alteration_image(self, img, alteration_level):
+    def apply_alteration_image(self, img: np.ndarray,
+                               alteration_level: float) -> np.ndarray:
         """
         Method that applies the Gaussian Noise with a given value to the image
 
@@ -353,7 +357,8 @@ class Blur(Alteration):
     In our experiments we have used (0, 1, 0.025) as usual range
     """
 
-    def __init__(self, value_from, value_to, radius=2, picture_mode='RGB'):
+    def __init__(self, value_from: float, value_to: float, radius: float=2,
+                 picture_mode: str='RGB'):
         """
         Constructs all the necessary attributes for the Gaussian Noise object.
 
@@ -376,7 +381,7 @@ class Blur(Alteration):
         self.radius = radius
         self.picture_mode = picture_mode
 
-    def name(self):
+    def name(self) -> str:
         """
         Method to get the alteration name
 
@@ -387,7 +392,8 @@ class Blur(Alteration):
         """
         return "Blur"
 
-    def apply_alteration_image(self, img, alteration_level):
+    def apply_alteration_image(self, img: np.ndarray,
+                               alteration_level: float) -> np.ndarray:
         """
         Method that applies the Blur with a given value to the image
 
@@ -425,7 +431,9 @@ class Blur(Alteration):
         assert(isinstance(img, np.ndarray))
         return img
 
-    def apply_alteration(self, file_name, alteration_level):
+    def apply_alteration(self,
+                         file_name: str,
+                         alteration_level: float) -> np.ndarray:
         """
         Method that applies a blur alteration with a given value to the image,
         whose fileName is given as a parameter
@@ -462,7 +470,8 @@ class Brightness(Alteration):
     In our experiments we have used (-1, 1, 0.05) as usual range
     """
 
-    def __init__(self, value_from, value_to, picture_mode='RGB'):
+    def __init__(self, value_from: float, value_to: float,
+                 picture_mode: str='RGB'):
         """
         Constructs all the necessary attributes for the Gaussian Noise object.
 
@@ -482,7 +491,7 @@ class Brightness(Alteration):
         super().__init__(value_from, value_to)
         self.picture_mode = picture_mode
 
-    def name(self):
+    def name(self) -> str:
         """
         Method to get the alteration name
 
@@ -493,7 +502,8 @@ class Brightness(Alteration):
         """
         return "Brightness"
 
-    def apply_alteration_image(self, img, alteration_level):
+    def apply_alteration_image(self, img: np.ndarray,
+                               alteration_level: float) -> np.ndarray:
         """
         Method that applies the Brightness Variation with a given value to the
         image
@@ -532,7 +542,9 @@ class Brightness(Alteration):
         assert(isinstance(img, np.ndarray))
         return img
 
-    def apply_alteration(self, file_name, alteration_level):
+    def apply_alteration(self,
+                         file_name: str,
+                         alteration_level: float) -> np.ndarray:
         """
         Method that applies a Brightness Variation with a given value to the
         image, whose fileName is given as a parameter
@@ -570,7 +582,7 @@ class Zoom(Alteration):
     In our experiments we have used (0, 1, 0.025) as usual range
     """
 
-    def name(self):
+    def name(self) -> str:
         """
         Method to get the alteration name
 
@@ -581,7 +593,8 @@ class Zoom(Alteration):
         """
         return "Zoom"
 
-    def apply_alteration_image(self, img, alteration_level):
+    def apply_alteration_image(self, img: np.ndarray,
+                               alteration_level: float) -> np.ndarray:
         """
         Method that applies the Zoom with a given value to the image
 
@@ -634,16 +647,17 @@ class AlterationSequence:
     alteration_level
     """
 
-    def __init__(self, alterations, alteration_levels):
+    def __init__(self, alterations: List[Alteration],
+                 alteration_levels: List[float]):
         """
         Constructs all the necessary attributes for the AlterationSequence
         object.
 
         Parameters
         ----------
-            alterations : list
+            alterations : List[Alteration]
                 list of alterations to be applied
-            alteration_levels : list
+            alteration_levels : List[float]
                 list of alteration levels
         Raises
         ------
@@ -656,7 +670,7 @@ class AlterationSequence:
         self.alterations = alterations
         self.alteration_levels = alteration_levels
 
-    def name(self):
+    def name(self) -> str:
         """
         Method to get the alteration sequence name
 
@@ -670,7 +684,7 @@ class AlterationSequence:
             alteration_name = alteration_name + " " + a.name() + ","
         return alteration_name
 
-    def apply_alteration(self, img):
+    def apply_alteration(self, img: np.ndarray) -> np.ndarray:
         """
         Method that applies a given sequence of alterations with given values
         to the image

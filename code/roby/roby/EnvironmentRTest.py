@@ -1,4 +1,4 @@
-"""
+r"""
 The **EnvironmentRTest** module contains all the information useful to compute
 the robustness analysis of a Neural Network.
 
@@ -23,6 +23,9 @@ In details, the following data are required:
 - _postprocess\_f_, i.e. a function that can be used to scale the probability
   in output to your network.
 """
+from keras import Model   # type: ignore
+from typing import Callable, List
+import numpy as np   # type: ignore
 
 
 class EnvironmentRTest:
@@ -31,33 +34,34 @@ class EnvironmentRTest:
     on our dataset
     """
 
-    def __init__(self, model, file_list: list, classes: list,
-                 label_list: list=None,
-                 labeler_f=None, preprocess_f=None,
-                 postprocess_f=None):
+    def __init__(self, model: Model, file_list: list, classes: List[str],
+                 label_list: List[str]=None,
+                 labeler_f: Callable[[np.ndarray], str]=None,
+                 preprocess_f: Callable[[np.ndarray], np.ndarray]=None,
+                 postprocess_f: Callable[[float], float]=None):
         """
         Constructs all the necessary attributes for the RobustnessResult object
 
         Parameters
         ----------
-            model : keras.model
+            model : keras.Model
                 model we are going to test
-            file_list : list
-                list of all the images - strings or cv2.image - (dataset)
+            file_list : List[str] or List[np.ndarray]
+                list of all the images - str or np.ndarray - (dataset)
                 uploaded in our VM
-            classes : list
+            classes : List[str]
                 list with the names - strings - of all the possible
                 classification of our model
-            label_list: list, optional
+            label_list: List[str], optional
                 list of all the labels associated to each image - str.
                 It can be None
-            labeler_f : function, optional
+            labeler_f : Callable[[np.ndarray], str], optional
                 labeler function used to get the correct label from an image.
                 It can be None
-            preprocess_f : function, optional
+            preprocess_f : Callable[[np.ndarray], np.ndarray], optional
                 pre-processing to be executed on the data before the model
                 classification. It can be None
-            postprocess_f : function, optional
+            postprocess_f : Callable[[float], float], optional
                 post-processing to be executed on the output of the model.
                 It can be None
 
@@ -73,7 +77,9 @@ class EnvironmentRTest:
         # If the label list is not given, then apply the labeler function
         try:
             if self.label_list is None and self.labeler_f is not None:
-                self.label_list = list(map(labeler_f, self.file_list))
+                assert self.labeler_f is not None
+                self.label_list = list(map(labeler_f,        # type: ignore
+                                           self.file_list))  # type: ignore
         except ValueError:
             pass
         assert self.label_list is not None and \

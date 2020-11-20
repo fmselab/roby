@@ -2,12 +2,14 @@
 The **RobustnessResults** module contains the class which is used to store
 the results of each robustness analysis.
 """
+from typing import List
 
 
 class RobustnessResults:
     """Class storing the results of the robustness."""
 
-    def __init__(self, steps: list, accuracies: list, robustness: float,
+    def __init__(self, steps: List[float], accuracies: List[float],
+                 robustness: float,
                  title: str,
                  xlabel: str,
                  ylabel: str,
@@ -18,10 +20,10 @@ class RobustnessResults:
 
         Parameters
         ----------
-            steps : list
+            steps : List[float]
                 list of all the alteration levels that have been applied
                 to the image
-            accuracies : list
+            accuracies : List[float]
                 list of all the accuracies gathered during the robustness
                 analysis
             robustness : float

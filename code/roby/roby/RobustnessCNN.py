@@ -24,7 +24,7 @@ def set_classes(filename: str) -> List[str]:
 
     Returns
     -------
-        classes : list
+        classes : List[str]
             the list (of str) containing the name of the classes
     """
     classes = []
@@ -44,10 +44,10 @@ def compute_robustness(accuracies: List[float], steps: List[float],
 
     Parameters
     ----------
-        accuracies : list
+        accuracies : List[float]
             the list (of float) of the accuracy values gathered during the
             robustness analysis
-        steps : list
+        steps : List[float]
             the list (of float) of the steps used to evaluate the robustness
         threshold : float
             the value chosen as the acceptable limit of accuracy to calculate
@@ -98,11 +98,11 @@ def classification(environment: EnvironmentRTest.EnvironmentRTest) -> float:
             proba = environment.post_processing(proba)
 
         # Get predicted label and real one
-        predicted_class = 0
+        predicted_class = ""
         predicted_prob = 0
         for (label, p) in zip(environment.classes, proba):
             if float(p) > float(predicted_prob):
-                predicted_class = label
+                predicted_class = str(label)
                 predicted_prob = p
         if environment.label_list is not None:
             real_label = environment.label_list[image_index]
@@ -195,11 +195,11 @@ def robustness_test(environment: EnvironmentRTest.EnvironmentRTest,
             if environment.post_processing is not None:
                 proba = environment.post_processing(proba)
             # Get predicted label and real one
-            predicted_class = 0
+            predicted_class = ""
             predicted_prob = 0
             for (label, p) in zip(environment.classes, proba):
                 if float(p) > float(predicted_prob):
-                    predicted_class = label
+                    predicted_class = str(label)
                     predicted_prob = p
 
             if environment.label_list is not None:

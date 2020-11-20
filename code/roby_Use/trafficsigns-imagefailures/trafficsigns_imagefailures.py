@@ -68,9 +68,10 @@ if __name__ == '__main__':
 
     # set the classes
     classes = list(range(44))
+    classesStr = [str(classV) for classV in classes]
 
     # load the environment
-    environment = EnvironmentRTest(model, X_test[:200], classes,
+    environment = EnvironmentRTest(model, X_test[:200], classesStr,
                                    preprocess_f=pre_processing,
                                    label_list=y_test[:200])
 

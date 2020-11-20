@@ -5,6 +5,7 @@ Created on 11 nov 2020
 """
 
 from keras.models import load_model   # type: ignore
+from keras import Model   # type: ignore
 # Manage xml and csv files
 import xml.etree.ElementTree as Et
 # Google Drive
@@ -16,15 +17,17 @@ from oauth2client.client import GoogleCredentials   # type: ignore
 # roby tools
 from roby.RobustnessCNN import set_classes
 from roby.EnvironmentRTest import EnvironmentRTest
+from typing import Callable, List
+import numpy as np   # type: ignore
 
 
-def upload_config():
+def upload_config() -> Et.Element:
     """
     Uploading and parsing of configuration file
 
     Returns
     -------
-        root : tree.root
+        root : xml.etree.ElementTree.Element
             the root element of the deserialized XML file
     """
     uploaded = files.upload()
@@ -38,7 +41,7 @@ def upload_config():
     return root
 
 
-def authenticate():
+def authenticate() -> GoogleDrive:
     """
     Mounts Google Drive into the virtual machine
 
@@ -55,25 +58,28 @@ def authenticate():
     return drive
 
 
-def process_config_from_xml(root, drive, labeler_f=None,
-                            pre_processing_function=None,
-                            post_processing_function=None):
+def process_config_from_xml(root: Et.Element, drive: GoogleDrive,
+                            labeler_f: Callable[[np.ndarray], str]=None,
+                            pre_processing_f:
+                            Callable[[np.ndarray], np.ndarray]=None,
+                            post_processing_f:
+                            Callable[[float], float]=None) -> EnvironmentRTest:
     """
     Loads the configuration data from an XML file and builds the environment
 
     Parameters
     ----------
-        root : tree.root
+        root : xml.etree.ElementTree.Element
             the root element of the deserialized XML configuration file
         drive : GoogleDrive
             the Google Drive element, used to hold the authorization to read
             and download the files from Google Drive
-        labeler_f : function, optional
+        labeler_f : Callable[[np.ndarray], str], optional
             the function used to assign the correct label to an image
-        pre_processing_function : function, optional
+        pre_processing_f : Callable[[np.ndarray], np.ndarray], optional
             pre-processing to be executed on the data before the model
             classification. It can be None
-        post_processing_function : function, optional
+        post_processing_f : Callable[[float], float], optional
             post-processing to be executed on the output of the model.
             It can be None
 
@@ -96,12 +102,19 @@ def process_config_from_xml(root, drive, labeler_f=None,
     for elem in root.iter('Labels'):
         labels_link = elem.text
 
+    if model_link is None:
+        raise ValueError("No model link found in the configuration file")
+    if link_dataset_dir is None:
+        raise ValueError("No dataset link found in the configuration file")
+    if classes_link is None:
+        raise ValueError("No classes link found in the configuration file")
+
     return process_config(model_link, link_dataset_dir, classes_link, drive,
                           labels_link, labeler_f,
-                          pre_processing_function, post_processing_function)
+                          pre_processing_f, post_processing_f)
 
 
-def load_model_from_url(model_link, drive):
+def load_model_from_url(model_link: str, drive: GoogleDrive) -> Model:
     """
     Loads the model from a Google Drive URL
 
@@ -115,7 +128,7 @@ def load_model_from_url(model_link, drive):
 
     Returns
     -------
-        model : keras.model
+        model : keras.Model
             the model used to classify the images
     """
     # Upload the Model
@@ -127,7 +140,8 @@ def load_model_from_url(model_link, drive):
     return model
 
 
-def load_dataset_from_url(link_dataset_dir, drive):
+def load_dataset_from_url(link_dataset_dir: str,
+                          drive: GoogleDrive) -> List[str]:
     """
     Loads the images dataset from a Google Drive URL
 
@@ -141,7 +155,7 @@ def load_dataset_from_url(link_dataset_dir, drive):
 
     Returns
     -------
-        file_list : list
+        file_list : List[str]
             the list (of str) containing all paths of the images contained in
             the test set
     """
@@ -161,7 +175,8 @@ def load_dataset_from_url(link_dataset_dir, drive):
     return file_list
 
 
-def load_classes_from_url(classes_link, drive):
+def load_classes_from_url(classes_link: str,
+                          drive: GoogleDrive) -> List[str]:
     """
     Loads the classes from a Google Drive URL
 
@@ -174,7 +189,7 @@ def load_classes_from_url(classes_link, drive):
             and download the files from Google Drive
     Returns
     -------
-        classes : list
+        classes : List[str]
             the list (of str) containing all the classes
     """
     id_val = classes_link.split('/')[-1]
@@ -185,7 +200,8 @@ def load_classes_from_url(classes_link, drive):
     return classes
 
 
-def load_labels_from_url(label_list_link, drive):
+def load_labels_from_url(label_list_link: str,
+                         drive: GoogleDrive) -> List[str]:
     """
     Loads the classes from a Google Drive URL
 
@@ -199,7 +215,7 @@ def load_labels_from_url(label_list_link, drive):
 
     Returns
     -------
-        labels : list
+        labels : List[str]
             the list (of str) containing all the correct labels for images
     """
     id_val = label_list_link.split('/')[-1]
@@ -213,9 +229,10 @@ def load_labels_from_url(label_list_link, drive):
 def process_config(model_link: str, link_dataset_dir: str, classes_link: str,
                    drive: GoogleDrive,
                    label_list_link: str=None,
-                   labeler_f=None,
-                   pre_processing_function=None,
-                   post_processing_function=None):
+                   labeler_f: Callable[[np.ndarray], str]=None,
+                   pre_processing_f: Callable[[np.ndarray], np.ndarray]=None,
+                   post_processing_f:
+                   Callable[[float], float]=None) -> EnvironmentRTest:
     """
     Loads the configuration data from parameters and builds the enviroment
 
@@ -232,13 +249,13 @@ def process_config(model_link: str, link_dataset_dir: str, classes_link: str,
             and download the files from Google Drive
         label_list_link : str, optional
             URL where the classification csv file can be found. It can be None
-        labeler_f : function, optional
+        labeler_f : Callable[[np.ndarray], str], optional
             function used to assign the right label to a certain image.
             It can be None
-        pre_processing_function : function, optional
+        pre_processing_f : Callable[[np.ndarray], np.ndarray], optional
             pre-processing to be executed on the data before the model
             classification. It can be None
-        post_processing_function : function, optional
+        post_processing_f : Callable[[float], float], optional
             post-processing to be executed on the output of the model.
             It can be None
 
@@ -258,11 +275,11 @@ def process_config(model_link: str, link_dataset_dir: str, classes_link: str,
     if label_list_link is not None:
         labels = load_labels_from_url(label_list_link, drive)
     else:
-        labels = None
+        labels = None   # type: ignore
 
     # Create the object wit all these variables saved
     environment = EnvironmentRTest(model, file_list, classes, labels,
                                    labeler_f,
-                                   pre_processing_function,
-                                   post_processing_function)
+                                   pre_processing_f,
+                                   post_processing_f)
     return environment
