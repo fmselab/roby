@@ -22,6 +22,8 @@ In details, the following data are required:
   parameter.
 - _postprocess\_f_, i.e. a function that can be used to scale the probability
   in output to your network.
+
+@author: Andrea Bombarda
 """
 from keras import Model   # type: ignore
 from typing import Callable, List

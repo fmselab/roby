@@ -1,5 +1,13 @@
 """
-Created on Wed May 29 17:22:43 2019
+The **RobustnessCNN** module offers the main functionalities of the
+**roby** tool, i.e. those useful to compute the robustness and evaluate
+a neural network.
+
+The major features offered by this module are the followings:
+
+- Network evaluation via its accuracy
+- Robustness evaluation, applying a specific alteration
+- Robustness results display
 
 @author: Andrea Bombarda
 """

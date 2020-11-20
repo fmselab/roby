@@ -1,7 +1,16 @@
 """
-Created on 11 nov 2020
+The **CloudTools** module contains useful functions to be used on Google Colab
+to perform robustness analysis on cloud based platform.
 
-@author: Andrea_PC
+It offers the following functionalities:
+
+- Load configurations from an `XML` file
+- Grant the permission on a Google Drive account, where the dataset and model
+  are stored
+- Configure the environment either by starting from an `XML` file or directly
+  giving the relevant links
+
+@author: Andrea Bombarda
 """
 
 from keras.models import load_model   # type: ignore

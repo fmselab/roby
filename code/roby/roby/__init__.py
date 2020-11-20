@@ -41,4 +41,6 @@ the following steps:
 7. Define the alteration w.r.t. you want to test the robustness of your
    network.
 8. Launch the robustness test and show the results.
+
+@author: Andrea Bombarda
 """

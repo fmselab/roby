@@ -1,6 +1,16 @@
 """
 The **RobustnessResults** module contains the class which is used to store
 the results of each robustness analysis.
+
+In particular, the following information are stored:
+
+- List of the steps used for robustness analysis
+- List of the accuracy values gathered during robustness analysis
+- The value of the robustness
+- The title of the plot, with the labels to be put on x and y axis
+- The name of the applied alteration
+
+@author: Andrea Bombarda
 """
 from typing import List
 
