@@ -43,7 +43,7 @@ class RainAlteration_1(Alteration):
                     Set this value to 'L' if your image is represented using a
                     np.array with values float32 and scaled within 0 and 1
         """
-        super().__init__(0, 1)
+        super().__init__(0, 0.2)
         self.picture_mode = picture_mode
 
     def name(self):
@@ -128,7 +128,7 @@ class Condensation_1(Alteration):
                     if your image is represented using a np.array with values
                     float32 and scaled within 0 and 1
         """
-        super().__init__(0, 1)
+        super().__init__(0, 0.2)
         self.picture_mode = picture_mode
 
     def name(self):

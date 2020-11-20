@@ -93,7 +93,7 @@ if __name__ == '__main__':
     results = robustness_test(environment, alteration_type, 20,
                               accuracy_threshold)
     display_robustness_results(results)
-
+    
     # create the alteration_type as a GaussianNoise with variance 0.01
     alteration_type = GaussianNoise(0, 1, 0.01)
 
