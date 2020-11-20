@@ -6,7 +6,7 @@
 <meta name="generator" content="pdoc 0.9.1" />
 <title>roby.RobustnessResults API documentation</title>
 <meta name="description" content="The **RobustnessResults** module contains the class which is used to store
-the results of each robustness analysis." />
+the results of each robustness analysis …" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
 <link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
@@ -25,6 +25,15 @@ the results of each robustness analysis." />
 <section id="section-intro">
 <p>The <strong>RobustnessResults</strong> module contains the class which is used to store
 the results of each robustness analysis.</p>
+<p>In particular, the following information are stored:</p>
+<ul>
+<li>List of the steps used for robustness analysis</li>
+<li>List of the accuracy values gathered during robustness analysis</li>
+<li>The value of the robustness</li>
+<li>The title of the plot, with the labels to be put on x and y axis</li>
+<li>The name of the applied alteration</li>
+</ul>
+<p>@author: Andrea Bombarda</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -32,6 +41,16 @@ the results of each robustness analysis.</p>
 <pre><code class="python">&#34;&#34;&#34;
 The **RobustnessResults** module contains the class which is used to store
 the results of each robustness analysis.
+
+In particular, the following information are stored:
+
+- List of the steps used for robustness analysis
+- List of the accuracy values gathered during robustness analysis
+- The value of the robustness
+- The title of the plot, with the labels to be put on x and y axis
+- The name of the applied alteration
+
+@author: Andrea Bombarda
 &#34;&#34;&#34;
 from typing import List
 
