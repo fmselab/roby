@@ -33,12 +33,14 @@ the results of each robustness analysis.</p>
 The **RobustnessResults** module contains the class which is used to store
 the results of each robustness analysis.
 &#34;&#34;&#34;
+from typing import List
 
 
 class RobustnessResults:
     &#34;&#34;&#34;Class storing the results of the robustness.&#34;&#34;&#34;
 
-    def __init__(self, steps: list, accuracies: list, robustness: float,
+    def __init__(self, steps: List[float], accuracies: List[float],
+                 robustness: float,
                  title: str,
                  xlabel: str,
                  ylabel: str,
@@ -49,10 +51,10 @@ class RobustnessResults:
 
         Parameters
         ----------
-            steps : list
+            steps : List[float]
                 list of all the alteration levels that have been applied
                 to the image
-            accuracies : list
+            accuracies : List[float]
                 list of all the accuracies gathered during the robustness
                 analysis
             robustness : float
@@ -88,17 +90,17 @@ class RobustnessResults:
 <dl>
 <dt id="roby.RobustnessResults.RobustnessResults"><code class="flex name class">
 <span>class <span class="ident">RobustnessResults</span></span>
-<span>(</span><span>steps: list, accuracies: list, robustness: float, title: str, xlabel: str, ylabel: str, alteration_name: str)</span>
+<span>(</span><span>steps: List[float], accuracies: List[float], robustness: float, title: str, xlabel: str, ylabel: str, alteration_name: str)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Class storing the results of the robustness.</p>
 <p>Constructs all the necessary attributes for the RobustnessResult
 object.</p>
 <h2 id="parameters">Parameters</h2>
-<pre><code>steps : list
+<pre><code>steps : List[float]
     list of all the alteration levels that have been applied
     to the image
-accuracies : list
+accuracies : List[float]
     list of all the accuracies gathered during the robustness
     analysis
 robustness : float
@@ -121,7 +123,8 @@ alteration_name : str
 <pre><code class="python">class RobustnessResults:
     &#34;&#34;&#34;Class storing the results of the robustness.&#34;&#34;&#34;
 
-    def __init__(self, steps: list, accuracies: list, robustness: float,
+    def __init__(self, steps: List[float], accuracies: List[float],
+                 robustness: float,
                  title: str,
                  xlabel: str,
                  ylabel: str,
@@ -132,10 +135,10 @@ alteration_name : str
 
         Parameters
         ----------
-            steps : list
+            steps : List[float]
                 list of all the alteration levels that have been applied
                 to the image
-            accuracies : list
+            accuracies : List[float]
                 list of all the accuracies gathered during the robustness
                 analysis
             robustness : float

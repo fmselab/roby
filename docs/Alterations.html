@@ -60,6 +60,7 @@ from abc import ABC, abstractmethod
 from scipy.ndimage.interpolation import zoom   # type: ignore
 import sys
 import warnings
+from typing import List
 
 if not sys.warnoptions:
     warnings.simplefilter(&#34;ignore&#34;)
@@ -84,7 +85,7 @@ class Alteration(ABC):
         self.value_to = value_to
 
     @abstractmethod
-    def name(self):
+    def name(self) -&gt; str:
         &#34;&#34;&#34;
         Abstract method to get the alteration name
 
@@ -94,7 +95,7 @@ class Alteration(ABC):
                 the name of the alteration type
         &#34;&#34;&#34;
 
-    def get_range(self, n_values: int):
+    def get_range(self, n_values: int) -&gt; np.ndarray:
         &#34;&#34;&#34;
         Method giving the range of the alteration, starting from &#39;value_from&#39;
         to &#39;value_to&#39; with step &#39;step&#39;
@@ -107,7 +108,7 @@ class Alteration(ABC):
 
         Returns
         -------
-            range : range
+            range : np.ndarray
                 the range of the alteration, starting from &#39;value_from&#39; to
                 &#39;value_to&#39;
         &#34;&#34;&#34;
@@ -168,7 +169,7 @@ class VerticalTranslation(Alteration):
     In our experiments we have used (-1, 1) as usual range
     &#34;&#34;&#34;
 
-    def name(self):
+    def name(self) -&gt; str:
         &#34;&#34;&#34;
         Method to get the alteration name
 
@@ -179,7 +180,8 @@ class VerticalTranslation(Alteration):
         &#34;&#34;&#34;
         return &#34;VerticalTranslation&#34;
 
-    def apply_alteration_image(self, img, alteration_level):
+    def apply_alteration_image(self, img: np.ndarray,
+                               alteration_level: float) -&gt; np.ndarray:
         &#34;&#34;&#34;
         Method that applies the vertical translation with a given value to the
         image
@@ -221,7 +223,7 @@ class HorizontalTranslation(Alteration):
     In our experiments we have used (-1, 1) as usual range
     &#34;&#34;&#34;
 
-    def name(self):
+    def name(self) -&gt; str:
         &#34;&#34;&#34;
         Method to get the alteration name
 
@@ -232,7 +234,8 @@ class HorizontalTranslation(Alteration):
         &#34;&#34;&#34;
         return &#34;HorizontalTranslation&#34;
 
-    def apply_alteration_image(self, img, alteration_level):
+    def apply_alteration_image(self, img: np.ndarray,
+                               alteration_level: float) -&gt; np.ndarray:
         &#34;&#34;&#34;
         Method that applies the horizontal translation with a given value to
         the image.
@@ -274,7 +277,7 @@ class Compression(Alteration):
     In our experiments we have used (0, 1) as usual range
     &#34;&#34;&#34;
 
-    def name(self):
+    def name(self) -&gt; str:
         &#34;&#34;&#34;
         Method to get the alteration name
 
@@ -326,7 +329,7 @@ class GaussianNoise(Alteration):
     In our experiments we have used (0, 1, 0.025) as usual range
     &#34;&#34;&#34;
 
-    def __init__(self, value_from, value_to, variance):
+    def __init__(self, value_from: float, value_to: float, variance: float):
         &#34;&#34;&#34;
         Constructs all the necessary attributes for the Gaussian Noise object.
 
@@ -342,7 +345,7 @@ class GaussianNoise(Alteration):
         super().__init__(value_from, value_to)
         self.variance = variance
 
-    def name(self):
+    def name(self) -&gt; str:
         &#34;&#34;&#34;
         Method to get the alteration name
 
@@ -353,7 +356,8 @@ class GaussianNoise(Alteration):
         &#34;&#34;&#34;
         return &#34;GaussianNoise&#34;
 
-    def apply_alteration_image(self, img, alteration_level):
+    def apply_alteration_image(self, img: np.ndarray,
+                               alteration_level: float) -&gt; np.ndarray:
         &#34;&#34;&#34;
         Method that applies the Gaussian Noise with a given value to the image
 
@@ -393,7 +397,8 @@ class Blur(Alteration):
     In our experiments we have used (0, 1, 0.025) as usual range
     &#34;&#34;&#34;
 
-    def __init__(self, value_from, value_to, radius=2, picture_mode=&#39;RGB&#39;):
+    def __init__(self, value_from: float, value_to: float, radius: float=2,
+                 picture_mode: str=&#39;RGB&#39;):
         &#34;&#34;&#34;
         Constructs all the necessary attributes for the Gaussian Noise object.
 
@@ -416,7 +421,7 @@ class Blur(Alteration):
         self.radius = radius
         self.picture_mode = picture_mode
 
-    def name(self):
+    def name(self) -&gt; str:
         &#34;&#34;&#34;
         Method to get the alteration name
 
@@ -427,7 +432,8 @@ class Blur(Alteration):
         &#34;&#34;&#34;
         return &#34;Blur&#34;
 
-    def apply_alteration_image(self, img, alteration_level):
+    def apply_alteration_image(self, img: np.ndarray,
+                               alteration_level: float) -&gt; np.ndarray:
         &#34;&#34;&#34;
         Method that applies the Blur with a given value to the image
 
@@ -465,7 +471,9 @@ class Blur(Alteration):
         assert(isinstance(img, np.ndarray))
         return img
 
-    def apply_alteration(self, file_name, alteration_level):
+    def apply_alteration(self,
+                         file_name: str,
+                         alteration_level: float) -&gt; np.ndarray:
         &#34;&#34;&#34;
         Method that applies a blur alteration with a given value to the image,
         whose fileName is given as a parameter
@@ -502,7 +510,8 @@ class Brightness(Alteration):
     In our experiments we have used (-1, 1, 0.05) as usual range
     &#34;&#34;&#34;
 
-    def __init__(self, value_from, value_to, picture_mode=&#39;RGB&#39;):
+    def __init__(self, value_from: float, value_to: float,
+                 picture_mode: str=&#39;RGB&#39;):
         &#34;&#34;&#34;
         Constructs all the necessary attributes for the Gaussian Noise object.
 
@@ -522,7 +531,7 @@ class Brightness(Alteration):
         super().__init__(value_from, value_to)
         self.picture_mode = picture_mode
 
-    def name(self):
+    def name(self) -&gt; str:
         &#34;&#34;&#34;
         Method to get the alteration name
 
@@ -533,7 +542,8 @@ class Brightness(Alteration):
         &#34;&#34;&#34;
         return &#34;Brightness&#34;
 
-    def apply_alteration_image(self, img, alteration_level):
+    def apply_alteration_image(self, img: np.ndarray,
+                               alteration_level: float) -&gt; np.ndarray:
         &#34;&#34;&#34;
         Method that applies the Brightness Variation with a given value to the
         image
@@ -572,7 +582,9 @@ class Brightness(Alteration):
         assert(isinstance(img, np.ndarray))
         return img
 
-    def apply_alteration(self, file_name, alteration_level):
+    def apply_alteration(self,
+                         file_name: str,
+                         alteration_level: float) -&gt; np.ndarray:
         &#34;&#34;&#34;
         Method that applies a Brightness Variation with a given value to the
         image, whose fileName is given as a parameter
@@ -610,7 +622,7 @@ class Zoom(Alteration):
     In our experiments we have used (0, 1, 0.025) as usual range
     &#34;&#34;&#34;
 
-    def name(self):
+    def name(self) -&gt; str:
         &#34;&#34;&#34;
         Method to get the alteration name
 
@@ -621,7 +633,8 @@ class Zoom(Alteration):
         &#34;&#34;&#34;
         return &#34;Zoom&#34;
 
-    def apply_alteration_image(self, img, alteration_level):
+    def apply_alteration_image(self, img: np.ndarray,
+                               alteration_level: float) -&gt; np.ndarray:
         &#34;&#34;&#34;
         Method that applies the Zoom with a given value to the image
 
@@ -674,16 +687,17 @@ class AlterationSequence:
     alteration_level
     &#34;&#34;&#34;
 
-    def __init__(self, alterations, alteration_levels):
+    def __init__(self, alterations: List[Alteration],
+                 alteration_levels: List[float]):
         &#34;&#34;&#34;
         Constructs all the necessary attributes for the AlterationSequence
         object.
 
         Parameters
         ----------
-            alterations : list
+            alterations : List[Alteration]
                 list of alterations to be applied
-            alteration_levels : list
+            alteration_levels : List[float]
                 list of alteration levels
         Raises
         ------
@@ -696,7 +710,7 @@ class AlterationSequence:
         self.alterations = alterations
         self.alteration_levels = alteration_levels
 
-    def name(self):
+    def name(self) -&gt; str:
         &#34;&#34;&#34;
         Method to get the alteration sequence name
 
@@ -710,7 +724,7 @@ class AlterationSequence:
             alteration_name = alteration_name + &#34; &#34; + a.name() + &#34;,&#34;
         return alteration_name
 
-    def apply_alteration(self, img):
+    def apply_alteration(self, img: np.ndarray) -&gt; np.ndarray:
         &#34;&#34;&#34;
         Method that applies a given sequence of alterations with given values
         to the image
@@ -779,7 +793,7 @@ value_to : float
         self.value_to = value_to
 
     @abstractmethod
-    def name(self):
+    def name(self) -&gt; str:
         &#34;&#34;&#34;
         Abstract method to get the alteration name
 
@@ -789,7 +803,7 @@ value_to : float
                 the name of the alteration type
         &#34;&#34;&#34;
 
-    def get_range(self, n_values: int):
+    def get_range(self, n_values: int) -&gt; np.ndarray:
         &#34;&#34;&#34;
         Method giving the range of the alteration, starting from &#39;value_from&#39;
         to &#39;value_to&#39; with step &#39;step&#39;
@@ -802,7 +816,7 @@ value_to : float
 
         Returns
         -------
-            range : range
+            range : np.ndarray
                 the range of the alteration, starting from &#39;value_from&#39; to
                 &#39;value_to&#39;
         &#34;&#34;&#34;
@@ -961,7 +975,7 @@ def apply_alteration_image(self, img: np.ndarray,
 </details>
 </dd>
 <dt id="roby.Alterations.Alteration.get_range"><code class="name flex">
-<span>def <span class="ident">get_range</span></span>(<span>self, n_values: int)</span>
+<span>def <span class="ident">get_range</span></span>(<span>self, n_values: int) ‑> numpy.ndarray</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Method giving the range of the alteration, starting from 'value_from'
@@ -972,7 +986,7 @@ to 'value_to' with step 'step'</p>
     'value_to', included
 </code></pre>
 <h2 id="returns">Returns</h2>
-<pre><code>range : range
+<pre><code>range : np.ndarray
     the range of the alteration, starting from 'value_from' to
     'value_to'
 </code></pre></div>
@@ -980,7 +994,7 @@ to 'value_to' with step 'step'</p>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def get_range(self, n_values: int):
+<pre><code class="python">def get_range(self, n_values: int) -&gt; np.ndarray:
     &#34;&#34;&#34;
     Method giving the range of the alteration, starting from &#39;value_from&#39;
     to &#39;value_to&#39; with step &#39;step&#39;
@@ -993,7 +1007,7 @@ to 'value_to' with step 'step'</p>
 
     Returns
     -------
-        range : range
+        range : np.ndarray
             the range of the alteration, starting from &#39;value_from&#39; to
             &#39;value_to&#39;
     &#34;&#34;&#34;
@@ -1003,7 +1017,7 @@ to 'value_to' with step 'step'</p>
 </details>
 </dd>
 <dt id="roby.Alterations.Alteration.name"><code class="name flex">
-<span>def <span class="ident">name</span></span>(<span>self)</span>
+<span>def <span class="ident">name</span></span>(<span>self) ‑> str</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Abstract method to get the alteration name</p>
@@ -1016,7 +1030,7 @@ to 'value_to' with step 'step'</p>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@abstractmethod
-def name(self):
+def name(self) -&gt; str:
     &#34;&#34;&#34;
     Abstract method to get the alteration name
 
@@ -1031,7 +1045,7 @@ def name(self):
 </dd>
 <dt id="roby.Alterations.AlterationSequence"><code class="flex name class">
 <span>class <span class="ident">AlterationSequence</span></span>
-<span>(</span><span>alterations, alteration_levels)</span>
+<span>(</span><span>alterations: List[<a title="roby.Alterations.Alteration" href="#roby.Alterations.Alteration">Alteration</a>], alteration_levels: List[float])</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Class defining the a sequence of alterations, each one with its own
@@ -1039,9 +1053,9 @@ alteration_level</p>
 <p>Constructs all the necessary attributes for the AlterationSequence
 object.</p>
 <h2 id="parameters">Parameters</h2>
-<pre><code>alterations : list
+<pre><code>alterations : List[Alteration]
     list of alterations to be applied
-alteration_levels : list
+alteration_levels : List[float]
     list of alteration levels
 </code></pre>
 <h2 id="raises">Raises</h2>
@@ -1058,16 +1072,17 @@ alteration_levels : list
     alteration_level
     &#34;&#34;&#34;
 
-    def __init__(self, alterations, alteration_levels):
+    def __init__(self, alterations: List[Alteration],
+                 alteration_levels: List[float]):
         &#34;&#34;&#34;
         Constructs all the necessary attributes for the AlterationSequence
         object.
 
         Parameters
         ----------
-            alterations : list
+            alterations : List[Alteration]
                 list of alterations to be applied
-            alteration_levels : list
+            alteration_levels : List[float]
                 list of alteration levels
         Raises
         ------
@@ -1080,7 +1095,7 @@ alteration_levels : list
         self.alterations = alterations
         self.alteration_levels = alteration_levels
 
-    def name(self):
+    def name(self) -&gt; str:
         &#34;&#34;&#34;
         Method to get the alteration sequence name
 
@@ -1094,7 +1109,7 @@ alteration_levels : list
             alteration_name = alteration_name + &#34; &#34; + a.name() + &#34;,&#34;
         return alteration_name
 
-    def apply_alteration(self, img):
+    def apply_alteration(self, img: np.ndarray) -&gt; np.ndarray:
         &#34;&#34;&#34;
         Method that applies a given sequence of alterations with given values
         to the image
@@ -1119,7 +1134,7 @@ alteration_levels : list
 <h3>Methods</h3>
 <dl>
 <dt id="roby.Alterations.AlterationSequence.apply_alteration"><code class="name flex">
-<span>def <span class="ident">apply_alteration</span></span>(<span>self, img)</span>
+<span>def <span class="ident">apply_alteration</span></span>(<span>self, img: numpy.ndarray) ‑> numpy.ndarray</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Method that applies a given sequence of alterations with given values
@@ -1136,7 +1151,7 @@ to the image</p>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def apply_alteration(self, img):
+<pre><code class="python">def apply_alteration(self, img: np.ndarray) -&gt; np.ndarray:
     &#34;&#34;&#34;
     Method that applies a given sequence of alterations with given values
     to the image
@@ -1160,7 +1175,7 @@ to the image</p>
 </details>
 </dd>
 <dt id="roby.Alterations.AlterationSequence.name"><code class="name flex">
-<span>def <span class="ident">name</span></span>(<span>self)</span>
+<span>def <span class="ident">name</span></span>(<span>self) ‑> str</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Method to get the alteration sequence name</p>
@@ -1172,7 +1187,7 @@ to the image</p>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def name(self):
+<pre><code class="python">def name(self) -&gt; str:
     &#34;&#34;&#34;
     Method to get the alteration sequence name
 
@@ -1191,7 +1206,7 @@ to the image</p>
 </dd>
 <dt id="roby.Alterations.Blur"><code class="flex name class">
 <span>class <span class="ident">Blur</span></span>
-<span>(</span><span>value_from, value_to, radius=2, picture_mode='RGB')</span>
+<span>(</span><span>value_from: float, value_to: float, radius: float = 2, picture_mode: str = 'RGB')</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Class defining the blur alteration.
@@ -1224,7 +1239,8 @@ picture_mode : str, optional
     In our experiments we have used (0, 1, 0.025) as usual range
     &#34;&#34;&#34;
 
-    def __init__(self, value_from, value_to, radius=2, picture_mode=&#39;RGB&#39;):
+    def __init__(self, value_from: float, value_to: float, radius: float=2,
+                 picture_mode: str=&#39;RGB&#39;):
         &#34;&#34;&#34;
         Constructs all the necessary attributes for the Gaussian Noise object.
 
@@ -1247,7 +1263,7 @@ picture_mode : str, optional
         self.radius = radius
         self.picture_mode = picture_mode
 
-    def name(self):
+    def name(self) -&gt; str:
         &#34;&#34;&#34;
         Method to get the alteration name
 
@@ -1258,7 +1274,8 @@ picture_mode : str, optional
         &#34;&#34;&#34;
         return &#34;Blur&#34;
 
-    def apply_alteration_image(self, img, alteration_level):
+    def apply_alteration_image(self, img: np.ndarray,
+                               alteration_level: float) -&gt; np.ndarray:
         &#34;&#34;&#34;
         Method that applies the Blur with a given value to the image
 
@@ -1296,7 +1313,9 @@ picture_mode : str, optional
         assert(isinstance(img, np.ndarray))
         return img
 
-    def apply_alteration(self, file_name, alteration_level):
+    def apply_alteration(self,
+                         file_name: str,
+                         alteration_level: float) -&gt; np.ndarray:
         &#34;&#34;&#34;
         Method that applies a blur alteration with a given value to the image,
         whose fileName is given as a parameter
@@ -1332,7 +1351,7 @@ picture_mode : str, optional
 <h3>Methods</h3>
 <dl>
 <dt id="roby.Alterations.Blur.apply_alteration"><code class="name flex">
-<span>def <span class="ident">apply_alteration</span></span>(<span>self, file_name, alteration_level)</span>
+<span>def <span class="ident">apply_alteration</span></span>(<span>self, file_name: str, alteration_level: float) ‑> numpy.ndarray</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Method that applies a blur alteration with a given value to the image,
@@ -1354,7 +1373,9 @@ alteration_level : float
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def apply_alteration(self, file_name, alteration_level):
+<pre><code class="python">def apply_alteration(self,
+                     file_name: str,
+                     alteration_level: float) -&gt; np.ndarray:
     &#34;&#34;&#34;
     Method that applies a blur alteration with a given value to the image,
     whose fileName is given as a parameter
@@ -1384,7 +1405,7 @@ alteration_level : float
 </details>
 </dd>
 <dt id="roby.Alterations.Blur.apply_alteration_image"><code class="name flex">
-<span>def <span class="ident">apply_alteration_image</span></span>(<span>self, img, alteration_level)</span>
+<span>def <span class="ident">apply_alteration_image</span></span>(<span>self, img: numpy.ndarray, alteration_level: float) ‑> numpy.ndarray</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Method that applies the Blur with a given value to the image</p>
@@ -1404,7 +1425,8 @@ alteration_level : float
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def apply_alteration_image(self, img, alteration_level):
+<pre><code class="python">def apply_alteration_image(self, img: np.ndarray,
+                           alteration_level: float) -&gt; np.ndarray:
     &#34;&#34;&#34;
     Method that applies the Blur with a given value to the image
 
@@ -1444,7 +1466,7 @@ alteration_level : float
 </details>
 </dd>
 <dt id="roby.Alterations.Blur.name"><code class="name flex">
-<span>def <span class="ident">name</span></span>(<span>self)</span>
+<span>def <span class="ident">name</span></span>(<span>self) ‑> str</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Method to get the alteration name</p>
@@ -1456,7 +1478,7 @@ alteration_level : float
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def name(self):
+<pre><code class="python">def name(self) -&gt; str:
     &#34;&#34;&#34;
     Method to get the alteration name
 
@@ -1480,7 +1502,7 @@ alteration_level : float
 </dd>
 <dt id="roby.Alterations.Brightness"><code class="flex name class">
 <span>class <span class="ident">Brightness</span></span>
-<span>(</span><span>value_from, value_to, picture_mode='RGB')</span>
+<span>(</span><span>value_from: float, value_to: float, picture_mode: str = 'RGB')</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Class defining the Brightness Variation alteration.
@@ -1511,7 +1533,8 @@ picture_mode : str, optional
     In our experiments we have used (-1, 1, 0.05) as usual range
     &#34;&#34;&#34;
 
-    def __init__(self, value_from, value_to, picture_mode=&#39;RGB&#39;):
+    def __init__(self, value_from: float, value_to: float,
+                 picture_mode: str=&#39;RGB&#39;):
         &#34;&#34;&#34;
         Constructs all the necessary attributes for the Gaussian Noise object.
 
@@ -1531,7 +1554,7 @@ picture_mode : str, optional
         super().__init__(value_from, value_to)
         self.picture_mode = picture_mode
 
-    def name(self):
+    def name(self) -&gt; str:
         &#34;&#34;&#34;
         Method to get the alteration name
 
@@ -1542,7 +1565,8 @@ picture_mode : str, optional
         &#34;&#34;&#34;
         return &#34;Brightness&#34;
 
-    def apply_alteration_image(self, img, alteration_level):
+    def apply_alteration_image(self, img: np.ndarray,
+                               alteration_level: float) -&gt; np.ndarray:
         &#34;&#34;&#34;
         Method that applies the Brightness Variation with a given value to the
         image
@@ -1581,7 +1605,9 @@ picture_mode : str, optional
         assert(isinstance(img, np.ndarray))
         return img
 
-    def apply_alteration(self, file_name, alteration_level):
+    def apply_alteration(self,
+                         file_name: str,
+                         alteration_level: float) -&gt; np.ndarray:
         &#34;&#34;&#34;
         Method that applies a Brightness Variation with a given value to the
         image, whose fileName is given as a parameter
@@ -1617,7 +1643,7 @@ picture_mode : str, optional
 <h3>Methods</h3>
 <dl>
 <dt id="roby.Alterations.Brightness.apply_alteration"><code class="name flex">
-<span>def <span class="ident">apply_alteration</span></span>(<span>self, file_name, alteration_level)</span>
+<span>def <span class="ident">apply_alteration</span></span>(<span>self, file_name: str, alteration_level: float) ‑> numpy.ndarray</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Method that applies a Brightness Variation with a given value to the
@@ -1639,7 +1665,9 @@ alteration_level : float
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def apply_alteration(self, file_name, alteration_level):
+<pre><code class="python">def apply_alteration(self,
+                     file_name: str,
+                     alteration_level: float) -&gt; np.ndarray:
     &#34;&#34;&#34;
     Method that applies a Brightness Variation with a given value to the
     image, whose fileName is given as a parameter
@@ -1669,7 +1697,7 @@ alteration_level : float
 </details>
 </dd>
 <dt id="roby.Alterations.Brightness.apply_alteration_image"><code class="name flex">
-<span>def <span class="ident">apply_alteration_image</span></span>(<span>self, img, alteration_level)</span>
+<span>def <span class="ident">apply_alteration_image</span></span>(<span>self, img: numpy.ndarray, alteration_level: float) ‑> numpy.ndarray</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Method that applies the Brightness Variation with a given value to the
@@ -1691,7 +1719,8 @@ alteration_level : float
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def apply_alteration_image(self, img, alteration_level):
+<pre><code class="python">def apply_alteration_image(self, img: np.ndarray,
+                           alteration_level: float) -&gt; np.ndarray:
     &#34;&#34;&#34;
     Method that applies the Brightness Variation with a given value to the
     image
@@ -1732,7 +1761,7 @@ alteration_level : float
 </details>
 </dd>
 <dt id="roby.Alterations.Brightness.name"><code class="name flex">
-<span>def <span class="ident">name</span></span>(<span>self)</span>
+<span>def <span class="ident">name</span></span>(<span>self) ‑> str</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Method to get the alteration name</p>
@@ -1744,7 +1773,7 @@ alteration_level : float
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def name(self):
+<pre><code class="python">def name(self) -&gt; str:
     &#34;&#34;&#34;
     Method to get the alteration name
 
@@ -1791,7 +1820,7 @@ value_to : float
     In our experiments we have used (0, 1) as usual range
     &#34;&#34;&#34;
 
-    def name(self):
+    def name(self) -&gt; str:
         &#34;&#34;&#34;
         Method to get the alteration name
 
@@ -1898,7 +1927,7 @@ alteration_level : float
 </details>
 </dd>
 <dt id="roby.Alterations.Compression.name"><code class="name flex">
-<span>def <span class="ident">name</span></span>(<span>self)</span>
+<span>def <span class="ident">name</span></span>(<span>self) ‑> str</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Method to get the alteration name</p>
@@ -1910,7 +1939,7 @@ alteration_level : float
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def name(self):
+<pre><code class="python">def name(self) -&gt; str:
     &#34;&#34;&#34;
     Method to get the alteration name
 
@@ -1935,7 +1964,7 @@ alteration_level : float
 </dd>
 <dt id="roby.Alterations.GaussianNoise"><code class="flex name class">
 <span>class <span class="ident">GaussianNoise</span></span>
-<span>(</span><span>value_from, value_to, variance)</span>
+<span>(</span><span>value_from: float, value_to: float, variance: float)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Class defining the Gaussian Noise alteration. Tha Gaussian Noise is defined
@@ -1962,7 +1991,7 @@ variance : float
     In our experiments we have used (0, 1, 0.025) as usual range
     &#34;&#34;&#34;
 
-    def __init__(self, value_from, value_to, variance):
+    def __init__(self, value_from: float, value_to: float, variance: float):
         &#34;&#34;&#34;
         Constructs all the necessary attributes for the Gaussian Noise object.
 
@@ -1978,7 +2007,7 @@ variance : float
         super().__init__(value_from, value_to)
         self.variance = variance
 
-    def name(self):
+    def name(self) -&gt; str:
         &#34;&#34;&#34;
         Method to get the alteration name
 
@@ -1989,7 +2018,8 @@ variance : float
         &#34;&#34;&#34;
         return &#34;GaussianNoise&#34;
 
-    def apply_alteration_image(self, img, alteration_level):
+    def apply_alteration_image(self, img: np.ndarray,
+                               alteration_level: float) -&gt; np.ndarray:
         &#34;&#34;&#34;
         Method that applies the Gaussian Noise with a given value to the image
 
@@ -2028,7 +2058,7 @@ variance : float
 <h3>Methods</h3>
 <dl>
 <dt id="roby.Alterations.GaussianNoise.apply_alteration_image"><code class="name flex">
-<span>def <span class="ident">apply_alteration_image</span></span>(<span>self, img, alteration_level)</span>
+<span>def <span class="ident">apply_alteration_image</span></span>(<span>self, img: numpy.ndarray, alteration_level: float) ‑> numpy.ndarray</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Method that applies the Gaussian Noise with a given value to the image</p>
@@ -2048,7 +2078,8 @@ alteration_level : float
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def apply_alteration_image(self, img, alteration_level):
+<pre><code class="python">def apply_alteration_image(self, img: np.ndarray,
+                           alteration_level: float) -&gt; np.ndarray:
     &#34;&#34;&#34;
     Method that applies the Gaussian Noise with a given value to the image
 
@@ -2081,7 +2112,7 @@ alteration_level : float
 </details>
 </dd>
 <dt id="roby.Alterations.GaussianNoise.name"><code class="name flex">
-<span>def <span class="ident">name</span></span>(<span>self)</span>
+<span>def <span class="ident">name</span></span>(<span>self) ‑> str</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Method to get the alteration name</p>
@@ -2093,7 +2124,7 @@ alteration_level : float
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def name(self):
+<pre><code class="python">def name(self) -&gt; str:
     &#34;&#34;&#34;
     Method to get the alteration name
 
@@ -2141,7 +2172,7 @@ value_to : float
     In our experiments we have used (-1, 1) as usual range
     &#34;&#34;&#34;
 
-    def name(self):
+    def name(self) -&gt; str:
         &#34;&#34;&#34;
         Method to get the alteration name
 
@@ -2152,7 +2183,8 @@ value_to : float
         &#34;&#34;&#34;
         return &#34;HorizontalTranslation&#34;
 
-    def apply_alteration_image(self, img, alteration_level):
+    def apply_alteration_image(self, img: np.ndarray,
+                               alteration_level: float) -&gt; np.ndarray:
         &#34;&#34;&#34;
         Method that applies the horizontal translation with a given value to
         the image.
@@ -2194,7 +2226,7 @@ value_to : float
 <h3>Methods</h3>
 <dl>
 <dt id="roby.Alterations.HorizontalTranslation.apply_alteration_image"><code class="name flex">
-<span>def <span class="ident">apply_alteration_image</span></span>(<span>self, img, alteration_level)</span>
+<span>def <span class="ident">apply_alteration_image</span></span>(<span>self, img: numpy.ndarray, alteration_level: float) ‑> numpy.ndarray</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Method that applies the horizontal translation with a given value to
@@ -2217,7 +2249,8 @@ alteration_level : float
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def apply_alteration_image(self, img, alteration_level):
+<pre><code class="python">def apply_alteration_image(self, img: np.ndarray,
+                           alteration_level: float) -&gt; np.ndarray:
     &#34;&#34;&#34;
     Method that applies the horizontal translation with a given value to
     the image.
@@ -2253,7 +2286,7 @@ alteration_level : float
 </details>
 </dd>
 <dt id="roby.Alterations.HorizontalTranslation.name"><code class="name flex">
-<span>def <span class="ident">name</span></span>(<span>self)</span>
+<span>def <span class="ident">name</span></span>(<span>self) ‑> str</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Method to get the alteration name</p>
@@ -2265,7 +2298,7 @@ alteration_level : float
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def name(self):
+<pre><code class="python">def name(self) -&gt; str:
     &#34;&#34;&#34;
     Method to get the alteration name
 
@@ -2313,7 +2346,7 @@ value_to : float
     In our experiments we have used (-1, 1) as usual range
     &#34;&#34;&#34;
 
-    def name(self):
+    def name(self) -&gt; str:
         &#34;&#34;&#34;
         Method to get the alteration name
 
@@ -2324,7 +2357,8 @@ value_to : float
         &#34;&#34;&#34;
         return &#34;VerticalTranslation&#34;
 
-    def apply_alteration_image(self, img, alteration_level):
+    def apply_alteration_image(self, img: np.ndarray,
+                               alteration_level: float) -&gt; np.ndarray:
         &#34;&#34;&#34;
         Method that applies the vertical translation with a given value to the
         image
@@ -2366,7 +2400,7 @@ value_to : float
 <h3>Methods</h3>
 <dl>
 <dt id="roby.Alterations.VerticalTranslation.apply_alteration_image"><code class="name flex">
-<span>def <span class="ident">apply_alteration_image</span></span>(<span>self, img, alteration_level)</span>
+<span>def <span class="ident">apply_alteration_image</span></span>(<span>self, img: numpy.ndarray, alteration_level: float) ‑> numpy.ndarray</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Method that applies the vertical translation with a given value to the
@@ -2389,7 +2423,8 @@ alteration_level : float
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def apply_alteration_image(self, img, alteration_level):
+<pre><code class="python">def apply_alteration_image(self, img: np.ndarray,
+                           alteration_level: float) -&gt; np.ndarray:
     &#34;&#34;&#34;
     Method that applies the vertical translation with a given value to the
     image
@@ -2425,7 +2460,7 @@ alteration_level : float
 </details>
 </dd>
 <dt id="roby.Alterations.VerticalTranslation.name"><code class="name flex">
-<span>def <span class="ident">name</span></span>(<span>self)</span>
+<span>def <span class="ident">name</span></span>(<span>self) ‑> str</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Method to get the alteration name</p>
@@ -2437,7 +2472,7 @@ alteration_level : float
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def name(self):
+<pre><code class="python">def name(self) -&gt; str:
     &#34;&#34;&#34;
     Method to get the alteration name
 
@@ -2489,7 +2524,7 @@ value_to : float
     In our experiments we have used (0, 1, 0.025) as usual range
     &#34;&#34;&#34;
 
-    def name(self):
+    def name(self) -&gt; str:
         &#34;&#34;&#34;
         Method to get the alteration name
 
@@ -2500,7 +2535,8 @@ value_to : float
         &#34;&#34;&#34;
         return &#34;Zoom&#34;
 
-    def apply_alteration_image(self, img, alteration_level):
+    def apply_alteration_image(self, img: np.ndarray,
+                               alteration_level: float) -&gt; np.ndarray:
         &#34;&#34;&#34;
         Method that applies the Zoom with a given value to the image
 
@@ -2554,7 +2590,7 @@ value_to : float
 <h3>Methods</h3>
 <dl>
 <dt id="roby.Alterations.Zoom.apply_alteration_image"><code class="name flex">
-<span>def <span class="ident">apply_alteration_image</span></span>(<span>self, img, alteration_level)</span>
+<span>def <span class="ident">apply_alteration_image</span></span>(<span>self, img: numpy.ndarray, alteration_level: float) ‑> numpy.ndarray</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Method that applies the Zoom with a given value to the image</p>
@@ -2573,7 +2609,8 @@ alteration_level : float
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def apply_alteration_image(self, img, alteration_level):
+<pre><code class="python">def apply_alteration_image(self, img: np.ndarray,
+                           alteration_level: float) -&gt; np.ndarray:
     &#34;&#34;&#34;
     Method that applies the Zoom with a given value to the image
 
@@ -2621,7 +2658,7 @@ alteration_level : float
 </details>
 </dd>
 <dt id="roby.Alterations.Zoom.name"><code class="name flex">
-<span>def <span class="ident">name</span></span>(<span>self)</span>
+<span>def <span class="ident">name</span></span>(<span>self) ‑> str</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Method to get the alteration name</p>
@@ -2633,7 +2670,7 @@ alteration_level : float
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def name(self):
+<pre><code class="python">def name(self) -&gt; str:
     &#34;&#34;&#34;
     Method to get the alteration name
 
