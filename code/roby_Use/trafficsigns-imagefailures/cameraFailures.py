@@ -57,32 +57,32 @@ class RainAlteration_1(Alteration):
         """
         return "Rain_1"
 
-    def apply_alteration_image(self, img, alteration_level):
+    def apply_alteration_data(self, data, alteration_level):
         """
         Method that applies the rain with a given value to the image
 
         Parameters
         ----------
-            img : np.array
-                the image on which the rain should be applied
+            data : np.array
+                the data on which the rain should be applied
             alterationLevel : float
                 the level of the rain that should be applied. It must be
                 contained in the range given by the get_range method
 
         Returns
         -------
-            img : np.array
-                the altered image on which the rain has been applied
+            data : np.array
+                the altered data on which the rain has been applied
         """
-        assert(isinstance(img, np.ndarray))
+        assert(isinstance(data, np.ndarray))
         if float(alteration_level) > 0.000001:
             # Load the image to be altered
-            if isinstance(img, np.ndarray):
+            if isinstance(data, np.ndarray):
                 if (self.picture_mode == 'RGB'):
-                    img = Image.fromarray(img, 'RGB')
+                    data = Image.fromarray(data, 'RGB')
                 elif (self.picture_mode == 'L'):
-                    img = Image.fromarray((img[:, :, 0]*255).astype('uint8'),
-                                          'L')
+                    data = Image.fromarray((data[:, :, 0]*255).astype('uint8'),
+                                           'L')
                 else:
                     raise RuntimeError("pictureMode not supported for " +
                                        "brightness alteration")
@@ -92,22 +92,47 @@ class RainAlteration_1(Alteration):
                 "Python_Image_Failures\\rain\\rain1.png")
 
             # Resize the alteration image to the same size of the original one
-            alteration_img = change_image_size(img.size[0], img.size[1],
+            alteration_img = change_image_size(data.size[0], data.size[1],
                                                alteration_img)
 
             # Make sure images got an alpha channel
             alteration_img = alteration_img.convert("RGBA")
-            img = img.convert("RGBA")
+            data = data.convert("RGBA")
 
             # Blend the two images
-            img = Image.blend(img, alteration_img, alteration_level)
+            data = Image.blend(data, alteration_img, alteration_level)
 
             # Convert the resulting image in np.ndarray
-            img = np.array(img)
-            img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
+            data = np.array(data)
+            data = cv2.cvtColor(data, cv2.COLOR_RGB2BGR)
 
-        assert(isinstance(img, np.ndarray))
-        return img
+        assert(isinstance(data, np.ndarray))
+        return data
+
+    def apply_alteration(self,
+                         file_name: str,
+                         alteration_level: float) -> np.ndarray:
+        """
+        Method that applies a given alteration with a given value to the input
+        data, whose fileName is given as a parameter
+
+        Parameters
+        ----------
+            file_name : str
+                the path of the input data on which the alteration should be
+                applied
+            alteration_level : float
+                the level of the alteration that should be applied. It must be
+                contained in the range given by the get_range method
+
+        Returns
+        -------
+            data : np.ndarray
+                the altered data on which the alteration has been applied
+        """
+        data = cv2.imread(file_name)
+        assert(isinstance(data, np.ndarray))
+        return self.apply_alteration_data(data, alteration_level)
 
 
 class Condensation_1(Alteration):
@@ -142,32 +167,32 @@ class Condensation_1(Alteration):
         """
         return "Condensation_1"
 
-    def apply_alteration_image(self, img, alteration_level):
+    def apply_alteration_data(self, data, alteration_level):
         """
         Method that applies the Condensation with a given value to the image
 
         Parameters
         ----------
-            img : np.array
-                the image on which the Condensation should be applied
+            data : np.array
+                the data on which the Condensation should be applied
             alterationLevel : float
                 the level of the Condensation that should be applied. It must
                 be contained in the range given by the get_range method
 
         Returns
         -------
-            img : np.array
-                the altered image on which the Condensation has been applied
+            data : np.array
+                the altered data on which the Condensation has been applied
         """
-        assert(isinstance(img, np.ndarray))
+        assert(isinstance(data, np.ndarray))
         if float(alteration_level) > 0.000001:
             # Load the image to be altered
-            if isinstance(img, np.ndarray):
+            if isinstance(data, np.ndarray):
                 if (self.picture_mode == 'RGB'):
-                    img = Image.fromarray(img, 'RGB')
+                    data = Image.fromarray(data, 'RGB')
                 elif (self.picture_mode == 'L'):
-                    img = Image.fromarray((img[:, :, 0]*255).astype('uint8'),
-                                          'L')
+                    data = Image.fromarray((data[:, :, 0]*255).astype('uint8'),
+                                           'L')
                 else:
                     raise RuntimeError("pictureMode not supported for " +
                                        "brightness alteration")
@@ -177,19 +202,44 @@ class Condensation_1(Alteration):
                 "Python_Image_Failures\\condensation\\condensation1.png")
 
             # Resize the alteration image to the same size of the original one
-            alteration_img = change_image_size(img.size[0], img.size[1],
+            alteration_img = change_image_size(data.size[0], data.size[1],
                                                alteration_img)
 
             # Make sure images got an alpha channel
             alteration_img = alteration_img.convert("RGBA")
-            img = img.convert("RGBA")
+            data = data.convert("RGBA")
 
             # Blend the two images
-            img = Image.blend(img, alteration_img, alteration_level)
+            data = Image.blend(data, alteration_img, alteration_level)
 
             # Convert the resulting image in np.ndarray
-            img = np.array(img)
-            img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
+            data = np.array(data)
+            data = cv2.cvtColor(data, cv2.COLOR_RGB2BGR)
 
-        assert(isinstance(img, np.ndarray))
-        return img
+        assert(isinstance(data, np.ndarray))
+        return data
+
+    def apply_alteration(self,
+                         file_name: str,
+                         alteration_level: float) -> np.ndarray:
+        """
+        Method that applies a given alteration with a given value to the input
+        data, whose fileName is given as a parameter
+
+        Parameters
+        ----------
+            file_name : str
+                the path of the input data on which the alteration should be
+                applied
+            alteration_level : float
+                the level of the alteration that should be applied. It must be
+                contained in the range given by the get_range method
+
+        Returns
+        -------
+            data : np.ndarray
+                the altered data on which the alteration has been applied
+        """
+        data = cv2.imread(file_name)
+        assert(isinstance(data, np.ndarray))
+        return self.apply_alteration_data(data, alteration_level)

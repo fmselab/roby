@@ -22,7 +22,7 @@ import numpy as np   # type: ignore
 import pickle   # type: ignore
 from keras.models import load_model   # type: ignore
 from roby.EnvironmentRTest import EnvironmentRTest
-from roby.RobustnessCNN import classification, robustness_test,\
+from roby.RobustnessNN import classification, robustness_test,\
     display_robustness_results
 from roby.Alterations import GaussianNoise, Compression, VerticalTranslation,\
     HorizontalTranslation, Blur, Brightness, Zoom, Alteration
