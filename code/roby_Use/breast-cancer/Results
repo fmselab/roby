@@ -2,7 +2,7 @@
 Successes: 183
 Failures: 31
 Accuracy: 0.8551401869158879
-Robustness w.r.t GaussianNoise: 0.8571428571428571
+Robustness w.r.t GaussianNoise: 1.0
 Robustness w.r.t Compression: 0.047619047619047616
 Robustness w.r.t VerticalTranslation: 1.0
 Robustness w.r.t HorizontalTranslation: 1.0

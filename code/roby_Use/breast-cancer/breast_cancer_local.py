@@ -13,7 +13,7 @@ In this example:
 - Only _alterations_ plausible for the application domain are applied.
 """
 from keras.models import load_model   # type: ignore
-from roby.RobustnessCNN import robustness_test, set_classes,\
+from roby.RobustnessNN import robustness_test, set_classes,\
     display_robustness_results, classification
 from roby.Alterations import GaussianNoise
 from roby.EnvironmentRTest import EnvironmentRTest
