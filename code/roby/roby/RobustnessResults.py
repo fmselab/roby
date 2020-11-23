@@ -32,7 +32,7 @@ class RobustnessResults:
         ----------
             steps : List[float]
                 list of all the alteration levels that have been applied
-                to the image
+                to the input data
             accuracies : List[float]
                 list of all the accuracies gathered during the robustness
                 analysis
