@@ -70,7 +70,7 @@ class EnvironmentRTest:
         """
         self.model = model
         self.file_list = file_list
-        self.total_img = len(file_list)
+        self.total_data = len(file_list)
         self.classes = classes
         self.pre_processing = preprocess_f
         self.post_processing = postprocess_f

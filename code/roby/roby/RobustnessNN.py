@@ -1,5 +1,5 @@
 """
-The **RobustnessCNN** module offers the main functionalities of the
+The **RobustnessNN** module offers the main functionalities of the
 **roby** tool, i.e. those useful to compute the robustness and evaluate
 a neural network.
 
@@ -64,7 +64,7 @@ def compute_robustness(accuracies: List[float], steps: List[float],
     Returns
     -------
         robustness : float
-            the robustness computed for the CNN under analysis w.r.t. the given
+            the robustness computed for the NN under analysis w.r.t. the given
             alteration
 
     """
@@ -75,7 +75,7 @@ def compute_robustness(accuracies: List[float], steps: List[float],
 def classification(environment: EnvironmentRTest.EnvironmentRTest) -> float:
     """
     Just a simple classification performed form the model we uploaded.
-    This methods performs the classification using un-altered images and
+    This methods performs the classification using un-altered input data and
     returns the accuracy of the network.
 
     Parameters
@@ -87,23 +87,23 @@ def classification(environment: EnvironmentRTest.EnvironmentRTest) -> float:
     Returns
     -------
         accuracy : float
-            the accuracy of the CNN under analysis
+            the accuracy of the NN under analysis
     """
     successes = 0
     failures = 0
-    image_index = 0
+    data_index = 0
     for thisFile in environment.file_list:
         if isinstance(thisFile, str):
             imgt = cv2.imread(thisFile)
         else:
             imgt = thisFile
-        # Pre-process the image for classification
+        # Pre-process the input data for classification
         if environment.pre_processing is not None:
-            img = environment.pre_processing(imgt)
+            data = environment.pre_processing(imgt)
         else:
-            img = imgt
+            data = imgt
         # Classify the input
-        proba = environment.model.predict(img)[0]
+        proba = environment.model.predict(data)[0]
         if environment.post_processing is not None:
             proba = environment.post_processing(proba)
 
@@ -115,7 +115,7 @@ def classification(environment: EnvironmentRTest.EnvironmentRTest) -> float:
                 predicted_class = str(label)
                 predicted_prob = p
         if environment.label_list is not None:
-            real_label = environment.label_list[image_index]
+            real_label = environment.label_list[data_index]
         else:
             raise RuntimeError("Real lable list cannot be None")
 
@@ -124,9 +124,9 @@ def classification(environment: EnvironmentRTest.EnvironmentRTest) -> float:
             successes += 1
         else:
             failures += 1
-        image_index = image_index + 1
+        data_index = data_index + 1
 
-    accuracy = float(successes) / float(environment.total_img)
+    accuracy = float(successes) / float(environment.total_data)
     print('Successes: ' + str(successes))
     print('Failures: ' + str(failures))
     print('Accuracy: ' + str(accuracy))
@@ -170,7 +170,7 @@ def robustness_test(environment: EnvironmentRTest.EnvironmentRTest,
             robustness analysis
         alteration : Alteration
             the alteration w.r.t. the user wants to compute the robustness of
-            the CNN
+            the NN
         n_values : int
             the number of points in the interval to be used for robustness
             analysis
@@ -190,16 +190,16 @@ def robustness_test(environment: EnvironmentRTest.EnvironmentRTest,
         # Reset the parameters to count
         successes = 0
         failures = 0
-        image_index = 0
+        data_index = 0
         for thisFile in environment.file_list:
             if isinstance(thisFile, str):
-                img = alteration.apply_alteration(thisFile, step)
+                data = alteration.apply_alteration(thisFile, step)
             else:
-                img = alteration.apply_alteration_image(thisFile, step)
+                data = alteration.apply_alteration_data(thisFile, step)
             # Pre-processing Function
             if environment.pre_processing is not None:
-                img = environment.pre_processing(img)
-            proba = environment.model.predict(img)[0]
+                data = environment.pre_processing(data)
+            proba = environment.model.predict(data)[0]
             # Post-processing Function, the probability has to be in the same
             # order of the classes
             if environment.post_processing is not None:
@@ -213,7 +213,7 @@ def robustness_test(environment: EnvironmentRTest.EnvironmentRTest,
                     predicted_prob = p
 
             if environment.label_list is not None:
-                real_label = environment.label_list[image_index]
+                real_label = environment.label_list[data_index]
             else:
                 raise RuntimeError("Real lable list cannot be None")
 
@@ -222,11 +222,11 @@ def robustness_test(environment: EnvironmentRTest.EnvironmentRTest,
                 successes += 1
             else:
                 failures += 1
-            image_index = image_index + 1
+            data_index = data_index + 1
 
-        # All of the images have been processed, so we can compute the accuracy
+        # All of the data have been processed, so we can compute the accuracy
         # for this step value
-        accuracy = float(successes) / float(environment.total_img)
+        accuracy = float(successes) / float(environment.total_data)
         accuracies.append(accuracy)
 
     # Plot data

@@ -24,7 +24,7 @@ from pydrive.drive import GoogleDrive   # type: ignore
 from google.colab import auth
 from oauth2client.client import GoogleCredentials   # type: ignore
 # roby tools
-from roby.RobustnessCNN import set_classes
+from roby.RobustnessNN import set_classes
 from roby.EnvironmentRTest import EnvironmentRTest
 from typing import Callable, List
 import numpy as np   # type: ignore
@@ -84,7 +84,7 @@ def process_config_from_xml(root: Et.Element, drive: GoogleDrive,
             the Google Drive element, used to hold the authorization to read
             and download the files from Google Drive
         labeler_f : Callable[[np.ndarray], str], optional
-            the function used to assign the correct label to an image
+            the function used to assign the correct label to a data
         pre_processing_f : Callable[[np.ndarray], np.ndarray], optional
             pre-processing to be executed on the data before the model
             classification. It can be None
@@ -138,7 +138,7 @@ def load_model_from_url(model_link: str, drive: GoogleDrive) -> Model:
     Returns
     -------
         model : keras.Model
-            the model used to classify the images
+            the model used to classify the data
     """
     # Upload the Model
     id_val = model_link.split('/')[-1]
@@ -152,12 +152,12 @@ def load_model_from_url(model_link: str, drive: GoogleDrive) -> Model:
 def load_dataset_from_url(link_dataset_dir: str,
                           drive: GoogleDrive) -> List[str]:
     """
-    Loads the images dataset from a Google Drive URL
+    Loads the input test dataset from a Google Drive URL
 
     Parameters
     ----------
         link_dataset_dir : str
-            URL where the images are stored on Google Drive
+            URL where the data are stored on Google Drive
         drive : GoogleDrive
             the Google Drive element, used to hold the authorization to read
             and download the files from Google Drive
@@ -165,7 +165,7 @@ def load_dataset_from_url(link_dataset_dir: str,
     Returns
     -------
         file_list : List[str]
-            the list (of str) containing all paths of the images contained in
+            the list (of str) containing all paths of the data contained in
             the test set
     """
     print('Uploading Dataset...')
@@ -225,7 +225,7 @@ def load_labels_from_url(label_list_link: str,
     Returns
     -------
         labels : List[str]
-            the list (of str) containing all the correct labels for images
+            the list (of str) containing all the correct labels for data
     """
     id_val = label_list_link.split('/')[-1]
     downloaded = drive.CreateFile({'id': id_val})
@@ -250,7 +250,7 @@ def process_config(model_link: str, link_dataset_dir: str, classes_link: str,
         model_link : str
             URL where the model can be found
         link_dataset_dir : str
-            URL where the images are stored on Google Drive
+            URL where the data are stored on Google Drive
         classes_link : str
             URL where the classes csv file can be found
         drive : GoogleDrive
@@ -259,7 +259,7 @@ def process_config(model_link: str, link_dataset_dir: str, classes_link: str,
         label_list_link : str, optional
             URL where the classification csv file can be found. It can be None
         labeler_f : Callable[[np.ndarray], str], optional
-            function used to assign the right label to a certain image.
+            function used to assign the right label to a certain data.
             It can be None
         pre_processing_f : Callable[[np.ndarray], np.ndarray], optional
             pre-processing to be executed on the data before the model
