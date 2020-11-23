@@ -20,7 +20,7 @@ import numpy as np   # type: ignore
 from roby.Alterations import Compression, GaussianNoise,\
     VerticalTranslation, HorizontalTranslation, Blur, Brightness, Zoom,\
     Alteration
-from roby.RobustnessCNN import robustness_test,\
+from roby.RobustnessNN import robustness_test,\
     display_robustness_results, classification
 
 
@@ -73,9 +73,9 @@ if __name__ == '__main__':
     classes = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
 
     # load the environment
-    environment = EnvironmentRTest(model, X_test[:100], classes,
+    environment = EnvironmentRTest(model, X_test[:200], classes,
                                    preprocess_f=pre_processing,
-                                   label_list=y_test[:100])
+                                   label_list=y_test[:200])
 
     # get the standard behavior of the net
     accuracy = classification(environment)
