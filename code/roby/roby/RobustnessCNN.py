@@ -94,12 +94,14 @@ def classification(environment: EnvironmentRTest.EnvironmentRTest) -> float:
     image_index = 0
     for thisFile in environment.file_list:
         if isinstance(thisFile, str):
-            img = cv2.imread(thisFile)
+            imgt = cv2.imread(thisFile)
         else:
-            img = thisFile
+            imgt = thisFile
         # Pre-process the image for classification
         if environment.pre_processing is not None:
-            img = environment.pre_processing(img)
+            img = environment.pre_processing(imgt)
+        else:
+            img = imgt
         # Classify the input
         proba = environment.model.predict(img)[0]
         if environment.post_processing is not None:
