@@ -7,5 +7,5 @@ Robustness w.r.t Compression: 0.047619047619047616
 Robustness w.r.t VerticalTranslation: 1.0
 Robustness w.r.t HorizontalTranslation: 1.0
 Robustness w.r.t Blur: 0.38095238095238093
-Robustness w.r.t Brightness: 0.09523809523809523
+Robustness w.r.t Brightness: 0.19047619047619047
 Robustness w.r.t Zoom: 0.7142857142857143

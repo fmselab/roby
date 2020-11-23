@@ -625,7 +625,7 @@ class Brightness(Alteration):
                 applied
         """
         assert(isinstance(data, np.ndarray))
-        if not (-0.00001 <= float(alteration_level) <= 0.00001):
+        if not (-0.0001 <= float(alteration_level) <= 0.0001):
             if isinstance(data, np.ndarray):
                 if self.picture_mode == 'RGB':
                     data = Image.fromarray(data, 'RGB')
