@@ -6,7 +6,7 @@ w.r.t. alterations.
 Some of these alterations are provided by the framework, but the user can
 define its own alteration by extending the class _Alteration_ and
 implementing the methods `name(self)` and
-`applyAlterationImage(self, img, alteration_level)`.
+`apply_alteration_data(self, data, alteration_level)`.
 
 The followings are the alterations provided by **roby**:
 
