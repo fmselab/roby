@@ -12,13 +12,13 @@ The major features offered by this module are the followings:
 @author: Andrea Bombarda
 """
 import matplotlib.pyplot as plt   # type: ignore
-import cv2   # type: ignore
 # Manage csv files
 import csv
+import numpy as np  # type: ignore
 from roby.RobustnessResults import RobustnessResults
 from builtins import isinstance
 from roby import Alterations, EnvironmentRTest
-from typing import List
+from typing import List, Callable
 
 
 def set_classes(filename: str) -> List[str]:
@@ -72,7 +72,8 @@ def compute_robustness(accuracies: List[float], steps: List[float],
     return float(above_threshold)/float(len(steps))
 
 
-def classification(environment: EnvironmentRTest.EnvironmentRTest) -> float:
+def classification(environment: EnvironmentRTest.EnvironmentRTest,
+                   reader: Callable[[str], np.ndarray]=None) -> float:
     """
     Just a simple classification performed form the model we uploaded.
     This methods performs the classification using un-altered input data and
@@ -83,6 +84,9 @@ def classification(environment: EnvironmentRTest.EnvironmentRTest) -> float:
         environment : EnvironmentRTest
             the environment containing all the information used to perform
             robustness analysis
+        reader : Callable[[str], np.ndarray], optional
+            function to be used to load the input data and put it into a
+            np.ndarray
 
     Returns
     -------
@@ -94,7 +98,9 @@ def classification(environment: EnvironmentRTest.EnvironmentRTest) -> float:
     data_index = 0
     for thisFile in environment.file_list:
         if isinstance(thisFile, str):
-            imgt = cv2.imread(thisFile)
+            if reader is None:
+                raise RuntimeError("A reader function must be defined")
+            imgt = reader(thisFile)
         else:
             imgt = thisFile
         # Pre-process the input data for classification

@@ -26,6 +26,10 @@ from roby.Alterations import Compression, VerticalTranslation,\
     HorizontalTranslation, Blur, Zoom, Brightness, Alteration
 
 
+def reader(file_name):
+    return cv2.imread(file_name)
+
+
 def pre_processing(image):
     """
     Pre-processes the image for classification, in the same way of the pictures
@@ -64,7 +68,7 @@ if __name__ == '__main__':
                                    labeler_f=labeler)
 
     # get the standard behavior of the net
-    accuracy = classification(environment)
+    accuracy = classification(environment, reader)
 
     # create the alteration_type as a GaussianNoise with variance 200
     alteration_type: Alteration = GaussianNoise(0, 1, 200)
