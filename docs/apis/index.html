@@ -30,7 +30,7 @@ w.r.t. alterations.</p>
 <p>Some of these alterations are provided by the framework, but the user can
 define its own alteration by extending the class <em>Alteration</em> and
 implementing the methods <code>name(self)</code> and
-<code>applyAlterationImage(self, img, alteration_level)</code>.</p>
+<code>apply_alteration_data(self, data, alteration_level)</code>.</p>
 <p>The followings are the alterations provided by <strong>roby</strong>:</p>
 <ul>
 <li>Blur</li>
@@ -78,7 +78,7 @@ w.r.t. alterations.
 Some of these alterations are provided by the framework, but the user can
 define its own alteration by extending the class _Alteration_ and
 implementing the methods `name(self)` and
-`applyAlterationImage(self, img, alteration_level)`.
+`apply_alteration_data(self, data, alteration_level)`.
 
 The followings are the alterations provided by **roby**:
 
@@ -136,9 +136,9 @@ to perform robustness analysis on cloud based platform …</p></div>
 <div class="desc"><p>The <strong>EnvironmentRTest</strong> module contains all the information useful to compute
 the robustness analysis of a Neural Network …</p></div>
 </dd>
-<dt><code class="name"><a title="roby.RobustnessCNN" href="RobustnessCNN.html">roby.RobustnessCNN</a></code></dt>
+<dt><code class="name"><a title="roby.RobustnessNN" href="RobustnessNN.html">roby.RobustnessNN</a></code></dt>
 <dd>
-<div class="desc"><p>The <strong>RobustnessCNN</strong> module offers the main functionalities of the
+<div class="desc"><p>The <strong>RobustnessNN</strong> module offers the main functionalities of the
 <strong>roby</strong> tool, i.e. those useful to compute the robustness and evaluate
 a neural …</p></div>
 </dd>
@@ -167,7 +167,7 @@ the results of each robustness analysis …</p></div>
 <li><code><a title="roby.Alterations" href="Alterations.html">roby.Alterations</a></code></li>
 <li><code><a title="roby.CloudTools" href="CloudTools.html">roby.CloudTools</a></code></li>
 <li><code><a title="roby.EnvironmentRTest" href="EnvironmentRTest.html">roby.EnvironmentRTest</a></code></li>
-<li><code><a title="roby.RobustnessCNN" href="RobustnessCNN.html">roby.RobustnessCNN</a></code></li>
+<li><code><a title="roby.RobustnessNN" href="RobustnessNN.html">roby.RobustnessNN</a></code></li>
 <li><code><a title="roby.RobustnessResults" href="RobustnessResults.html">roby.RobustnessResults</a></code></li>
 </ul>
 </li>
