@@ -1,63 +1,40 @@
 # roby: neural network ROBusteness analYzer
 
-### brief tutorial on how to use roby
+Spiegazione di roby ,...
 
-1. create a python file
-
-2. import roby
-
-3. load your model and locate your images
-
-```python
-model = load_model('model\\Medical.model')
-```
-get the images in the test data-set
-```python
-file_list = sorted(list(paths.list_images('images')))
-```
-set the classes
-```python
-classes = set_classes('model\\Classes.csv')
-```
-
-4. define your environment
-
-load the environment
-```python
-environment = EnvironmentRTest(model, file_list, classes, labeler_f=labeler)
-```
+## How to use roby
 
 
-5. check the current accuracy of your model 
+### tutorial 1: images classifier
 
-Get the standard behavior of the net
-```python
-accuracy = classification(environment)
-```
+[tutorial_image1.md]
 
 
-6. check the robustness against a desired alteration
+### tutorial XX: using colab
 
-create the alteration_type as a GaussianNoise with variance 200
-```python
-alteration_type: Alteration = GaussianNoise(0, 1, 200)
-```
-  
-Set the accuracy threshold
-```python
-accuracy_treshold = 0.8
-```
 
-robustness analysis, with 20 points
-```python
-results = robustness_test(environment, alteration_type, 20,
-                              accuracy_treshold)
-display_robustness_results(results)
-```
 
-![alt text](images/robustenss.jpg "")
+## How to extend roby
 
+* loading:
+
+* labeling:
+
+* alterations:
+
+* pre/post processing:
 
 ### APIs documentation
+
+## Examples
+
+* breast cancer data set
+  <https://github.com/fmselab/roby/tree/main/code/roby_Use/breast-cancer>
+
+*
+
+*
+
+*
 
 <https://fmselab.github.io/roby/apis/>
