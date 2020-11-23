@@ -2,7 +2,7 @@ import setuptools   # type: ignore
 
 setuptools.setup(
     name="roby",
-    version="0.0.1",
+    version="0.0.2",
     author="University of Bergamo",
     author_email="andrea.bombarda@unibg.it",
     description="A general framework to analyse the robustness of a " +
