@@ -1,6 +1,6 @@
 """
 In this **German Traffic Sign classification** example we test the robustness a
-CNN used to identify traffic sign. The case study has been taken from this
+NN used to identify traffic sign. The case study has been taken from this
 [paper](https://github.com/francescosecci/Python_Image_Failures/blob/master/Documenti/Paper.pdf),
 while the model of which we test the robustness is taken from this
 [repository](https://github.com/ItsCosmas/Traffic-Sign-Classification). The
@@ -22,7 +22,7 @@ import numpy as np   # type: ignore
 import pickle   # type: ignore
 from keras.models import load_model   # type: ignore
 from roby.EnvironmentRTest import EnvironmentRTest
-from roby.RobustnessCNN import classification, robustness_test,\
+from roby.RobustnessNN import classification, robustness_test,\
     display_robustness_results
 from roby.Alterations import Alteration
 from keras.engine.training import Model
@@ -33,7 +33,7 @@ from audioFailures import AudioNoise
 def pre_processing(data):
     """
     Pre-processes the image for classification, in the same way of the pictures
-    used to train the CNN
+    used to train the NN
     """
     data_processed = np.expand_dims(data, axis=0)
     return data_processed
@@ -47,7 +47,7 @@ if __name__ == '__main__':
     accuracy_threshold = 0.8
 
     # get the audio files
-    X_train, x_test, y_train, y_test, cnn_model = get_data.get_all()
+    X_train, x_test, y_train, y_test, nn_model = get_data.get_all()
 
     # set the classes
     classes = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
