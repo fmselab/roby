@@ -513,7 +513,7 @@ class Blur(Alteration):
                 the altered data on which the Blur has been applied
         """
         assert(isinstance(data, np.ndarray))
-        if alteration_level != 0:
+        if alteration_level != 0.0:
             if isinstance(data, np.ndarray):
                 if self.picture_mode == 'RGB':
                     data = Image.fromarray(data, 'RGB')
@@ -665,11 +665,12 @@ class Brightness(Alteration):
                 the altered data on which the Brightness Variation has been
                 applied
         """
-        if alteration_level != 0:
+        if not -0.0001 <= float(alteration_level) <= 0.0001:
             data = Image.open(file_name)
             data = np.asarray(data)
         else:
             data = cv2.imread(file_name)
+            return data
         assert(isinstance(data, np.ndarray))
         return self.apply_alteration_data(data, alteration_level)
 
