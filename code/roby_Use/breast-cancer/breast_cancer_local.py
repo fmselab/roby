@@ -53,20 +53,20 @@ def labeler(image):
 
 if __name__ == '__main__':
     # load the model
-    model = load_model('model\\Medical.model')
+    model = load_model('model/Medical.model')
     # set the accuracy threshold
     accuracy_treshold = 0.8
     # get the images in the test data-set
     file_list = sorted(list(paths.list_images('images')))
 
     # set the classes
-    classes = set_classes('model\\Classes.csv')
+    classes = set_classes('model/Classes.csv')
 
     # load the environment
     environment = EnvironmentRTest(model, file_list, classes,
                                    preprocess_f=pre_processing,
                                    labeler_f=labeler)
-    
+
     # get the standard behavior of the net
     accuracy = classification(environment, reader)
 
