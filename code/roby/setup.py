@@ -9,19 +9,18 @@ setuptools.setup(
                 "Neural Network",
     packages=setuptools.find_packages(),
 	python_requires='>=3.6, <=3.8',
-    install_requires=[
+    install_requires=[ 
+          'numpy==1.18.5',
           'opencv_python>=4.0',
           'Pillow>=5.4.1',
           'Keras>=2.2.4',
-          'tensorflow>=1.5',
+          'tensorflow==2.3.1',
           'sklearn',
           'PyDrive>=1.3.1',
-          'google-colab>=1.0',
           'scipy>=1.4.1',
-          'numpy>=1.16.1',
           'oauth2client>=4.1.3',
           'matplotlib>=3.0.2',
-          'protobuf>=3.13.0',
+          'protobuf==3.13.0',
           'typing>=3.7.4',
 		  'imutils>=0.5.2'
     ],)
