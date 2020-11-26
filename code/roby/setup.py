@@ -2,13 +2,13 @@ import setuptools   # type: ignore
 
 setuptools.setup(
     name="roby",
-    version="0.0.5",
+    version="0.0.8",
     author="University of Bergamo",
     author_email="andrea.bombarda@unibg.it",
     description="A general framework to analyse the robustness of a " +
                 "Neural Network",
     packages=setuptools.find_packages(),
-	python_requires='>=3.6, <=3.8',
+	python_requires='>=3.6, <=3.8.6',
     install_requires=[ 
           'numpy==1.18.5',
           'opencv_python>=4.0',
