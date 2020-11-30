@@ -16,6 +16,13 @@ roby has been designed to be more flexible as possible. However, there are some 
 
 4. Input data must be representable using `np.ndarray`.
 
+### Installation
+
+roby can be installed using the pip package-management system with
+```python
+pip install roby
+```
+
 ## Tutorials and application scenarios
 
 ### tutorial 1: images classifier
