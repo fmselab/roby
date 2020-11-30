@@ -221,7 +221,7 @@ If users want to classify data that are not images, or if they want to introduce
 
 * Define the `apply_alteration(...)` method in the new alteration class, which applies the defined alteration to an input when its path is given
   ```python
-  def apply_alteration(self, file_name: str, alteration_level: float) -> np.ndarray:
+    def apply_alteration(self, file_name: str, alteration_level: float) -> np.ndarray:
       # Open the file
       file = ...
       return apply_alteration_data(file, alteration_level)
