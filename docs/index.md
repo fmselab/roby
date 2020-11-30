@@ -91,7 +91,7 @@ display_robustness_results(results)
 env = EnvironmentRTest.EnvironmentRTest(model, input_dataset, classes,
                                    label_list=label_list)
 ```
-while in the latter case the user must define a function receiving a data (in _np.npdarray_ format) and returning a string representing the real label
+while in the latter case the user must define a function receiving a data (in _np.ndarray_ format) and returning a string representing the real label
 ```python
 def labeler(image: np.ndarray):
     ...
@@ -103,7 +103,14 @@ env = EnvironmentRTest.EnvironmentRTest(model, file_list, classes,
                                    labeler_f=labeler)
 ```
 
-* **Alterations**:
+* **Alterations**: roby includes the abstract class
+```python
+Alterations.Alteration
+```
+that can be extended to create customized alterations. When extending the abstract class, the user must implement the following functions:
+  * _name()_ returning the name of the alteration.
+  * _apply\_alteration\_data(data, alteration\_level)_ receiving the input data in the format of _np.ndarray_ and returning the data of the same format with the alteration applied
+  * _apply\_alteration(file\_name, alteration\_level)_ receiving the path of the input data and returning the data with the applied alteration.
 
 * **Pre/Post-processing**: Users can adapt test input data to the ones used for NN training. During the declaration of the test environment users can specify a pre-processing and/or a post-processing function. The former must follow the pattern
 ```python
