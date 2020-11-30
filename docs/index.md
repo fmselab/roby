@@ -84,7 +84,25 @@ display_robustness_results(results)
 
 ## How to extend roby
 
-* **Loading**:
+* **Loading**:  users can create a testing environment either by giving the path of all the input data
+```python
+path_list : List[str] = [...]
+env = EnvironmentRTest.EnvironmentRTest(model, input_dataset, classes,
+                                   label_list=label_list)
+```
+or by a list of data already in the `np.ndarray` format
+```python
+path_list : List[np.ndarray] = [...]
+env = EnvironmentRTest.EnvironmentRTest(model, input_dataset, classes,
+                                  label_list=label_list)
+```
+If paths are given, for classification purposes, the User shall specify the way to be used to convert the data in the `np.ndarray` format by declaring a
+`reader` function:
+```python
+def reader(file_name: str)
+  ...
+  return data: np.ndarray
+```
 
 * **Labeling**: real labels for input data can be given either with a list of all the labels or by giving a `labeler` function. In the former case, the list `label_list` must be of the same size as the input dataset
 ```python
