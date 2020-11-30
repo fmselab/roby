@@ -27,22 +27,29 @@ pip install roby
 
 ### Tutorial 1: Images classifier - Local execution
 
-1. create a python file
+In this Tutorial 1, the robustness of a CNN images classifier is analyzed. The execution of all the code is performed locally.
 
-2. import roby
+* Create a python file
 
-3. load your model and locate your images
-
+* Import roby
 ```python
-model = load_model('model\\Medical.model')
+from roby import *
 ```
-get the images in the test data-set
-```python
-file_list = sorted(list(paths.list_images('images')))
-```
-set the classes
-```python
-classes = set_classes('model\\Classes.csv')
+
+* Load your **model** and locate your **images**. The model can be stored in a `.model` or in a `.h5` file and must be in the _Keras_ format.
+
+  ```python
+  model = load_model('modelFile.model')
+  ```
+  Get the images in the test data-set. These can be loaded as a list of paths
+  ```python
+  file_list = sorted(list(paths.list_images('images')))
+  ```
+  or as a list of `np.ndarray` as commonly happens when working with already available datasets (eg., in pickle files)
+
+  set the classes
+  ```python
+  classes = set_classes('model\\Classes.csv')
 ```
 
 4. define your environment
