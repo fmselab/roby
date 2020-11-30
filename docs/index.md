@@ -51,24 +51,30 @@ from roby import *
     * Defining a `labeler` function, assigning to each image the correct label
     * Creating a list containing the corresponding label for each input image.
 
-  In this tutorial the first option is used, but more details are reported in the "How to extend roby" section of this documentation. Thus, define a labeler function, eg. extracting the label from the file name
+  In this tutorial the first option is used, but more details are reported in the "How to extend roby" section of this documentation. Thus, define a labeler function, eg. extracting the label from the file name:
   ```python
   def labeler(image):
     real_label = (image.split('.')[0]).split('_')[-1]
     return real_label
   ```
 
-  Set the classes available for classification.
+* Set the **classes** available for classification. This can be done by reading the classes from a `csv` file
   ```python
-  classes = set_classes('model\\Classes.csv')
-```
+  classes = set_classes('Classes.csv')
+  ```
+  or by defining manually a list of strings
+  ```python
+  classes = ["0", "1", ...]
+  ```
 
-4. define your environment
+* [OPTIONAL] Define your **pre-processing** and/or **post-processing** function. More details on these two functions are reported in the "How to extend roby" section of this documentation.
 
-load the environment
-```python
-environment = EnvironmentRTest(model, file_list, classes, labeler_f=labeler)
-```
+* Define your **environment**
+  ```python
+  environment = EnvironmentRTest.EnvironmentRTest(model, file_list, classes, labeler_f=labeler)
+  ```
+
+* [OPTIONAL] Check the **accuracy** of your model. This value can be used as a baseline of the nominal behavior of your model when no alteration is applied.
 
 
 5. check the current accuracy of your model
