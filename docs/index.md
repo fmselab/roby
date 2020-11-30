@@ -32,9 +32,9 @@ In this Tutorial 1, the robustness of a CNN images classifier is analyzed. The e
 * Create a python file
 
 * Import roby
-```python
-from roby import *
-```
+  ```python
+  from roby import *
+  ```
 
 * Load your **model** and locate your **images**. The model can be stored in a `.model` or in a `.h5` file and must be in the _Keras_ format.
 
@@ -115,34 +115,41 @@ This tutorial analyzes the same case study described in the previous Tutorial bu
 * Create a `.ipynb` file on Google Colab.
 
 * Install all the packages, included **roby**, necessary for robustness analysis
-```python
-!pip install -q keras
-!pip install -U -q PyDrive
-!pip install -q --no-dependencies roby
-```
+  ```python
+  !pip install -q keras
+  !pip install -U -q PyDrive
+  !pip install -q --no-dependencies roby
+  ```
 
 * Remove all the **temporary files** from the old computations
-```python
-!rm -r /content/*
-```
+  ```python
+  !rm -r /content/*
+  ```
 
 * Import all the required **libraries**
-```python
-from google.colab import files
-from roby.CloudTools import authenticate
-from roby.CloudTools import upload_config
-from roby.CloudTools import process_config
-from roby.RobustnessNN import classification
-from roby.RobustnessNN import robustness_test
-from roby.RobustnessNN import display_robustness_results
-from roby.Alterations import GaussianNoise
-from imutils import paths
-import imutils
-import cv2
-from keras.preprocessing.image import img_to_array
-import numpy as np
-```
+  ```python
+  from google.colab import files
+  from roby.CloudTools import authenticate
+  from roby.CloudTools import upload_config
+  from roby.CloudTools import process_config
+  from roby.RobustnessNN import classification
+  from roby.RobustnessNN import robustness_test
+  from roby.RobustnessNN import display_robustness_results
+  from roby.Alterations import GaussianNoise
+  from imutils import paths
+  import imutils
+  import cv2
+  from keras.preprocessing.image import img_to_array
+  import numpy as np
+  ```
 
+* Authenticate with **Google Drive**. We need to authorize Google Colab to access to a Google Drive storage. The user will be required to:
+  * Click a link
+  * Authorize the connection
+  * Paste in a text-box the given Key
+  ```python
+  drive = authenticate()
+  ```
 
 
 ### Tutorial 3: Defining customized alterations
