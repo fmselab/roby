@@ -1,2 +1,2 @@
 # roby
-robustness analyser for neural networks
+robustness analyzer for neural networks
