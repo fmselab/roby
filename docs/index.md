@@ -75,14 +75,19 @@ from roby import *
   ```
 
 * [OPTIONAL] Check the **accuracy** of your model. This value can be used as a baseline of the nominal behavior of your model when no alteration is applied.
+  ```python
+  accuracy = classification(environment)
+  ```
 
-
-5. check the current accuracy of your model
-
-Get the standard behavior of the net
-```python
-accuracy = classification(environment)
-```
+  Note that, if you have defined your dataset as a list of strings, you must specify for the `classification` function a second parameter representing the function specifying how to open the input data file and convert into a `np.ndarray`. For this tutorial, we define a function
+  ```python
+  def reader(file_name):
+    return cv2.imread(file_name)
+  ```
+  and we check the accuracy with
+  ```python
+  accuracy = classification(environment, reader)
+  ```
 
 
 6. check the robustness against a desired alteration
@@ -109,7 +114,7 @@ display_robustness_results(results)
 ### Tutorial 2: Images classifier - Cloud execution
 
 
-### Tutorial 3: Images classifier with customized alteration
+### Tutorial 3: Defining customized alterations
 
 
 ### Tutorial 4: Sounds classifier
