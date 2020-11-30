@@ -147,6 +147,7 @@ This tutorial analyzes the same case study described in the previous Tutorial bu
   * Click a link
   * Authorize the connection
   * Paste in a text-box the given Key
+  
   ```python
   drive = authenticate()
   ```
