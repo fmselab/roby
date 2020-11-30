@@ -202,7 +202,7 @@ If users want to classify data that are not images, or if they want to introduce
         self.variance = variance
   ```
 
-* Define the **`name()`** method in the new alteration class
+* Define the `name()` method in the new alteration class, returning the **name** of the alteration
   ```python
     def name(self) -> str:
       return "AudioNoise"
