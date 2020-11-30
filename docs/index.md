@@ -106,7 +106,7 @@ from roby import *
   display_robustness_results(results)
   ```
 
-  ![Accuracy variation when Gaussian Noise is applied](docs/images/robustness.jpg "Accuracy variation when Gaussian Noise is applied")
+  ![Accuracy variation when Gaussian Noise is applied](https://github.com/fmselab/roby/blob/main/docs/images/robustness.jpg?raw=true "Accuracy variation when Gaussian Noise is applied")
 
 ### Tutorial 2: Images classifier - Cloud execution
 
