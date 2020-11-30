@@ -121,6 +121,30 @@ This tutorial analyzes the same case study described in the previous Tutorial bu
 !pip install -q --no-dependencies roby
 ```
 
+* Remove all the **temporary files** from the old computations
+```python
+!rm -r /content/*
+```
+
+* Import all the required **libraries**
+```python
+from google.colab import files
+from roby.CloudTools import authenticate
+from roby.CloudTools import upload_config
+from roby.CloudTools import process_config
+from roby.RobustnessNN import classification
+from roby.RobustnessNN import robustness_test
+from roby.RobustnessNN import display_robustness_results
+from roby.Alterations import GaussianNoise
+from imutils import paths
+import imutils
+import cv2
+from keras.preprocessing.image import img_to_array
+import numpy as np
+```
+
+
+
 ### Tutorial 3: Defining customized alterations
 
 
