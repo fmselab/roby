@@ -86,7 +86,22 @@ display_robustness_results(results)
 
 * **Loading**:
 
-* **Labeling**:
+* **Labeling**: real labels for input data can be given either with a list of all the labels or by giving a _labeler_ function. In the former case, the list _label\_list_ must be of the same size as the input dataset
+```python
+env = EnvironmentRTest.EnvironmentRTest(model, input_dataset, classes,
+                                   label_list=label_list)
+```
+while in the latter case the user must define a function receiving a data (in _np.npdarray_ format) and returning a string representing the real label
+```python
+def labeler(image: np.ndarray):
+    ...
+    return real_label: str
+```
+and pass this function when defining the environment
+```python
+env = EnvironmentRTest.EnvironmentRTest(model, file_list, classes,
+                                   labeler_f=labeler)
+```
 
 * **Alterations**:
 
