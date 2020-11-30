@@ -14,7 +14,7 @@ roby has been designed to be more flexible as possible. However, there are some 
 
 3. Only ANNs used for _classification_ are supported by roby.
 
-4. Input data must be representable using _np.ndarrays_.
+4. Input data must be representable using `np.ndarray`.
 
 ## Tutorials and application scenarios
 
@@ -86,12 +86,12 @@ display_robustness_results(results)
 
 * **Loading**:
 
-* **Labeling**: real labels for input data can be given either with a list of all the labels or by giving a _labeler_ function. In the former case, the list _label\_list_ must be of the same size as the input dataset
+* **Labeling**: real labels for input data can be given either with a list of all the labels or by giving a `labeler` function. In the former case, the list `label_list` must be of the same size as the input dataset
 ```python
 env = EnvironmentRTest.EnvironmentRTest(model, input_dataset, classes,
                                    label_list=label_list)
 ```
-while in the latter case the user must define a function receiving a data (in _np.ndarray_ format) and returning a string representing the real label
+while in the latter case the user must define a function receiving a data (in `np.ndarray` format) and returning a string representing the real label
 ```python
 def labeler(image: np.ndarray):
     ...
@@ -108,9 +108,9 @@ env = EnvironmentRTest.EnvironmentRTest(model, file_list, classes,
 Alterations.Alteration
 ```
 that can be extended to create customized alterations. When extending the abstract class, the user must implement the following functions:
-  * _name()_ returning the name of the alteration.
-  * _apply\_alteration\_data(data, alteration\_level)_ receiving the input data in the format of _np.ndarray_ and returning the data of the same format with the alteration applied
-  * _apply\_alteration(file\_name, alteration\_level)_ receiving the path of the input data and returning the data with the applied alteration.
+  * `name()` returning the name of the alteration.
+  * `apply_alteration_data(data, alteration_level)` receiving the input data in the format of `np.ndarray` and returning the data of the same format with the alteration applied
+  * `apply_alteration(file_name, alteration_level)` receiving the path of the input data and returning the data with the applied alteration.
 
 * **Pre/Post-processing**: Users can adapt test input data to the ones used for NN training. During the declaration of the test environment users can specify a pre-processing and/or a post-processing function. The former must follow the pattern
 ```python
