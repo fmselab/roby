@@ -89,27 +89,24 @@ from roby import *
   accuracy = classification(environment, reader)
   ```
 
+* Define the **alteration** against which you want to compute the robustness of your model. For example, if we want to use a _Gaussian Noise_, with variance 200,  we can define:
+  ```python
+  alteration_type: Alteration = GaussianNoise(0, 1, 200)
+  ```
 
-6. check the robustness against a desired alteration
+* Set the accuracy **threshold** to be used to compute robustness
+  ```python
+  accuracy_threshold = 0.8
+  ```
 
-create the alteration_type as a GaussianNoise with variance 200
-```python
-alteration_type: Alteration = GaussianNoise(0, 1, 200)
-```
+* Compute the **robustess** of your model, using 20 points between the minimum and maximum value of the alteration, and get the results.
+  ```python
+  results = robustness_test(environment, alteration_type, 20,
+                                accuracy_threshold)
+  display_robustness_results(results)
+  ```
 
-Set the accuracy threshold
-```python
-accuracy_treshold = 0.8
-```
-
-robustness analysis, with 20 points
-```python
-results = robustness_test(environment, alteration_type, 20,
-                              accuracy_treshold)
-display_robustness_results(results)
-```
-
-![alt text](images/robustenss.jpg "")
+![Accuracy variation when Gaussian Noise is applied](images/robustness.jpg "Accuracy variation when Gaussian Noise is applied")
 
 ### Tutorial 2: Images classifier - Cloud execution
 
