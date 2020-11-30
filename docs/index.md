@@ -192,6 +192,21 @@ This tutorial analyzes the same case study described in the previous Tutorial bu
 
 ### Tutorial 3: Defining customized alterations
 
+If users want to classify data that are not images, or if they want to introduce new kinds of alterations, it is possible to define a customized one. This tutorial will analyze the definition of a new alteration, for audio files, that adds _Gaussian Audio Noise_ to an audio file.
+
+* Extend the `Alterations.Alteration` class and define your new **alteration class**. In this case, since we want to add _Gaussian Noise_ we will need to add a new parameter to the alteration, representing its variance
+  ```python
+  class AudioNoise(Alteration):   
+    def __init__(self, value_from: float, value_to: float, variance: float):
+      super().__init__(value_from, value_to)
+        self.variance = variance
+  ```
+
+* Define the **`name()`** method in the new alteration class
+  ```python
+    def name(self) -> str:
+      return "AudioNoise"
+  ```
 
 ### Tutorial 4: Sounds classifier
 
