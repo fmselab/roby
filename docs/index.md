@@ -50,6 +50,7 @@ from roby import *
   For each input image we must give the correct label, in order to make possible the evaluation of the results of the CNN when alterations are applied. This can be done in two different ways:
     * Defining a `labeler` function, assigning to each image the correct label
     * Creating a list containing the corresponding label for each input image.
+
   In this tutorial the first option is used, but more details are reported in the "How to extend roby" section of this documentation.
 
   Set the classes available for classification.
