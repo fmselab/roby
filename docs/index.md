@@ -99,7 +99,7 @@ In this Tutorial 1, the robustness of a CNN images classifier is analyzed. The e
   accuracy_threshold = 0.8
   ```
 
-* Compute the **robustess** of your model, using 20 points between the minimum and maximum value of the alteration, and get the results.
+* Compute the **robustness** of your model, using 20 points between the minimum and maximum value of the alteration, and get the results.
   ```python
   results = robustness_test(environment, alteration_type, 20,
                                 accuracy_threshold)
@@ -151,6 +151,44 @@ This tutorial analyzes the same case study described in the previous Tutorial bu
   drive = authenticate()
   ```
 
+* [OPTIONAL] Define your **pre-processing** and/or **post-processing** function. More details on these two functions are reported in the [How to extend roby](#how-to-extend-roby) section of this documentation.
+
+* Since we work with the same dataset of the previous tutorial, we still need a **labeler** function. Define a labeler function, eg. extracting the label from the file name:
+  ```python
+  def labeler(image):
+    real_label = (image.split('.')[0]).split('_')[-1]
+    return real_label
+  ```
+
+* Set up your **environment**.
+  The `CouldTools` module offers functionalities to load from Google Drive the model, the dataset and, possibly, the csv file containing the classes. To use this functionality, the user has only to specify the three urls:
+  ```python
+  model_link = "..."
+  link_dataset_dir = "..."
+  classes_link = "..."
+  ```  
+
+  At this point, create the `EnvironmentRTest`:
+  ```python
+  environment = process_config(model_link, link_dataset_dir, classes_link, drive, labeler_f = labeler)
+  ```
+
+* Define the **alteration** against which you want to compute the robustness of your model. For example, if we want to use a _Gaussian Noise_, with variance 200,  we can define:
+  ```python
+  alteration_type: Alteration = GaussianNoise(0, 1, 200)
+  ```
+
+* Set the accuracy **threshold** to be used to compute robustness
+  ```python
+  accuracy_threshold = 0.8
+  ```
+
+* Compute the **robustness** of your model, using 20 points between the minimum and maximum value of the alteration, and get the results.
+  ```python
+  results = robustness_test(environment, alteration_type, 20,
+                                accuracy_threshold)
+  display_robustness_results(results)
+  ```
 
 ### Tutorial 3: Defining customized alterations
 
