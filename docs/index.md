@@ -229,8 +229,73 @@ If users want to classify data that are not images, or if they want to introduce
 
 ### Tutorial 4: Sounds classifier
 
+Tutorial 1 and Tutorial 2 were about images classifier. However, roby is applicable to all the classifiers receiving `np.ndarray` as input type. For example, in this Tutorial, the use of roby in the case of sounds classifier is presented.
 
+* Create a python file
 
+* Import roby
+  ```python
+  from roby import *
+  ```
+
+* Load your **model** and locate your **sounds**. The model can be stored in a `.model` or in a `.h5` file and must be in the _Keras_ format.
+
+  ```python
+  model = load_model('trained_model.h5')
+  ```
+  Get the sounds in the test data-set. As for the images, these can be loaded as a list of paths
+  ```python
+  file_list = sorted(list(paths.list_images('sounds')))
+  ```
+  or as a list of `np.ndarray` as commonly happens when working with already available datasets (eg., in pickle files).
+
+  For each input sound we must give the correct label, in order to make possible the evaluation of the results of the NN when alterations are applied. This can be done in two different ways:
+    * Defining a `labeler` function, assigning to each sound the correct label
+    * Creating a list containing the corresponding label for each input sound.
+
+  In this tutorial the second option is used. Thus, define a list containing the labels:
+  ```python
+  labels = [...]
+  ```
+
+* Set the **classes** available for classification. This can be done by reading the classes from a `csv` file
+  ```python
+  classes = set_classes('Classes.csv')
+  ```
+  or by defining manually a list of strings
+  ```python
+  classes = ["0", "1", ...]
+  ```
+
+* [OPTIONAL] Define your **pre-processing** and/or **post-processing** function. More details on these two functions are reported in the [How to extend roby](#how-to-extend-roby) section of this documentation.
+
+* Define your **environment**
+  ```python
+  environment = EnvironmentRTest.EnvironmentRTest(model, file_list, classes, label_list = labels)
+  ```
+
+* [OPTIONAL] Check the **accuracy** of your model. This value can be used as a baseline of the nominal behavior of your model when no alteration is applied.
+  ```python
+  accuracy = classification(environment)
+  ```
+
+* Define the **alteration** against which you want to compute the robustness of your model. For example, we can use the _Gaussian Audio Noise_ alteration we have defined in the previous tutorial, with variance 200:
+  ```python
+  alteration_type: Alteration = AudioNoise(0, 1, 200)
+  ```
+* Set the accuracy **threshold** to be used to compute robustness
+  ```python
+  accuracy_threshold = 0.8
+  ```
+
+* Compute the **robustness** of your model, using 20 points between the minimum and maximum value of the alteration, and get the results.
+  ```python
+  results = robustness_test(environment, alteration_type, 20,
+                                accuracy_threshold)
+  display_robustness_results(results)
+  ```
+
+  ![Accuracy variation when Audio Noise is applied](https://github.com/fmselab/roby/blob/main/docs/images/robustnessAudio.jpg?raw=true "Accuracy variation when Audio Noise is applied")
 
 ## How to extend roby
 
