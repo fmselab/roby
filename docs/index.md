@@ -4,9 +4,17 @@ Spiegazione di roby ,...
 
 ## How to use roby
 
-### requisites
+### Requirements
 
-'''
+roby has been designed to be more flexible as possible. However, there are some requirements needed for the use of the tool:
+
+1. Alterations must be expressible as input modification between a _minumum_ and a _maximum_ threshold.
+
+2. The model to be tested must be in the _Keras_ format.
+
+3. Only ANNs used for _classification_ are supported by roby.
+
+4. Input data must be representable using _np.ndarrays_.
 
 
 ### tutorial 1: images classifier
@@ -41,7 +49,7 @@ environment = EnvironmentRTest(model, file_list, classes, labeler_f=labeler)
 ```
 
 
-5. check the current accuracy of your model 
+5. check the current accuracy of your model
 
 Get the standard behavior of the net
 ```python
@@ -55,7 +63,7 @@ create the alteration_type as a GaussianNoise with variance 200
 ```python
 alteration_type: Alteration = GaussianNoise(0, 1, 200)
 ```
-  
+
 Set the accuracy threshold
 ```python
 accuracy_treshold = 0.8
@@ -69,11 +77,6 @@ display_robustness_results(results)
 ```
 
 ![alt text](images/robustenss.jpg "")
-
-
-### APIs documentation
-
-<https://fmselab.github.io/roby/apis/>
 
 
 ### tutorial XX: using colab
@@ -92,15 +95,19 @@ display_robustness_results(results)
 
 ### APIs documentation
 
-## Examples
+A full documentation of the roby's APIs can be found at
+<https://fmselab.github.io/roby/apis/>
 
-* breast cancer data set
+## Examples of use
+
+* Breast cancer images dataset
   <https://github.com/fmselab/roby/tree/main/code/roby_Use/breast-cancer>
 
-*
+* MNIST dataset
+  <https://github.com/fmselab/roby/tree/main/code/roby_Use/MNIST>
 
-*
+* German Traffic Signs dataset
+  <https://github.com/fmselab/roby/tree/main/code/roby_Use/trafficsigns-imagefailures>
 
-*
-
-<https://fmselab.github.io/roby/apis/>
+* Numbers recognition from speech
+  <https://github.com/fmselab/roby/tree/main/code/roby_Use/speech_recognition>
