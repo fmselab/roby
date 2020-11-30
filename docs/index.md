@@ -51,7 +51,12 @@ from roby import *
     * Defining a `labeler` function, assigning to each image the correct label
     * Creating a list containing the corresponding label for each input image.
 
-  In this tutorial the first option is used, but more details are reported in the "How to extend roby" section of this documentation.
+  In this tutorial the first option is used, but more details are reported in the "How to extend roby" section of this documentation. Thus, define a labeler function, eg. extracting the label from the file name
+  ```python
+  def labeler(image):
+    real_label = (image.split('.')[0]).split('_')[-1]
+    return real_label
+  ```
 
   Set the classes available for classification.
   ```python
