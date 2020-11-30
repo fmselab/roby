@@ -16,10 +16,9 @@ roby has been designed to be more flexible as possible. However, there are some 
 
 4. Input data must be representable using _np.ndarrays_.
 
+## Tutorials and application scenarios
 
 ### tutorial 1: images classifier
-
-# roby: neural network ROBusteness analYzer
 
 ### brief tutorial on how to use roby
 
