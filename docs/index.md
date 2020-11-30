@@ -90,13 +90,25 @@ display_robustness_results(results)
 
 * **Alterations**:
 
-* **Pre/Post-processing**: Users can adapt test input data to the ones used for NN training. During the declaration of the test environment users can specify a pre-processing and/or a post-processing function. The former must follow the following pattern
+* **Pre/Post-processing**: Users can adapt test input data to the ones used for NN training. During the declaration of the test environment users can specify a pre-processing and/or a post-processing function. The former must follow the pattern
 ```python
 def pre_processing(image: np.ndarray):
     ...
     return image: np.ndarray
 ```
-and it is applied to each input data before its recognition by the NN. The latter allows the user to scale the probabilities given as output by the NN.
+and it is applied to each input data before its recognition by the NN. The latter allows the user to scale the probabilities given as output by the NN. It must follow this pattern
+```python
+def post_processing(probabilities: List[float]):
+    ...
+    return new_probabilities:  List[float]
+```
+The declaration of these two functions is not mandatory. If the user has defined one of them, they can be specified in the declaration of the test environment
+```python
+env = EnvironmentRTest.EnvironmentRTest(model, file_list, classes,
+                                   preprocess_f=pre_processing,
+                                   postprocess_f=post_processing,
+                                   labeler_f=labeler)
+```
 
 ### APIs documentation
 
