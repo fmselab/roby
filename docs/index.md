@@ -147,7 +147,7 @@ This tutorial analyzes the same case study described in the previous Tutorial bu
   * Click a link
   * Authorize the connection
   * Paste in a text-box the given Key
-  
+
   ```python
   drive = authenticate()
   ```
@@ -207,6 +207,24 @@ If users want to classify data that are not images, or if they want to introduce
   ```python
     def name(self) -> str:
       return "AudioNoise"
+  ```
+
+* Define the `apply_alteration_data(...)` method in the new alteration class, which applies the defined alteration to an input in the form of `np.ndarray`
+  ```python
+    def apply_alteration_data(self, data: np.ndarray, alteration_level: float) -> np.ndarray:
+      # Apply the alteration
+      if float(alteration_level) > 0.0:
+        noise=np.random.normal(0, (self.variance/100)*alteration_level, [data.shape[0], data.shape[1], 1])
+        data = data + noise
+      return data
+  ```
+
+* Define the `apply_alteration(...)` method in the new alteration class, which applies the defined alteration to an input when its path is given
+  ```python
+  def apply_alteration(self, file_name: str, alteration_level: float) -> np.ndarray:
+      # Open the file
+      file = ...
+      return apply_alteration_data(file, alteration_level)
   ```
 
 ### Tutorial 4: Sounds classifier
