@@ -25,9 +25,7 @@ pip install roby
 
 ## Tutorials and application scenarios
 
-### tutorial 1: images classifier
-
-### brief tutorial on how to use roby
+### Tutorial 1: Images classifier - Local execution
 
 1. create a python file
 
@@ -84,8 +82,14 @@ display_robustness_results(results)
 
 ![alt text](images/robustenss.jpg "")
 
+### Tutorial 2: Images classifier - Cloud execution
 
-### tutorial XX: using colab
+
+### Tutorial 3: Images classifier with customized alteration
+
+
+### Tutorial 4: Sounds classifier
+
 
 
 
