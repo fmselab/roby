@@ -1,6 +1,6 @@
 # roby: neural network ROBusteness analYzer
 
-Spiegazione di roby ,...
+roby (ROBustness analYzer) is a Python tool to perform robustness evaluation of neural network classifiers. Given a trained model, a classified dataset and the list of classes, alterations are applied and the robustness is computed based on the accuracy threshold defined.
 
 ## How to use roby
 
