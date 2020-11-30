@@ -51,7 +51,7 @@ from roby import *
     * Defining a `labeler` function, assigning to each image the correct label
     * Creating a list containing the corresponding label for each input image.
 
-  In this tutorial the first option is used, but more details are reported in the [How to extend roby](#How-to-extend-roby) section of this documentation. Thus, define a labeler function, eg. extracting the label from the file name:
+  In this tutorial the first option is used, but more details are reported in the [How to extend roby](#how-to-extend-roby) section of this documentation. Thus, define a labeler function, eg. extracting the label from the file name:
   ```python
   def labeler(image):
     real_label = (image.split('.')[0]).split('_')[-1]
@@ -67,7 +67,7 @@ from roby import *
   classes = ["0", "1", ...]
   ```
 
-* [OPTIONAL] Define your **pre-processing** and/or **post-processing** function. More details on these two functions are reported in the [How to extend roby](#How-to-extend-roby) section of this documentation.
+* [OPTIONAL] Define your **pre-processing** and/or **post-processing** function. More details on these two functions are reported in the [How to extend roby](#how-to-extend-roby) section of this documentation.
 
 * Define your **environment**
   ```python
@@ -110,7 +110,16 @@ from roby import *
 
 ### Tutorial 2: Images classifier - Cloud execution
 
-This tutorial analyzes the same case study described in the Tutorial 1
+This tutorial analyzes the same case study described in the previous Tutorial but the execution is performed online on Google Colab. The files used for robustness analysis (model file, dataset, ...) must be stored on Google Drive.
+
+* Create a `.ipynb` file on Google Colab.
+
+* Install all the packages, included **roby**, necessary for robustness analysis
+```python
+!pip install -q keras
+!pip install -U -q PyDrive
+!pip install -q --no-dependencies roby
+```
 
 ### Tutorial 3: Defining customized alterations
 
