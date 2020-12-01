@@ -11,9 +11,9 @@ In details, the following data are required:
 - _classes_, i.e. the list of the classes in which you want to classify the
   input images
 - _label\_list_, i.e. the list of the labels. Its `size` must be equals to the
-  `size` of the _file\_list. You may want to use a function to automatically
-  give the label for each input data. In this case you can skip the parameter
-  `label_list`
+  `size` of the _file\_list. If you want to use a function to automatically
+  assign the label for each input data, you can skip this
+  parameter and use the parameter `labeler\_f`.
 - _labeler\_f_, i.e. the function used to assign automatically the labels to
   the images. If you already have your own list of labels, you can skip this
   parameter.
