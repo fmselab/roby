@@ -86,7 +86,9 @@ def classification(environment: EnvironmentRTest.EnvironmentRTest,
             robustness analysis
         reader : Callable[[str], np.ndarray], optional
             function to be used to load the input data and put it into a
-            np.ndarray
+            np.ndarray.
+            It is mandatory if the input data are given as a list of path
+            in the EnvironmentRTest
 
     Returns
     -------
