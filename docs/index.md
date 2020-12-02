@@ -6,9 +6,9 @@ roby (ROBustness analYzer) is a Python tool to perform robustness evaluation of 
 
 ### Requirements
 
-roby has been designed to be more flexible as possible. However, there are some requirements needed for the use of the tool:
+roby has been designed to be as flexible as possible. However, there are some requirements needed for the use of the tool:
 
-1. Alterations must be expressible as input modification between a _minumum_ and a _maximum_ threshold.
+1. Alterations must be expressible as input modification between a _minimum_ and a _maximum_ threshold.
 
 2. The model to be tested must be in the _Keras_ format.
 
@@ -22,12 +22,17 @@ roby can be installed using the pip package-management system with
 ```python
 pip install roby
 ```
+or with
+```python
+pip3 install roby
+```
+depending on the version installed.
 
 ## Tutorials and application scenarios
 
 ### Tutorial 1: Images classifier - Local execution
 
-In this Tutorial 1, the robustness of a CNN images classifier is analyzed. The execution of all the code is performed locally.
+In this tutorial, the robustness of a CNN images classifier is analyzed. The execution of all the code is performed locally.
 
 * Create a python file
 
@@ -45,13 +50,13 @@ In this Tutorial 1, the robustness of a CNN images classifier is analyzed. The e
   ```python
   file_list = sorted(list(paths.list_images('images')))
   ```
-  or as a list of `np.ndarray` as commonly happens when working with already available datasets (eg., in pickle files).
+  or as a list of `np.ndarray` as commonly happens when working with already available datasets (e.g., in pickle files).
 
   For each input image we must give the correct label, in order to make possible the evaluation of the results of the CNN when alterations are applied. This can be done in two different ways:
     * Defining a `labeler` function, assigning to each image the correct label
     * Creating a list containing the corresponding label for each input image.
 
-  In this tutorial the first option is used, but more details are reported in the [How to extend roby](#how-to-extend-roby) section of this documentation. Thus, define a labeler function, eg. extracting the label from the file name:
+  In this tutorial the first option is used, but more details are reported in the [How to extend roby](#how-to-extend-roby) section of this documentation. Thus, define a labeler function, e.g. extracting the label from the file name:
   ```python
   def labeler(image):
     real_label = (image.split('.')[0]).split('_')[-1]
@@ -89,7 +94,7 @@ In this Tutorial 1, the robustness of a CNN images classifier is analyzed. The e
   accuracy = classification(environment, reader)
   ```
 
-* Define the **alteration** against which you want to compute the robustness of your model. For example, if we want to use a _Gaussian Noise_, with variance 200,  we can define:
+* Define the **alteration** against which you want to compute the robustness of your model. For example, if we want to use a _Gaussian Noise_ with variance 200,  we can define:
   ```python
   alteration_type: Alteration = GaussianNoise(0, 1, 200)
   ```
@@ -110,11 +115,11 @@ In this Tutorial 1, the robustness of a CNN images classifier is analyzed. The e
 
 ### Tutorial 2: Images classifier - Cloud execution
 
-This tutorial analyzes the same case study described in the previous Tutorial but the execution is performed online on Google Colab. The files used for robustness analysis (model file, dataset, ...) must be stored on Google Drive.
+This tutorial analyzes the same case study described in the previous tutorial but the execution is performed online on [Google Colab](https://colab.research.google.com/). The files used for robustness analysis (model file, dataset, ...) must be stored on Google Drive.
 
 * Create a `.ipynb` file on Google Colab.
 
-* Install all the packages, included **roby**, necessary for robustness analysis
+* Install all the packages, including **roby**, necessary for robustness analysis
   ```python
   !pip install -q keras
   !pip install -U -q PyDrive
@@ -154,7 +159,7 @@ This tutorial analyzes the same case study described in the previous Tutorial bu
 
 * [OPTIONAL] Define your **pre-processing** and/or **post-processing** function. More details on these two functions are reported in the [How to extend roby](#how-to-extend-roby) section of this documentation.
 
-* Since we work with the same dataset of the previous tutorial, we still need a **labeler** function. Define a labeler function, eg. extracting the label from the file name:
+* Since we work with the same dataset of the previous tutorial, we still need a **labeler** function. Define a labeler function, e.g. extracting the label from the file name:
   ```python
   def labeler(image):
     real_label = (image.split('.')[0]).split('_')[-1]
@@ -162,7 +167,7 @@ This tutorial analyzes the same case study described in the previous Tutorial bu
   ```
 
 * Set up your **environment**.
-  The `CouldTools` module offers functionalities to load from Google Drive the model, the dataset and, possibly, the csv file containing the classes. To use this functionality, the user has only to specify the three urls:
+  The `CouldTools` module offers functionalities to load from Google Drive the model, the dataset and, possibly, the csv file containing the classes. To use this functionality, the user has only to specify the following three urls:
   ```python
   model_link = "..."
   link_dataset_dir = "..."
@@ -229,7 +234,7 @@ If users want to classify data that are not images, or if they want to introduce
 
 ### Tutorial 4: Sounds classifier
 
-Tutorial 1 and Tutorial 2 were about images classifier. However, roby is applicable to all the classifiers receiving `np.ndarray` as input type. For example, in this Tutorial, the use of roby in the case of sounds classifier is presented.
+Tutorial 1 and Tutorial 2 were about images classifiers. However, roby is applicable to all the classifiers receiving `np.ndarray` as input type. For example, in this tutorial, the use of roby in the case of a sound classifier is presented.
 
 * Create a python file
 
@@ -247,7 +252,7 @@ Tutorial 1 and Tutorial 2 were about images classifier. However, roby is applica
   ```python
   file_list = sorted(list(paths.list_images('sounds')))
   ```
-  or as a list of `np.ndarray` as commonly happens when working with already available datasets (eg., in pickle files).
+  or as a list of `np.ndarray` as commonly happens when working with already available datasets (e.g., in pickle files).
 
   For each input sound we must give the correct label, in order to make possible the evaluation of the results of the NN when alterations are applied. This can be done in two different ways:
     * Defining a `labeler` function, assigning to each sound the correct label
@@ -364,6 +369,7 @@ env = EnvironmentRTest.EnvironmentRTest(model, file_list, classes,
                                    postprocess_f=post_processing,
                                    labeler_f=labeler)
 ```
+When a function is not defined `None` is used as default.
 
 ### APIs documentation
 
