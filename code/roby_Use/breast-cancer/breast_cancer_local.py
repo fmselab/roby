@@ -125,3 +125,7 @@ if __name__ == '__main__':
     results = robustness_test(environment, alteration_type, 20,
                               accuracy_treshold)
     display_robustness_results(results)
+
+    altseq = AlterationSequence([Zoom(0, 1),Brightness(-0.5, 0.5)])
+    
+    results = robustness_test(environment, altseq, 20, accuracy_treshold)

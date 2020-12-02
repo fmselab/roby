@@ -770,14 +770,13 @@ class Zoom(Alteration):
         return self.apply_alteration_data(data, alteration_level)
 
 
-class AlterationSequence:
+class AlterationSequence(Alteration):
     """
     Class defining the a sequence of alterations, each one with its own
     alteration_level
     """
 
-    def __init__(self, alterations: List[Alteration],
-                 alteration_levels: List[float]):
+    def __init__(self, alterations: List[Alteration]):
         """
         Constructs all the necessary attributes for the AlterationSequence
         object.
@@ -793,11 +792,9 @@ class AlterationSequence:
             ValueError
                 when alterations and alteration_levels have different sizes
         """
-        if len(alterations) != len(alteration_levels):
-            raise ValueError("alterations and alteration_levels must be of " +
-                             "the same size")
         self.alterations = alterations
-        self.alteration_levels = alteration_levels
+        self.value_from = -1
+        self.value_to = +1
 
     def name(self) -> str:
         """
@@ -813,7 +810,8 @@ class AlterationSequence:
             alteration_name = alteration_name + " " + a.name() + ","
         return alteration_name
 
-    def apply_alteration(self, data: np.ndarray) -> np.ndarray:
+    def apply_alteration(self, data: np.ndarray,
+                         alteration_level: float) -> np.ndarray:
         """
         Method that applies a given sequence of alterations with given values
         to the data
@@ -828,9 +826,7 @@ class AlterationSequence:
             data : np.ndarray
                 the altered data on which the alterations have been applied
         """
-        alteration_counter = 0
         for a in self.alterations:
-            data = a.apply_alteration_data(data, self.alteration_levels[
-                alteration_counter])
-            alteration_counter = alteration_counter + 1
+            # calcola la proporzion eper a
+            data = a.apply_alteration_data(data, a.value_from)
         return data
