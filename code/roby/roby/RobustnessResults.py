@@ -23,7 +23,8 @@ class RobustnessResults:
                  title: str,
                  xlabel: str,
                  ylabel: str,
-                 alteration_name: str):
+                 alteration_name: str,
+                 threshold: float):
         """
         Constructs all the necessary attributes for the RobustnessResult
         object.
@@ -48,6 +49,8 @@ class RobustnessResults:
                 analysis
             alteration_name : str
                 name of the applied alteration
+            threshold : float
+                threshold used for robustness computation
         """
         self.steps = steps
         self.accuracies = accuracies
@@ -56,3 +59,4 @@ class RobustnessResults:
         self.xlabel = xlabel
         self.ylabel = ylabel
         self.alteration_name = alteration_name
+        self.threshold = threshold

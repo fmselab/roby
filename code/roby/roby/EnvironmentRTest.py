@@ -20,8 +20,6 @@ In details, the following data are required:
 - _preprocess\_f_, i.e. a function that can be applied to each picture before
   its classification. You may want to classify raw data, so you can skip this
   parameter.
-- _postprocess\_f_, i.e. a function that can be used to scale the probability
-  in output to your network.
 
 @author: Andrea Bombarda
 """
@@ -40,8 +38,7 @@ class EnvironmentRTest:
                  label_list: List[str]=None,
                  labeler_f: Callable[[np.ndarray], str]=None,
                  preprocess_f: Callable[[np.ndarray], np.ndarray]=None,
-                 postprocess_f: Callable[[float], float]=None,
-                 reader_f:Callable[[str], np.ndarray]=None):
+                 reader_f: Callable[[str], np.ndarray]=None):
         """
         Constructs all the necessary attributes for the RobustnessResult object
 
@@ -64,18 +61,15 @@ class EnvironmentRTest:
             preprocess_f : Callable[[np.ndarray], np.ndarray], optional
                 pre-processing to be executed on the data before the model
                 classification. It can be None
-            postprocess_f : Callable[[float], float], optional
-                post-processing to be executed on the output of the model.
-                It can be None
-                
-
+            reader_f : Callable[[str], np.ndarray], optional
+                optional function used to read the input data from file in a
+                np.ndarray format
         """
         self.model = model
         self.file_list = file_list
         self.total_data = len(file_list)
         self.classes = classes
         self.pre_processing = preprocess_f
-        self.post_processing = postprocess_f
         self.labeler_f = labeler_f
         self.label_list = label_list
         self.reader_f = reader_f
