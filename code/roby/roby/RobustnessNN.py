@@ -14,11 +14,10 @@ The major features offered by this module are the followings:
 import matplotlib.pyplot as plt   # type: ignore
 # Manage csv files
 import csv
-import numpy as np  # type: ignore
 from roby.RobustnessResults import RobustnessResults
 from builtins import isinstance
 from roby import Alterations, EnvironmentRTest
-from typing import List, Callable
+from typing import List
 
 
 def set_classes(filename: str) -> List[str]:
@@ -83,11 +82,6 @@ def classification(environment: EnvironmentRTest.EnvironmentRTest) -> float:
         environment : EnvironmentRTest
             the environment containing all the information used to perform
             robustness analysis
-        reader : Callable[[str], np.ndarray], optional
-            function to be used to load the input data and put it into a
-            np.ndarray.
-            It is mandatory if the input data are given as a list of path
-            in the EnvironmentRTest
 
     Returns
     -------
