@@ -111,8 +111,6 @@ def classification(environment: EnvironmentRTest.EnvironmentRTest) -> float:
             data = imgt
         # Classify the input
         proba = environment.model.predict(data)[0]
-        if environment.post_processing is not None:
-            proba = environment.post_processing(proba)
 
         # Get predicted label and real one
         predicted_class = ""
@@ -198,18 +196,15 @@ def robustness_test(environment: EnvironmentRTest.EnvironmentRTest,
         successes = 0
         failures = 0
         data_index = 0
-        for input in environment.file_list:
-            if isinstance(input, str):
-                input = environment.reader_f(input)
-            data = alteration.apply_alteration(input, step)
+        for thisFile in environment.file_list:
+            inputFile = thisFile
+            if isinstance(input, str) and environment.reader_f is not None:
+                inputFile = environment.reader_f(thisFile)
+            data = alteration.apply_alteration(inputFile, step)
             # Pre-processing Function
             if environment.pre_processing is not None:
                 data = environment.pre_processing(data)
             proba = environment.model.predict(data)[0]
-            # Post-processing Function, the probability has to be in the same
-            # order of the classes
-            if environment.post_processing is not None:
-                proba = environment.post_processing(proba)
             # Get predicted label and real one
             predicted_class = ""
             predicted_prob = 0
@@ -243,5 +238,5 @@ def robustness_test(environment: EnvironmentRTest.EnvironmentRTest,
     # Robustness computation
     robustness = compute_robustness(accuracies, steps, accuracy_threshold)
     results = RobustnessResults(steps, accuracies, robustness, title, xlabel,
-                                ylabel, alteration.name())
+                                ylabel, alteration.name(), accuracy_threshold)
     return results
