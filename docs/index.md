@@ -369,7 +369,7 @@ env = EnvironmentRTest.EnvironmentRTest(model, file_list, classes,
                                    postprocess_f=post_processing,
                                    labeler_f=labeler)
 ```
-When a function is not defined `None` is used as default.
+When a function is not defined `None` is used as default value.
 
 ### APIs documentation
 
