@@ -23,7 +23,7 @@ import cv2   # type: ignore
 from keras.preprocessing.image import img_to_array   # type: ignore
 import numpy as np   # type: ignore
 from roby.Alterations import Compression, VerticalTranslation,\
-    HorizontalTranslation, Blur, Zoom, Brightness, Alteration
+    HorizontalTranslation, Blur, Zoom, Brightness, Alteration,AlterationSequence
 
 
 def reader(file_name):
@@ -65,67 +65,70 @@ if __name__ == '__main__':
     # load the environment
     environment = EnvironmentRTest(model, file_list, classes,
                                    preprocess_f=pre_processing,
-                                   labeler_f=labeler)
+                                   labeler_f=labeler,
+                                   reader_f=reader)
 
     # get the standard behavior of the net
-    accuracy = classification(environment, reader)
-
-    # create the alteration_type as a GaussianNoise with variance 200
-    alteration_type: Alteration = GaussianNoise(0, 1, 200)
-
-    # perform robustness analysis, with 20 points
-    results = robustness_test(environment, alteration_type, 20,
-                              accuracy_treshold)
-    display_robustness_results(results)
-
-    # create the alteration_type as a Compression
-    alteration_type = Compression(0, 1)
-
-    # perform robustness analysis, with 20 points
-    results = robustness_test(environment, alteration_type, 20,
-                              accuracy_treshold)
-    display_robustness_results(results)
-
-    # create the alteration_type as a Vertical Translation
-    alteration_type = VerticalTranslation(-1, 1)
-
-    # perform robustness analysis, with 20 points
-    results = robustness_test(environment, alteration_type, 20,
-                              accuracy_treshold)
-    display_robustness_results(results)
-
-    # create the alteration_type as a Horizontal Translation
-    alteration_type = HorizontalTranslation(-1, 1)
-
-    # perform robustness analysis, with 20 points
-    results = robustness_test(environment, alteration_type, 20,
-                              accuracy_treshold)
-    display_robustness_results(results)
-
-    # create the alteration_type as a Blur Variation, with radius = 2
-    alteration_type = Blur(0, 1, 2)
-
-    # perform robustness analysis, with 20 points
-    results = robustness_test(environment, alteration_type, 20,
-                              accuracy_treshold)
-    display_robustness_results(results)
-
-    # create the alteration_type as a Brightness Variation
-    alteration_type = Brightness(-0.5, 0.5)
-
-    # perform robustness analysis, with 20 points
-    results = robustness_test(environment, alteration_type, 20,
-                              accuracy_treshold)
-    display_robustness_results(results)
-
-    # create the alteration_type as a Zoom
-    alteration_type = Zoom(0, 1)
-
-    # perform robustness analysis, with 20 points
-    results = robustness_test(environment, alteration_type, 20,
-                              accuracy_treshold)
-    display_robustness_results(results)
+    accuracy = classification(environment)
+# 
+#     # create the alteration_type as a GaussianNoise with variance 200
+#     alteration_type: Alteration = GaussianNoise(0, 1, 200)
+# 
+#     # perform robustness analysis, with 20 points
+#     results = robustness_test(environment, alteration_type, 2,
+#                               accuracy_treshold)
+#     display_robustness_results(results)
+# 
+#     # create the alteration_type as a Compression
+#     alteration_type = Compression(0, 1)
+# 
+#     # perform robustness analysis, with 20 points
+#     results = robustness_test(environment, alteration_type, 2,
+#                               accuracy_treshold)
+#     display_robustness_results(results)
+# 
+#     # create the alteration_type as a Vertical Translation
+#     alteration_type = VerticalTranslation(-1, 1)
+# 
+#     # perform robustness analysis, with 20 points
+#     results = robustness_test(environment, alteration_type, 2,
+#                               accuracy_treshold)
+#     display_robustness_results(results)
+# 
+#     # create the alteration_type as a Horizontal Translation
+#     alteration_type = HorizontalTranslation(-1, 1)
+# 
+#     # perform robustness analysis, with 20 points
+#     results = robustness_test(environment, alteration_type, 2,
+#                               accuracy_treshold)
+#     display_robustness_results(results)
+# 
+#     # create the alteration_type as a Blur Variation, with radius = 2
+#     alteration_type = Blur(0, 1, 2)
+# 
+#     # perform robustness analysis, with 20 points
+#     results = robustness_test(environment, alteration_type, 2,
+#                               accuracy_treshold)
+#     display_robustness_results(results)
+# 
+#     # create the alteration_type as a Brightness Variation
+#     alteration_type = Brightness(-0.5, 0.5)
+# 
+#     # perform robustness analysis, with 20 points
+#     results = robustness_test(environment, alteration_type, 2,
+#                               accuracy_treshold)
+#     display_robustness_results(results)
+# 
+#     # create the alteration_type as a Zoom
+#     alteration_type = Zoom(0, 1)
+# 
+#     # perform robustness analysis, with 20 points
+#     results = robustness_test(environment, alteration_type, 2,
+#                               accuracy_treshold)
+#     display_robustness_results(results)
 
     altseq = AlterationSequence([Zoom(0, 1),Brightness(-0.5, 0.5)])
     
-    results = robustness_test(environment, altseq, 20, accuracy_treshold)
+    results = robustness_test(environment, altseq, 2, accuracy_treshold)
+    
+    display_robustness_results(results)

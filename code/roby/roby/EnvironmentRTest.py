@@ -40,7 +40,8 @@ class EnvironmentRTest:
                  label_list: List[str]=None,
                  labeler_f: Callable[[np.ndarray], str]=None,
                  preprocess_f: Callable[[np.ndarray], np.ndarray]=None,
-                 postprocess_f: Callable[[float], float]=None):
+                 postprocess_f: Callable[[float], float]=None,
+                 reader_f:Callable[[str], np.ndarray]=None):
         """
         Constructs all the necessary attributes for the RobustnessResult object
 
@@ -66,6 +67,7 @@ class EnvironmentRTest:
             postprocess_f : Callable[[float], float], optional
                 post-processing to be executed on the output of the model.
                 It can be None
+                
 
         """
         self.model = model
@@ -76,6 +78,7 @@ class EnvironmentRTest:
         self.post_processing = postprocess_f
         self.labeler_f = labeler_f
         self.label_list = label_list
+        self.reader_f = reader_f
         # If the label list is not given, then apply the labeler function
         try:
             if self.label_list is None and self.labeler_f is not None:

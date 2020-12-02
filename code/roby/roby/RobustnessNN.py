@@ -72,8 +72,7 @@ def compute_robustness(accuracies: List[float], steps: List[float],
     return float(above_threshold)/float(len(steps))
 
 
-def classification(environment: EnvironmentRTest.EnvironmentRTest,
-                   reader: Callable[[str], np.ndarray]=None) -> float:
+def classification(environment: EnvironmentRTest.EnvironmentRTest) -> float:
     """
     Just a simple classification performed form the model we uploaded.
     This methods performs the classification using un-altered input data and
@@ -100,9 +99,9 @@ def classification(environment: EnvironmentRTest.EnvironmentRTest,
     data_index = 0
     for thisFile in environment.file_list:
         if isinstance(thisFile, str):
-            if reader is None:
+            if environment.reader_f is None:
                 raise RuntimeError("A reader function must be defined")
-            imgt = reader(thisFile)
+            imgt = environment.reader_f(thisFile)
         else:
             imgt = thisFile
         # Pre-process the input data for classification
@@ -199,11 +198,10 @@ def robustness_test(environment: EnvironmentRTest.EnvironmentRTest,
         successes = 0
         failures = 0
         data_index = 0
-        for thisFile in environment.file_list:
-            if isinstance(thisFile, str):
-                data = alteration.apply_alteration(thisFile, step)
-            else:
-                data = alteration.apply_alteration_data(thisFile, step)
+        for input in environment.file_list:
+            if isinstance(input, str):
+                input = environment.reader_f(input)
+            data = alteration.apply_alteration(input, step)
             # Pre-processing Function
             if environment.pre_processing is not None:
                 data = environment.pre_processing(data)
