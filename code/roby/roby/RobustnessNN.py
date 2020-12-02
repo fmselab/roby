@@ -156,6 +156,8 @@ def display_robustness_results(results: RobustnessResults):
     plt.style.use("ggplot")
     plt.figure()
     plt.plot(results.steps, results.accuracies)
+    thresholds = np.full(len(results.steps), results.threshold)
+    plt.plot(results.steps, thresholds)
     plt.title(results.title)
     plt.xlabel(results.xlabel)
     plt.ylabel(results.ylabel)
@@ -245,5 +247,5 @@ def robustness_test(environment: EnvironmentRTest.EnvironmentRTest,
     # Robustness computation
     robustness = compute_robustness(accuracies, steps, accuracy_threshold)
     results = RobustnessResults(steps, accuracies, robustness, title, xlabel,
-                                ylabel, alteration.name())
+                                ylabel, alteration.name(), accuracy_threshold)
     return results
