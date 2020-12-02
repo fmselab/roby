@@ -71,8 +71,9 @@ def process_config_from_xml(root: Et.Element, drive: GoogleDrive,
                             labeler_f: Callable[[np.ndarray], str]=None,
                             pre_processing_f:
                             Callable[[np.ndarray], np.ndarray]=None,
-                            post_processing_f:
-                            Callable[[float], float]=None) -> EnvironmentRTest:
+                            reader_f:
+                            Callable[[str], np.ndarray]=None) \
+                            -> EnvironmentRTest:
     """
     Loads the configuration data from an XML file and builds the environment
 
@@ -88,9 +89,9 @@ def process_config_from_xml(root: Et.Element, drive: GoogleDrive,
         pre_processing_f : Callable[[np.ndarray], np.ndarray], optional
             pre-processing to be executed on the data before the model
             classification. It can be None
-        post_processing_f : Callable[[float], float], optional
-            post-processing to be executed on the output of the model.
-            It can be None
+        reader_f : Callable[[str], np.ndarray], optional
+            optional function used to read the input data from file in a
+            np.ndarray format
 
     Returns
     -------
@@ -120,7 +121,7 @@ def process_config_from_xml(root: Et.Element, drive: GoogleDrive,
 
     return process_config(model_link, link_dataset_dir, classes_link, drive,
                           labels_link, labeler_f,
-                          pre_processing_f, post_processing_f)
+                          pre_processing_f, reader_f)
 
 
 def load_model_from_url(model_link: str, drive: GoogleDrive) -> Model:
@@ -240,8 +241,8 @@ def process_config(model_link: str, link_dataset_dir: str, classes_link: str,
                    label_list_link: str=None,
                    labeler_f: Callable[[np.ndarray], str]=None,
                    pre_processing_f: Callable[[np.ndarray], np.ndarray]=None,
-                   post_processing_f:
-                   Callable[[float], float]=None) -> EnvironmentRTest:
+                   reader_f: Callable[[str], np.ndarray]=None) \
+                   -> EnvironmentRTest:
     """
     Loads the configuration data from parameters and builds the enviroment
 
@@ -264,9 +265,9 @@ def process_config(model_link: str, link_dataset_dir: str, classes_link: str,
         pre_processing_f : Callable[[np.ndarray], np.ndarray], optional
             pre-processing to be executed on the data before the model
             classification. It can be None
-        post_processing_f : Callable[[float], float], optional
-            post-processing to be executed on the output of the model.
-            It can be None
+        reader_f : Callable[[str], np.ndarray], optional
+            optional function used to read the input data from file in a
+            np.ndarray format
 
     Returns
     -------
@@ -288,7 +289,5 @@ def process_config(model_link: str, link_dataset_dir: str, classes_link: str,
 
     # Create the object wit all these variables saved
     environment = EnvironmentRTest(model, file_list, classes, labels,
-                                   labeler_f,
-                                   pre_processing_f,
-                                   post_processing_f)
+                                   labeler_f, pre_processing_f, reader_f)
     return environment
