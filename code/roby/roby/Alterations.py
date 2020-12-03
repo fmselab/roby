@@ -404,40 +404,9 @@ class Blur(Alteration):
             data = data.filter(ImageFilter.GaussianBlur(radius=self.radius *
                                                         alteration_level))
             data = np.array(data)
-            data = cv2.cvtColor(data, cv2.COLOR_RGB2BGR)
 
         assert(isinstance(data, np.ndarray))
         return data
-
-    def apply_alteration_fromfile(self,
-                         file_name: str,
-                         alteration_level: float) -> np.ndarray:
-        """
-        Method that applies a blur alteration with a given value to the data,
-        whose fileName is given as a parameter
-
-        Parameters
-        ----------
-            file_name : str
-                the path of the data on which the blur alteration should be
-                applied
-            alteration_level : float
-                the level of the blur alteration that should be applied.
-                It must be contained in the range given by
-                the get_range method
-
-        Returns
-        -------
-            data : np.ndarray
-                the altered data on which the blur alteration has been applied
-        """
-        if alteration_level != 0:
-            data = Image.open(file_name)
-            data = np.asarray(data)
-        else:
-            data = cv2.imread(file_name)
-        assert(isinstance(data, np.ndarray))
-        return self.apply_alteration(data, alteration_level)
 
 
 class Brightness(Alteration):
@@ -515,41 +484,9 @@ class Brightness(Alteration):
             enhancer = ImageEnhance.Brightness(data)
             data = enhancer.enhance(1 + (alteration_level * 0.5))
             data = np.array(data)
-            data = cv2.cvtColor(data, cv2.COLOR_RGB2BGR)
 
         assert(isinstance(data, np.ndarray))
         return data
-
-    def apply_alteration_fromfile(self,
-                         file_name: str,
-                         alteration_level: float) -> np.ndarray:
-        """
-        Method that applies a Brightness Variation with a given value to the
-        input data, whose fileName is given as a parameter
-
-        Parameters
-        ----------
-            file_name : str
-                the path of the data on which the Brightness Variation should
-                be applied
-            alteration_level : float
-                the level of the Brightness Variation that should be applied.
-                It must be contained in the range given by the get_range method
-
-        Returns
-        -------
-            data : np.ndarray
-                the altered data on which the Brightness Variation has been
-                applied
-        """
-        if not -0.0001 <= float(alteration_level) <= 0.0001:
-            data = Image.open(file_name)
-            data = np.asarray(data)
-        else:
-            data = cv2.imread(file_name)
-            return data
-        assert(isinstance(data, np.ndarray))
-        return self.apply_alteration(data, alteration_level)
 
 
 class Zoom(Alteration):
@@ -674,7 +611,9 @@ class AlterationSequence(Alteration):
         """
         for a in self.alterations:
             # map the interval
-            alteration = ((alteration_level - self.value_from)/(self.value_to - self.value_from)) * (a.value_to - a.value_from)
-            alteration = alteration + a.value_from 
+            alteration = ((alteration_level - self.value_from) / (
+                self.value_to - self.value_from)) * (
+                    a.value_to - a.value_from)
+            alteration = alteration + a.value_from
             data = a.apply_alteration(data, alteration)
         return data
