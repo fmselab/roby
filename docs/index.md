@@ -302,6 +302,29 @@ Tutorial 1 and Tutorial 2 were about images classifiers. However, roby is applic
 
   ![Accuracy variation when Audio Noise is applied](https://github.com/fmselab/roby/blob/main/docs/images/robustnessAudio.jpg?raw=true "Accuracy variation when Audio Noise is applied")
 
+### Tutorial 5: Alteration sequence
+In the previous tutorials, only a single alteration per time was applied to the pictures in the data set. However, in a real situation it is possible that a single alteration implies other alterations. _For example, when a picture is zoomed, it is also blurred._ Thus, in this tutorial the process to apply a sequence of alterations is explained.
+
+* Execute all the steps in **tutorial 1**
+
+* Define a **sequence of alterations**. In this case we can try to use a sequence composed of the followings:
+  * _Zoom_, between 0 and 1
+  * _Brightness_ variation, between -0.5 and 0.5
+
+  ```python
+  altseq = AlterationSequence([Zoom(0, 1), Brightness(-0.5, 0.5)])
+  ```
+
+* Compute the **robustness** of your model, using 20 points between the minimum and maximum values of the alterations, and get the results.
+  ```python
+  results = robustness_test(environment, altseq, 20,
+                                accuracy_threshold)
+  display_robustness_results(results)
+  ```
+
+  ![Accuracy variation when an alteration sequence is applied](https://github.com/fmselab/roby/blob/main/docs/images/robustnessSeq.jpg?raw=true "Accuracy variation when an alteration sequence is applied")
+
+
 ## How to extend roby
 
 * **Loading**:  users can create a testing environment either by giving the path of all the input data
