@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.9.1" />
+<meta name="generator" content="pdoc 0.9.2" />
 <title>roby.EnvironmentRTest API documentation</title>
 <meta name="description" content="The **EnvironmentRTest** module contains all the information useful to compute
 the robustness analysis of a Neural Network …" />
@@ -34,17 +34,15 @@ np.array images</li>
 <li><em>classes</em>, i.e. the list of the classes in which you want to classify the
 input images</li>
 <li><em>label_list</em>, i.e. the list of the labels. Its <code>size</code> must be equals to the
-<code>size</code> of the _file_list. You may want to use a function to automatically
-give the label for each input data. In this case you can skip the parameter
-<code>label_list</code></li>
+<code>size</code> of the _file_list. If you want to use a function to automatically
+assign the label for each input data, you can skip this
+parameter and use the parameter <code>labeler\_f</code>.</li>
 <li><em>labeler_f</em>, i.e. the function used to assign automatically the labels to
 the images. If you already have your own list of labels, you can skip this
 parameter.</li>
 <li><em>preprocess_f</em>, i.e. a function that can be applied to each picture before
 its classification. You may want to classify raw data, so you can skip this
 parameter.</li>
-<li><em>postprocess_f</em>, i.e. a function that can be used to scale the probability
-in output to your network.</li>
 </ul>
 <p>@author: Andrea Bombarda</p>
 <details class="source">
@@ -64,23 +62,24 @@ In details, the following data are required:
 - _classes_, i.e. the list of the classes in which you want to classify the
   input images
 - _label\_list_, i.e. the list of the labels. Its `size` must be equals to the
-  `size` of the _file\_list. You may want to use a function to automatically
-  give the label for each input data. In this case you can skip the parameter
-  `label_list`
+  `size` of the _file\_list. If you want to use a function to automatically
+  assign the label for each input data, you can skip this
+  parameter and use the parameter `labeler\_f`.
 - _labeler\_f_, i.e. the function used to assign automatically the labels to
   the images. If you already have your own list of labels, you can skip this
   parameter.
 - _preprocess\_f_, i.e. a function that can be applied to each picture before
   its classification. You may want to classify raw data, so you can skip this
   parameter.
-- _postprocess\_f_, i.e. a function that can be used to scale the probability
-  in output to your network.
 
 @author: Andrea Bombarda
 &#34;&#34;&#34;
 from keras import Model   # type: ignore
-from typing import Callable, List
+from typing import Callable, List, TypeVar, Any
 import numpy as np   # type: ignore
+
+
+ImageFile = TypeVar(&#39;ImageFile&#39;, np.ndarray, str)
 
 
 class EnvironmentRTest:
@@ -91,9 +90,9 @@ class EnvironmentRTest:
 
     def __init__(self, model: Model, file_list: list, classes: List[str],
                  label_list: List[str]=None,
-                 labeler_f: Callable[[np.ndarray], str]=None,
+                 labeler_f: Callable[[Any], str]=None,
                  preprocess_f: Callable[[np.ndarray], np.ndarray]=None,
-                 postprocess_f: Callable[[float], float]=None):
+                 reader_f: Callable[[str], np.ndarray]=None):
         &#34;&#34;&#34;
         Constructs all the necessary attributes for the RobustnessResult object
 
@@ -110,25 +109,25 @@ class EnvironmentRTest:
             label_list: List[str], optional
                 list of all the labels associated to each image - str.
                 It can be None
-            labeler_f : Callable[[np.ndarray], str], optional
+            labeler_f : Callable[[ImageFile], str], optional
                 labeler function used to get the correct label from an image.
-                It can be None
+                The image can be given as a str or np.ndarray
+                It can be None.
             preprocess_f : Callable[[np.ndarray], np.ndarray], optional
                 pre-processing to be executed on the data before the model
                 classification. It can be None
-            postprocess_f : Callable[[float], float], optional
-                post-processing to be executed on the output of the model.
-                It can be None
-
+            reader_f : Callable[[str], np.ndarray], optional
+                optional function used to read the input data from file in a
+                np.ndarray format
         &#34;&#34;&#34;
         self.model = model
         self.file_list = file_list
         self.total_data = len(file_list)
         self.classes = classes
         self.pre_processing = preprocess_f
-        self.post_processing = postprocess_f
         self.labeler_f = labeler_f
         self.label_list = label_list
+        self.reader_f = reader_f
         # If the label list is not given, then apply the labeler function
         try:
             if self.label_list is None and self.labeler_f is not None:
@@ -152,7 +151,7 @@ class EnvironmentRTest:
 <dl>
 <dt id="roby.EnvironmentRTest.EnvironmentRTest"><code class="flex name class">
 <span>class <span class="ident">EnvironmentRTest</span></span>
-<span>(</span><span>model: keras.engine.training.Model, file_list: list, classes: List[str], label_list: List[str] = None, labeler_f: Callable[[numpy.ndarray], str] = None, preprocess_f: Callable[[numpy.ndarray], numpy.ndarray] = None, postprocess_f: Callable[[float], float] = None)</span>
+<span>(</span><span>model: tensorflow.python.keras.engine.training.Model, file_list: list, classes: List[str], label_list: List[str] = None, labeler_f: Callable[[Any], str] = None, preprocess_f: Callable[[numpy.ndarray], numpy.ndarray] = None, reader_f: Callable[[str], numpy.ndarray] = None)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Class with all the elements necessary to execute the robustness analysis
@@ -170,15 +169,16 @@ classes : List[str]
 label_list: List[str], optional
     list of all the labels associated to each image - str.
     It can be None
-labeler_f : Callable[[np.ndarray], str], optional
+labeler_f : Callable[[ImageFile], str], optional
     labeler function used to get the correct label from an image.
-    It can be None
+    The image can be given as a str or np.ndarray
+    It can be None.
 preprocess_f : Callable[[np.ndarray], np.ndarray], optional
     pre-processing to be executed on the data before the model
     classification. It can be None
-postprocess_f : Callable[[float], float], optional
-    post-processing to be executed on the output of the model.
-    It can be None
+reader_f : Callable[[str], np.ndarray], optional
+    optional function used to read the input data from file in a
+    np.ndarray format
 </code></pre></div>
 <details class="source">
 <summary>
@@ -192,9 +192,9 @@ postprocess_f : Callable[[float], float], optional
 
     def __init__(self, model: Model, file_list: list, classes: List[str],
                  label_list: List[str]=None,
-                 labeler_f: Callable[[np.ndarray], str]=None,
+                 labeler_f: Callable[[Any], str]=None,
                  preprocess_f: Callable[[np.ndarray], np.ndarray]=None,
-                 postprocess_f: Callable[[float], float]=None):
+                 reader_f: Callable[[str], np.ndarray]=None):
         &#34;&#34;&#34;
         Constructs all the necessary attributes for the RobustnessResult object
 
@@ -211,25 +211,25 @@ postprocess_f : Callable[[float], float], optional
             label_list: List[str], optional
                 list of all the labels associated to each image - str.
                 It can be None
-            labeler_f : Callable[[np.ndarray], str], optional
+            labeler_f : Callable[[ImageFile], str], optional
                 labeler function used to get the correct label from an image.
-                It can be None
+                The image can be given as a str or np.ndarray
+                It can be None.
             preprocess_f : Callable[[np.ndarray], np.ndarray], optional
                 pre-processing to be executed on the data before the model
                 classification. It can be None
-            postprocess_f : Callable[[float], float], optional
-                post-processing to be executed on the output of the model.
-                It can be None
-
+            reader_f : Callable[[str], np.ndarray], optional
+                optional function used to read the input data from file in a
+                np.ndarray format
         &#34;&#34;&#34;
         self.model = model
         self.file_list = file_list
         self.total_data = len(file_list)
         self.classes = classes
         self.pre_processing = preprocess_f
-        self.post_processing = postprocess_f
         self.labeler_f = labeler_f
         self.label_list = label_list
+        self.reader_f = reader_f
         # If the label list is not given, then apply the labeler function
         try:
             if self.label_list is None and self.labeler_f is not None:
@@ -267,7 +267,7 @@ postprocess_f : Callable[[float], float], optional
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.1</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
 </footer>
 </body>
 </html>

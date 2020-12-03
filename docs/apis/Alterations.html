@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.9.1" />
+<meta name="generator" content="pdoc 0.9.2" />
 <title>roby.Alterations API documentation</title>
 <meta name="description" content="The **Alteration** module defines the general framework that can be used to
 define alterations and provides: …" />
@@ -31,9 +31,9 @@ domain-specific alterations.</li>
 <li>A set of default alterations.</li>
 </ul>
 <p>If you want to create your own domain-specific alteration, you have just
-to extend the class <em>Alteration</em> and implement the methods <code>name(self)</code> and
-<code>apply_alteration_data(self, data, alteration_level)</code> to comply with your own
-alteration.</p>
+to extend the class <em>Alteration</em> and implement the methods <code>name(self)</code>,
+<code>apply_alteration(self, file_name, alteration_level)</code> to comply with
+your own alteration.</p>
 <p>@author: Andrea Bombarda</p>
 <details class="source">
 <summary>
@@ -48,9 +48,9 @@ define alterations and provides:
 - A set of default alterations.
 
 If you want to create your own domain-specific alteration, you have just
-to extend the class _Alteration_ and implement the methods `name(self)` and
-`apply_alteration_data(self, data, alteration_level)` to comply with your own
-alteration.
+to extend the class _Alteration_ and implement the methods `name(self)`,
+`apply_alteration(self, file_name, alteration_level)` to comply with
+your own alteration.
 
 @author: Andrea Bombarda
 &#34;&#34;&#34;
@@ -120,8 +120,8 @@ class Alteration(ABC):
         return np.append(values, self.value_to)
 
     @abstractmethod
-    def apply_alteration_data(self, data: np.ndarray,
-                              alteration_level: float) -&gt; np.ndarray:
+    def apply_alteration(self, data: np.ndarray,
+                         alteration_level: float) -&gt; np.ndarray:
         &#34;&#34;&#34;
         Abstract method that applies a given alteration with a given value to
         the input data
@@ -130,29 +130,6 @@ class Alteration(ABC):
         ----------
             data : np.ndarray
                 the data on which the alteration should be applied
-            alteration_level : float
-                the level of the alteration that should be applied. It must be
-                contained in the range given by the get_range method
-
-        Returns
-        -------
-            data : np.ndarray
-                the altered data on which the alteration has been applied
-        &#34;&#34;&#34;
-
-    @abstractmethod
-    def apply_alteration(self,
-                         file_name: str,
-                         alteration_level: float) -&gt; np.ndarray:
-        &#34;&#34;&#34;
-        Method that applies a given alteration with a given value to the input
-        data, whose fileName is given as a parameter
-
-        Parameters
-        ----------
-            file_name : str
-                the path of the input data on which the alteration should be
-                applied
             alteration_level : float
                 the level of the alteration that should be applied. It must be
                 contained in the range given by the get_range method
@@ -182,8 +159,8 @@ class VerticalTranslation(Alteration):
         &#34;&#34;&#34;
         return &#34;VerticalTranslation&#34;
 
-    def apply_alteration_data(self, data: np.ndarray,
-                              alteration_level: float) -&gt; np.ndarray:
+    def apply_alteration(self, data: np.ndarray,
+                         alteration_level: float) -&gt; np.ndarray:
         &#34;&#34;&#34;
         Method that applies the vertical translation with a given value to the
         inptu data
@@ -217,31 +194,6 @@ class VerticalTranslation(Alteration):
         assert(isinstance(data, np.ndarray))
         return data
 
-    def apply_alteration(self,
-                         file_name: str,
-                         alteration_level: float) -&gt; np.ndarray:
-        &#34;&#34;&#34;
-        Method that applies a given alteration with a given value to the input
-        data, whose fileName is given as a parameter
-
-        Parameters
-        ----------
-            file_name : str
-                the path of the input data on which the alteration should be
-                applied
-            alteration_level : float
-                the level of the alteration that should be applied. It must be
-                contained in the range given by the get_range method
-
-        Returns
-        -------
-            data : np.ndarray
-                the altered data on which the alteration has been applied
-        &#34;&#34;&#34;
-        data = cv2.imread(file_name)
-        assert(isinstance(data, np.ndarray))
-        return self.apply_alteration_data(data, alteration_level)
-
 
 class HorizontalTranslation(Alteration):
     &#34;&#34;&#34;
@@ -261,8 +213,8 @@ class HorizontalTranslation(Alteration):
         &#34;&#34;&#34;
         return &#34;HorizontalTranslation&#34;
 
-    def apply_alteration_data(self, data: np.ndarray,
-                              alteration_level: float) -&gt; np.ndarray:
+    def apply_alteration(self, data: np.ndarray,
+                         alteration_level: float) -&gt; np.ndarray:
         &#34;&#34;&#34;
         Method that applies the horizontal translation with a given value to
         the input data.
@@ -296,31 +248,6 @@ class HorizontalTranslation(Alteration):
         assert(isinstance(data, np.ndarray))
         return data
 
-    def apply_alteration(self,
-                         file_name: str,
-                         alteration_level: float) -&gt; np.ndarray:
-        &#34;&#34;&#34;
-        Method that applies a given alteration with a given value to the input
-        data, whose fileName is given as a parameter
-
-        Parameters
-        ----------
-            file_name : str
-                the path of the input data on which the alteration should be
-                applied
-            alteration_level : float
-                the level of the alteration that should be applied. It must be
-                contained in the range given by the get_range method
-
-        Returns
-        -------
-            data : np.ndarray
-                the altered data on which the alteration has been applied
-        &#34;&#34;&#34;
-        data = cv2.imread(file_name)
-        assert(isinstance(data, np.ndarray))
-        return self.apply_alteration_data(data, alteration_level)
-
 
 class Compression(Alteration):
     &#34;&#34;&#34;
@@ -340,8 +267,8 @@ class Compression(Alteration):
         &#34;&#34;&#34;
         return &#34;Compression&#34;
 
-    def apply_alteration_data(self, data: np.ndarray,
-                              alteration_level: float) -&gt; np.ndarray:
+    def apply_alteration(self, data: np.ndarray,
+                         alteration_level: float) -&gt; np.ndarray:
         &#34;&#34;&#34;
         Method that applies the jpeg compression with a given value to the
         input data
@@ -370,31 +297,6 @@ class Compression(Alteration):
 
         assert(isinstance(data, np.ndarray))
         return data
-
-    def apply_alteration(self,
-                         file_name: str,
-                         alteration_level: float) -&gt; np.ndarray:
-        &#34;&#34;&#34;
-        Method that applies a given alteration with a given value to the input
-        data, whose fileName is given as a parameter
-
-        Parameters
-        ----------
-            file_name : str
-                the path of the input data on which the alteration should be
-                applied
-            alteration_level : float
-                the level of the alteration that should be applied. It must be
-                contained in the range given by the get_range method
-
-        Returns
-        -------
-            data : np.ndarray
-                the altered data on which the alteration has been applied
-        &#34;&#34;&#34;
-        data = cv2.imread(file_name)
-        assert(isinstance(data, np.ndarray))
-        return self.apply_alteration_data(data, alteration_level)
 
 
 class GaussianNoise(Alteration):
@@ -432,8 +334,8 @@ class GaussianNoise(Alteration):
         &#34;&#34;&#34;
         return &#34;GaussianNoise&#34;
 
-    def apply_alteration_data(self, data: np.ndarray,
-                              alteration_level: float) -&gt; np.ndarray:
+    def apply_alteration(self, data: np.ndarray,
+                         alteration_level: float) -&gt; np.ndarray:
         &#34;&#34;&#34;
         Method that applies the Gaussian Noise with a given value to the input
         data
@@ -464,31 +366,6 @@ class GaussianNoise(Alteration):
 
         assert(isinstance(data, np.ndarray))
         return data
-
-    def apply_alteration(self,
-                         file_name: str,
-                         alteration_level: float) -&gt; np.ndarray:
-        &#34;&#34;&#34;
-        Method that applies a given alteration with a given value to the input
-        data, whose fileName is given as a parameter
-
-        Parameters
-        ----------
-            file_name : str
-                the path of the input data on which the alteration should be
-                applied
-            alteration_level : float
-                the level of the alteration that should be applied. It must be
-                contained in the range given by the get_range method
-
-        Returns
-        -------
-            data : np.ndarray
-                the altered data on which the alteration has been applied
-        &#34;&#34;&#34;
-        data = cv2.imread(file_name)
-        assert(isinstance(data, np.ndarray))
-        return self.apply_alteration_data(data, alteration_level)
 
 
 class Blur(Alteration):
@@ -534,8 +411,8 @@ class Blur(Alteration):
         &#34;&#34;&#34;
         return &#34;Blur&#34;
 
-    def apply_alteration_data(self, data: np.ndarray,
-                              alteration_level: float) -&gt; np.ndarray:
+    def apply_alteration(self, data: np.ndarray,
+                         alteration_level: float) -&gt; np.ndarray:
         &#34;&#34;&#34;
         Method that applies the Blur with a given value to the data
 
@@ -554,7 +431,7 @@ class Blur(Alteration):
                 the altered data on which the Blur has been applied
         &#34;&#34;&#34;
         assert(isinstance(data, np.ndarray))
-        if alteration_level != 0:
+        if alteration_level != 0.0:
             if isinstance(data, np.ndarray):
                 if self.picture_mode == &#39;RGB&#39;:
                     data = Image.fromarray(data, &#39;RGB&#39;)
@@ -568,40 +445,9 @@ class Blur(Alteration):
             data = data.filter(ImageFilter.GaussianBlur(radius=self.radius *
                                                         alteration_level))
             data = np.array(data)
-            data = cv2.cvtColor(data, cv2.COLOR_RGB2BGR)
 
         assert(isinstance(data, np.ndarray))
         return data
-
-    def apply_alteration(self,
-                         file_name: str,
-                         alteration_level: float) -&gt; np.ndarray:
-        &#34;&#34;&#34;
-        Method that applies a blur alteration with a given value to the data,
-        whose fileName is given as a parameter
-
-        Parameters
-        ----------
-            file_name : str
-                the path of the data on which the blur alteration should be
-                applied
-            alteration_level : float
-                the level of the blur alteration that should be applied.
-                It must be contained in the range given by
-                the get_range method
-
-        Returns
-        -------
-            data : np.ndarray
-                the altered data on which the blur alteration has been applied
-        &#34;&#34;&#34;
-        if alteration_level != 0:
-            data = Image.open(file_name)
-            data = np.asarray(data)
-        else:
-            data = cv2.imread(file_name)
-        assert(isinstance(data, np.ndarray))
-        return self.apply_alteration_data(data, alteration_level)
 
 
 class Brightness(Alteration):
@@ -644,8 +490,8 @@ class Brightness(Alteration):
         &#34;&#34;&#34;
         return &#34;Brightness&#34;
 
-    def apply_alteration_data(self, data: np.ndarray,
-                              alteration_level: float) -&gt; np.ndarray:
+    def apply_alteration(self, data: np.ndarray,
+                         alteration_level: float) -&gt; np.ndarray:
         &#34;&#34;&#34;
         Method that applies the Brightness Variation with a given value to the
         data
@@ -666,7 +512,7 @@ class Brightness(Alteration):
                 applied
         &#34;&#34;&#34;
         assert(isinstance(data, np.ndarray))
-        if not (-0.00001 &lt;= float(alteration_level) &lt;= 0.00001):
+        if not (-0.0001 &lt;= float(alteration_level) &lt;= 0.0001):
             if isinstance(data, np.ndarray):
                 if self.picture_mode == &#39;RGB&#39;:
                     data = Image.fromarray(data, &#39;RGB&#39;)
@@ -679,40 +525,9 @@ class Brightness(Alteration):
             enhancer = ImageEnhance.Brightness(data)
             data = enhancer.enhance(1 + (alteration_level * 0.5))
             data = np.array(data)
-            data = cv2.cvtColor(data, cv2.COLOR_RGB2BGR)
 
         assert(isinstance(data, np.ndarray))
         return data
-
-    def apply_alteration(self,
-                         file_name: str,
-                         alteration_level: float) -&gt; np.ndarray:
-        &#34;&#34;&#34;
-        Method that applies a Brightness Variation with a given value to the
-        input data, whose fileName is given as a parameter
-
-        Parameters
-        ----------
-            file_name : str
-                the path of the data on which the Brightness Variation should
-                be applied
-            alteration_level : float
-                the level of the Brightness Variation that should be applied.
-                It must be contained in the range given by the get_range method
-
-        Returns
-        -------
-            data : np.ndarray
-                the altered data on which the Brightness Variation has been
-                applied
-        &#34;&#34;&#34;
-        if alteration_level != 0:
-            data = Image.open(file_name)
-            data = np.asarray(data)
-        else:
-            data = cv2.imread(file_name)
-        assert(isinstance(data, np.ndarray))
-        return self.apply_alteration_data(data, alteration_level)
 
 
 class Zoom(Alteration):
@@ -735,8 +550,8 @@ class Zoom(Alteration):
         &#34;&#34;&#34;
         return &#34;Zoom&#34;
 
-    def apply_alteration_data(self, data: np.ndarray,
-                              alteration_level: float) -&gt; np.ndarray:
+    def apply_alteration(self, data: np.ndarray,
+                         alteration_level: float) -&gt; np.ndarray:
         &#34;&#34;&#34;
         Method that applies the Zoom with a given value to the data
 
@@ -783,40 +598,14 @@ class Zoom(Alteration):
         assert(isinstance(data, np.ndarray))
         return data
 
-    def apply_alteration(self,
-                         file_name: str,
-                         alteration_level: float) -&gt; np.ndarray:
-        &#34;&#34;&#34;
-        Method that applies a given alteration with a given value to the input
-        data, whose fileName is given as a parameter
 
-        Parameters
-        ----------
-            file_name : str
-                the path of the input data on which the alteration should be
-                applied
-            alteration_level : float
-                the level of the alteration that should be applied. It must be
-                contained in the range given by the get_range method
-
-        Returns
-        -------
-            data : np.ndarray
-                the altered data on which the alteration has been applied
-        &#34;&#34;&#34;
-        data = cv2.imread(file_name)
-        assert(isinstance(data, np.ndarray))
-        return self.apply_alteration_data(data, alteration_level)
-
-
-class AlterationSequence:
+class AlterationSequence(Alteration):
     &#34;&#34;&#34;
     Class defining the a sequence of alterations, each one with its own
     alteration_level
     &#34;&#34;&#34;
 
-    def __init__(self, alterations: List[Alteration],
-                 alteration_levels: List[float]):
+    def __init__(self, alterations: List[Alteration]):
         &#34;&#34;&#34;
         Constructs all the necessary attributes for the AlterationSequence
         object.
@@ -824,19 +613,9 @@ class AlterationSequence:
         Parameters
         ----------
             alterations : List[Alteration]
-                list of alterations to be applied
-            alteration_levels : List[float]
-                list of alteration levels
-        Raises
-        ------
-            ValueError
-                when alterations and alteration_levels have different sizes
         &#34;&#34;&#34;
-        if len(alterations) != len(alteration_levels):
-            raise ValueError(&#34;alterations and alteration_levels must be of &#34; +
-                             &#34;the same size&#34;)
+        super().__init__(-1, 1)
         self.alterations = alterations
-        self.alteration_levels = alteration_levels
 
     def name(self) -&gt; str:
         &#34;&#34;&#34;
@@ -847,12 +626,14 @@ class AlterationSequence:
             alteration_name : str
                 the name of the alteration type
         &#34;&#34;&#34;
-        alteration_name = &#34;Seq:&#34;
+        alteration_name = &#34;Seq(&#34;
         for a in self.alterations:
-            alteration_name = alteration_name + &#34; &#34; + a.name() + &#34;,&#34;
+            alteration_name = alteration_name + a.name() + &#34;-&#34;
+        alteration_name = alteration_name[:len(alteration_name)-1] + &#34;)&#34;
         return alteration_name
 
-    def apply_alteration(self, data: np.ndarray) -&gt; np.ndarray:
+    def apply_alteration(self, data: np.ndarray,
+                         alteration_level: float) -&gt; np.ndarray:
         &#34;&#34;&#34;
         Method that applies a given sequence of alterations with given values
         to the data
@@ -861,17 +642,21 @@ class AlterationSequence:
         ----------
             data : np.ndarray
                 the data on which the alterations should be applied
+            alteration_level : float
+                the level of alteration that should be applied
 
         Returns
         -------
             data : np.ndarray
                 the altered data on which the alterations have been applied
         &#34;&#34;&#34;
-        alteration_counter = 0
         for a in self.alterations:
-            data = a.apply_alteration_data(data, self.alteration_levels[
-                alteration_counter])
-            alteration_counter = alteration_counter + 1
+            # map the interval
+            alteration = ((alteration_level - self.value_from) / (
+                self.value_to - self.value_from)) * (
+                    a.value_to - a.value_from)
+            alteration = alteration + a.value_from
+            data = a.apply_alteration(data, alteration)
         return data</code></pre>
 </details>
 </section>
@@ -953,8 +738,8 @@ value_to : float
         return np.append(values, self.value_to)
 
     @abstractmethod
-    def apply_alteration_data(self, data: np.ndarray,
-                              alteration_level: float) -&gt; np.ndarray:
+    def apply_alteration(self, data: np.ndarray,
+                         alteration_level: float) -&gt; np.ndarray:
         &#34;&#34;&#34;
         Abstract method that applies a given alteration with a given value to
         the input data
@@ -971,29 +756,6 @@ value_to : float
         -------
             data : np.ndarray
                 the altered data on which the alteration has been applied
-        &#34;&#34;&#34;
-
-    @abstractmethod
-    def apply_alteration(self,
-                         file_name: str,
-                         alteration_level: float) -&gt; np.ndarray:
-        &#34;&#34;&#34;
-        Method that applies a given alteration with a given value to the input
-        data, whose fileName is given as a parameter
-
-        Parameters
-        ----------
-            file_name : str
-                the path of the input data on which the alteration should be
-                applied
-            alteration_level : float
-                the level of the alteration that should be applied. It must be
-                contained in the range given by the get_range method
-
-        Returns
-        -------
-            data : np.ndarray
-                the altered data on which the alteration has been applied
         &#34;&#34;&#34;</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -1002,6 +764,7 @@ value_to : float
 </ul>
 <h3>Subclasses</h3>
 <ul class="hlist">
+<li><a title="roby.Alterations.AlterationSequence" href="#roby.Alterations.AlterationSequence">AlterationSequence</a></li>
 <li><a title="roby.Alterations.Blur" href="#roby.Alterations.Blur">Blur</a></li>
 <li><a title="roby.Alterations.Brightness" href="#roby.Alterations.Brightness">Brightness</a></li>
 <li><a title="roby.Alterations.Compression" href="#roby.Alterations.Compression">Compression</a></li>
@@ -1013,53 +776,7 @@ value_to : float
 <h3>Methods</h3>
 <dl>
 <dt id="roby.Alterations.Alteration.apply_alteration"><code class="name flex">
-<span>def <span class="ident">apply_alteration</span></span>(<span>self, file_name: str, alteration_level: float) ‑> numpy.ndarray</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Method that applies a given alteration with a given value to the input
-data, whose fileName is given as a parameter</p>
-<h2 id="parameters">Parameters</h2>
-<pre><code>file_name : str
-    the path of the input data on which the alteration should be
-    applied
-alteration_level : float
-    the level of the alteration that should be applied. It must be
-    contained in the range given by the get_range method
-</code></pre>
-<h2 id="returns">Returns</h2>
-<pre><code>data : np.ndarray
-    the altered data on which the alteration has been applied
-</code></pre></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@abstractmethod
-def apply_alteration(self,
-                     file_name: str,
-                     alteration_level: float) -&gt; np.ndarray:
-    &#34;&#34;&#34;
-    Method that applies a given alteration with a given value to the input
-    data, whose fileName is given as a parameter
-
-    Parameters
-    ----------
-        file_name : str
-            the path of the input data on which the alteration should be
-            applied
-        alteration_level : float
-            the level of the alteration that should be applied. It must be
-            contained in the range given by the get_range method
-
-    Returns
-    -------
-        data : np.ndarray
-            the altered data on which the alteration has been applied
-    &#34;&#34;&#34;</code></pre>
-</details>
-</dd>
-<dt id="roby.Alterations.Alteration.apply_alteration_data"><code class="name flex">
-<span>def <span class="ident">apply_alteration_data</span></span>(<span>self, data: numpy.ndarray, alteration_level: float) ‑> numpy.ndarray</span>
+<span>def <span class="ident">apply_alteration</span></span>(<span>self, data: numpy.ndarray, alteration_level: float) ‑> numpy.ndarray</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Abstract method that applies a given alteration with a given value to
@@ -1080,8 +797,8 @@ alteration_level : float
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@abstractmethod
-def apply_alteration_data(self, data: np.ndarray,
-                          alteration_level: float) -&gt; np.ndarray:
+def apply_alteration(self, data: np.ndarray,
+                     alteration_level: float) -&gt; np.ndarray:
     &#34;&#34;&#34;
     Abstract method that applies a given alteration with a given value to
     the input data
@@ -1172,7 +889,7 @@ def name(self) -&gt; str:
 </dd>
 <dt id="roby.Alterations.AlterationSequence"><code class="flex name class">
 <span>class <span class="ident">AlterationSequence</span></span>
-<span>(</span><span>alterations: List[<a title="roby.Alterations.Alteration" href="#roby.Alterations.Alteration">Alteration</a>], alteration_levels: List[float])</span>
+<span>(</span><span>alterations: List[<a title="roby.Alterations.Alteration" href="#roby.Alterations.Alteration">Alteration</a>])</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Class defining the a sequence of alterations, each one with its own
@@ -1181,26 +898,18 @@ alteration_level</p>
 object.</p>
 <h2 id="parameters">Parameters</h2>
 <pre><code>alterations : List[Alteration]
-    list of alterations to be applied
-alteration_levels : List[float]
-    list of alteration levels
-</code></pre>
-<h2 id="raises">Raises</h2>
-<pre><code>ValueError
-    when alterations and alteration_levels have different sizes
 </code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class AlterationSequence:
+<pre><code class="python">class AlterationSequence(Alteration):
     &#34;&#34;&#34;
     Class defining the a sequence of alterations, each one with its own
     alteration_level
     &#34;&#34;&#34;
 
-    def __init__(self, alterations: List[Alteration],
-                 alteration_levels: List[float]):
+    def __init__(self, alterations: List[Alteration]):
         &#34;&#34;&#34;
         Constructs all the necessary attributes for the AlterationSequence
         object.
@@ -1208,19 +917,9 @@ alteration_levels : List[float]
         Parameters
         ----------
             alterations : List[Alteration]
-                list of alterations to be applied
-            alteration_levels : List[float]
-                list of alteration levels
-        Raises
-        ------
-            ValueError
-                when alterations and alteration_levels have different sizes
         &#34;&#34;&#34;
-        if len(alterations) != len(alteration_levels):
-            raise ValueError(&#34;alterations and alteration_levels must be of &#34; +
-                             &#34;the same size&#34;)
+        super().__init__(-1, 1)
         self.alterations = alterations
-        self.alteration_levels = alteration_levels
 
     def name(self) -&gt; str:
         &#34;&#34;&#34;
@@ -1231,12 +930,14 @@ alteration_levels : List[float]
             alteration_name : str
                 the name of the alteration type
         &#34;&#34;&#34;
-        alteration_name = &#34;Seq:&#34;
+        alteration_name = &#34;Seq(&#34;
         for a in self.alterations:
-            alteration_name = alteration_name + &#34; &#34; + a.name() + &#34;,&#34;
+            alteration_name = alteration_name + a.name() + &#34;-&#34;
+        alteration_name = alteration_name[:len(alteration_name)-1] + &#34;)&#34;
         return alteration_name
 
-    def apply_alteration(self, data: np.ndarray) -&gt; np.ndarray:
+    def apply_alteration(self, data: np.ndarray,
+                         alteration_level: float) -&gt; np.ndarray:
         &#34;&#34;&#34;
         Method that applies a given sequence of alterations with given values
         to the data
@@ -1245,23 +946,32 @@ alteration_levels : List[float]
         ----------
             data : np.ndarray
                 the data on which the alterations should be applied
+            alteration_level : float
+                the level of alteration that should be applied
 
         Returns
         -------
             data : np.ndarray
                 the altered data on which the alterations have been applied
         &#34;&#34;&#34;
-        alteration_counter = 0
         for a in self.alterations:
-            data = a.apply_alteration_data(data, self.alteration_levels[
-                alteration_counter])
-            alteration_counter = alteration_counter + 1
+            # map the interval
+            alteration = ((alteration_level - self.value_from) / (
+                self.value_to - self.value_from)) * (
+                    a.value_to - a.value_from)
+            alteration = alteration + a.value_from
+            data = a.apply_alteration(data, alteration)
         return data</code></pre>
 </details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="roby.Alterations.Alteration" href="#roby.Alterations.Alteration">Alteration</a></li>
+<li>abc.ABC</li>
+</ul>
 <h3>Methods</h3>
 <dl>
 <dt id="roby.Alterations.AlterationSequence.apply_alteration"><code class="name flex">
-<span>def <span class="ident">apply_alteration</span></span>(<span>self, data: numpy.ndarray) ‑> numpy.ndarray</span>
+<span>def <span class="ident">apply_alteration</span></span>(<span>self, data: numpy.ndarray, alteration_level: float) ‑> numpy.ndarray</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Method that applies a given sequence of alterations with given values
@@ -1269,6 +979,8 @@ to the data</p>
 <h2 id="parameters">Parameters</h2>
 <pre><code>data : np.ndarray
     the data on which the alterations should be applied
+alteration_level : float
+    the level of alteration that should be applied
 </code></pre>
 <h2 id="returns">Returns</h2>
 <pre><code>data : np.ndarray
@@ -1278,7 +990,8 @@ to the data</p>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def apply_alteration(self, data: np.ndarray) -&gt; np.ndarray:
+<pre><code class="python">def apply_alteration(self, data: np.ndarray,
+                     alteration_level: float) -&gt; np.ndarray:
     &#34;&#34;&#34;
     Method that applies a given sequence of alterations with given values
     to the data
@@ -1287,17 +1000,21 @@ to the data</p>
     ----------
         data : np.ndarray
             the data on which the alterations should be applied
+        alteration_level : float
+            the level of alteration that should be applied
 
     Returns
     -------
         data : np.ndarray
             the altered data on which the alterations have been applied
     &#34;&#34;&#34;
-    alteration_counter = 0
     for a in self.alterations:
-        data = a.apply_alteration_data(data, self.alteration_levels[
-            alteration_counter])
-        alteration_counter = alteration_counter + 1
+        # map the interval
+        alteration = ((alteration_level - self.value_from) / (
+            self.value_to - self.value_from)) * (
+                a.value_to - a.value_from)
+        alteration = alteration + a.value_from
+        data = a.apply_alteration(data, alteration)
     return data</code></pre>
 </details>
 </dd>
@@ -1323,13 +1040,22 @@ to the data</p>
         alteration_name : str
             the name of the alteration type
     &#34;&#34;&#34;
-    alteration_name = &#34;Seq:&#34;
+    alteration_name = &#34;Seq(&#34;
     for a in self.alterations:
-        alteration_name = alteration_name + &#34; &#34; + a.name() + &#34;,&#34;
+        alteration_name = alteration_name + a.name() + &#34;-&#34;
+    alteration_name = alteration_name[:len(alteration_name)-1] + &#34;)&#34;
     return alteration_name</code></pre>
 </details>
 </dd>
 </dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="roby.Alterations.Alteration" href="#roby.Alterations.Alteration">Alteration</a></b></code>:
+<ul class="hlist">
+<li><code><a title="roby.Alterations.Alteration.get_range" href="#roby.Alterations.Alteration.get_range">get_range</a></code></li>
+</ul>
+</li>
+</ul>
 </dd>
 <dt id="roby.Alterations.Blur"><code class="flex name class">
 <span>class <span class="ident">Blur</span></span>
@@ -1401,8 +1127,8 @@ picture_mode : str, optional
         &#34;&#34;&#34;
         return &#34;Blur&#34;
 
-    def apply_alteration_data(self, data: np.ndarray,
-                              alteration_level: float) -&gt; np.ndarray:
+    def apply_alteration(self, data: np.ndarray,
+                         alteration_level: float) -&gt; np.ndarray:
         &#34;&#34;&#34;
         Method that applies the Blur with a given value to the data
 
@@ -1421,7 +1147,7 @@ picture_mode : str, optional
                 the altered data on which the Blur has been applied
         &#34;&#34;&#34;
         assert(isinstance(data, np.ndarray))
-        if alteration_level != 0:
+        if alteration_level != 0.0:
             if isinstance(data, np.ndarray):
                 if self.picture_mode == &#39;RGB&#39;:
                     data = Image.fromarray(data, &#39;RGB&#39;)
@@ -1435,40 +1161,9 @@ picture_mode : str, optional
             data = data.filter(ImageFilter.GaussianBlur(radius=self.radius *
                                                         alteration_level))
             data = np.array(data)
-            data = cv2.cvtColor(data, cv2.COLOR_RGB2BGR)
 
         assert(isinstance(data, np.ndarray))
-        return data
-
-    def apply_alteration(self,
-                         file_name: str,
-                         alteration_level: float) -&gt; np.ndarray:
-        &#34;&#34;&#34;
-        Method that applies a blur alteration with a given value to the data,
-        whose fileName is given as a parameter
-
-        Parameters
-        ----------
-            file_name : str
-                the path of the data on which the blur alteration should be
-                applied
-            alteration_level : float
-                the level of the blur alteration that should be applied.
-                It must be contained in the range given by
-                the get_range method
-
-        Returns
-        -------
-            data : np.ndarray
-                the altered data on which the blur alteration has been applied
-        &#34;&#34;&#34;
-        if alteration_level != 0:
-            data = Image.open(file_name)
-            data = np.asarray(data)
-        else:
-            data = cv2.imread(file_name)
-        assert(isinstance(data, np.ndarray))
-        return self.apply_alteration_data(data, alteration_level)</code></pre>
+        return data</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -1478,61 +1173,7 @@ picture_mode : str, optional
 <h3>Methods</h3>
 <dl>
 <dt id="roby.Alterations.Blur.apply_alteration"><code class="name flex">
-<span>def <span class="ident">apply_alteration</span></span>(<span>self, file_name: str, alteration_level: float) ‑> numpy.ndarray</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Method that applies a blur alteration with a given value to the data,
-whose fileName is given as a parameter</p>
-<h2 id="parameters">Parameters</h2>
-<pre><code>file_name : str
-    the path of the data on which the blur alteration should be
-    applied
-alteration_level : float
-    the level of the blur alteration that should be applied.
-    It must be contained in the range given by
-    the get_range method
-</code></pre>
-<h2 id="returns">Returns</h2>
-<pre><code>data : np.ndarray
-    the altered data on which the blur alteration has been applied
-</code></pre></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def apply_alteration(self,
-                     file_name: str,
-                     alteration_level: float) -&gt; np.ndarray:
-    &#34;&#34;&#34;
-    Method that applies a blur alteration with a given value to the data,
-    whose fileName is given as a parameter
-
-    Parameters
-    ----------
-        file_name : str
-            the path of the data on which the blur alteration should be
-            applied
-        alteration_level : float
-            the level of the blur alteration that should be applied.
-            It must be contained in the range given by
-            the get_range method
-
-    Returns
-    -------
-        data : np.ndarray
-            the altered data on which the blur alteration has been applied
-    &#34;&#34;&#34;
-    if alteration_level != 0:
-        data = Image.open(file_name)
-        data = np.asarray(data)
-    else:
-        data = cv2.imread(file_name)
-    assert(isinstance(data, np.ndarray))
-    return self.apply_alteration_data(data, alteration_level)</code></pre>
-</details>
-</dd>
-<dt id="roby.Alterations.Blur.apply_alteration_data"><code class="name flex">
-<span>def <span class="ident">apply_alteration_data</span></span>(<span>self, data: numpy.ndarray, alteration_level: float) ‑> numpy.ndarray</span>
+<span>def <span class="ident">apply_alteration</span></span>(<span>self, data: numpy.ndarray, alteration_level: float) ‑> numpy.ndarray</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Method that applies the Blur with a given value to the data</p>
@@ -1552,8 +1193,8 @@ alteration_level : float
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def apply_alteration_data(self, data: np.ndarray,
-                          alteration_level: float) -&gt; np.ndarray:
+<pre><code class="python">def apply_alteration(self, data: np.ndarray,
+                     alteration_level: float) -&gt; np.ndarray:
     &#34;&#34;&#34;
     Method that applies the Blur with a given value to the data
 
@@ -1572,7 +1213,7 @@ alteration_level : float
             the altered data on which the Blur has been applied
     &#34;&#34;&#34;
     assert(isinstance(data, np.ndarray))
-    if alteration_level != 0:
+    if alteration_level != 0.0:
         if isinstance(data, np.ndarray):
             if self.picture_mode == &#39;RGB&#39;:
                 data = Image.fromarray(data, &#39;RGB&#39;)
@@ -1586,7 +1227,6 @@ alteration_level : float
         data = data.filter(ImageFilter.GaussianBlur(radius=self.radius *
                                                     alteration_level))
         data = np.array(data)
-        data = cv2.cvtColor(data, cv2.COLOR_RGB2BGR)
 
     assert(isinstance(data, np.ndarray))
     return data</code></pre>
@@ -1692,8 +1332,8 @@ picture_mode : str, optional
         &#34;&#34;&#34;
         return &#34;Brightness&#34;
 
-    def apply_alteration_data(self, data: np.ndarray,
-                              alteration_level: float) -&gt; np.ndarray:
+    def apply_alteration(self, data: np.ndarray,
+                         alteration_level: float) -&gt; np.ndarray:
         &#34;&#34;&#34;
         Method that applies the Brightness Variation with a given value to the
         data
@@ -1714,7 +1354,7 @@ picture_mode : str, optional
                 applied
         &#34;&#34;&#34;
         assert(isinstance(data, np.ndarray))
-        if not (-0.00001 &lt;= float(alteration_level) &lt;= 0.00001):
+        if not (-0.0001 &lt;= float(alteration_level) &lt;= 0.0001):
             if isinstance(data, np.ndarray):
                 if self.picture_mode == &#39;RGB&#39;:
                     data = Image.fromarray(data, &#39;RGB&#39;)
@@ -1727,40 +1367,9 @@ picture_mode : str, optional
             enhancer = ImageEnhance.Brightness(data)
             data = enhancer.enhance(1 + (alteration_level * 0.5))
             data = np.array(data)
-            data = cv2.cvtColor(data, cv2.COLOR_RGB2BGR)
 
         assert(isinstance(data, np.ndarray))
-        return data
-
-    def apply_alteration(self,
-                         file_name: str,
-                         alteration_level: float) -&gt; np.ndarray:
-        &#34;&#34;&#34;
-        Method that applies a Brightness Variation with a given value to the
-        input data, whose fileName is given as a parameter
-
-        Parameters
-        ----------
-            file_name : str
-                the path of the data on which the Brightness Variation should
-                be applied
-            alteration_level : float
-                the level of the Brightness Variation that should be applied.
-                It must be contained in the range given by the get_range method
-
-        Returns
-        -------
-            data : np.ndarray
-                the altered data on which the Brightness Variation has been
-                applied
-        &#34;&#34;&#34;
-        if alteration_level != 0:
-            data = Image.open(file_name)
-            data = np.asarray(data)
-        else:
-            data = cv2.imread(file_name)
-        assert(isinstance(data, np.ndarray))
-        return self.apply_alteration_data(data, alteration_level)</code></pre>
+        return data</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -1770,61 +1379,7 @@ picture_mode : str, optional
 <h3>Methods</h3>
 <dl>
 <dt id="roby.Alterations.Brightness.apply_alteration"><code class="name flex">
-<span>def <span class="ident">apply_alteration</span></span>(<span>self, file_name: str, alteration_level: float) ‑> numpy.ndarray</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Method that applies a Brightness Variation with a given value to the
-input data, whose fileName is given as a parameter</p>
-<h2 id="parameters">Parameters</h2>
-<pre><code>file_name : str
-    the path of the data on which the Brightness Variation should
-    be applied
-alteration_level : float
-    the level of the Brightness Variation that should be applied.
-    It must be contained in the range given by the get_range method
-</code></pre>
-<h2 id="returns">Returns</h2>
-<pre><code>data : np.ndarray
-    the altered data on which the Brightness Variation has been
-    applied
-</code></pre></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def apply_alteration(self,
-                     file_name: str,
-                     alteration_level: float) -&gt; np.ndarray:
-    &#34;&#34;&#34;
-    Method that applies a Brightness Variation with a given value to the
-    input data, whose fileName is given as a parameter
-
-    Parameters
-    ----------
-        file_name : str
-            the path of the data on which the Brightness Variation should
-            be applied
-        alteration_level : float
-            the level of the Brightness Variation that should be applied.
-            It must be contained in the range given by the get_range method
-
-    Returns
-    -------
-        data : np.ndarray
-            the altered data on which the Brightness Variation has been
-            applied
-    &#34;&#34;&#34;
-    if alteration_level != 0:
-        data = Image.open(file_name)
-        data = np.asarray(data)
-    else:
-        data = cv2.imread(file_name)
-    assert(isinstance(data, np.ndarray))
-    return self.apply_alteration_data(data, alteration_level)</code></pre>
-</details>
-</dd>
-<dt id="roby.Alterations.Brightness.apply_alteration_data"><code class="name flex">
-<span>def <span class="ident">apply_alteration_data</span></span>(<span>self, data: numpy.ndarray, alteration_level: float) ‑> numpy.ndarray</span>
+<span>def <span class="ident">apply_alteration</span></span>(<span>self, data: numpy.ndarray, alteration_level: float) ‑> numpy.ndarray</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Method that applies the Brightness Variation with a given value to the
@@ -1846,8 +1401,8 @@ alteration_level : float
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def apply_alteration_data(self, data: np.ndarray,
-                          alteration_level: float) -&gt; np.ndarray:
+<pre><code class="python">def apply_alteration(self, data: np.ndarray,
+                     alteration_level: float) -&gt; np.ndarray:
     &#34;&#34;&#34;
     Method that applies the Brightness Variation with a given value to the
     data
@@ -1868,7 +1423,7 @@ alteration_level : float
             applied
     &#34;&#34;&#34;
     assert(isinstance(data, np.ndarray))
-    if not (-0.00001 &lt;= float(alteration_level) &lt;= 0.00001):
+    if not (-0.0001 &lt;= float(alteration_level) &lt;= 0.0001):
         if isinstance(data, np.ndarray):
             if self.picture_mode == &#39;RGB&#39;:
                 data = Image.fromarray(data, &#39;RGB&#39;)
@@ -1881,7 +1436,6 @@ alteration_level : float
         enhancer = ImageEnhance.Brightness(data)
         data = enhancer.enhance(1 + (alteration_level * 0.5))
         data = np.array(data)
-        data = cv2.cvtColor(data, cv2.COLOR_RGB2BGR)
 
     assert(isinstance(data, np.ndarray))
     return data</code></pre>
@@ -1958,8 +1512,8 @@ value_to : float
         &#34;&#34;&#34;
         return &#34;Compression&#34;
 
-    def apply_alteration_data(self, data: np.ndarray,
-                              alteration_level: float) -&gt; np.ndarray:
+    def apply_alteration(self, data: np.ndarray,
+                         alteration_level: float) -&gt; np.ndarray:
         &#34;&#34;&#34;
         Method that applies the jpeg compression with a given value to the
         input data
@@ -1987,32 +1541,7 @@ value_to : float
             data = cv2.imdecode(data, 1)
 
         assert(isinstance(data, np.ndarray))
-        return data
-
-    def apply_alteration(self,
-                         file_name: str,
-                         alteration_level: float) -&gt; np.ndarray:
-        &#34;&#34;&#34;
-        Method that applies a given alteration with a given value to the input
-        data, whose fileName is given as a parameter
-
-        Parameters
-        ----------
-            file_name : str
-                the path of the input data on which the alteration should be
-                applied
-            alteration_level : float
-                the level of the alteration that should be applied. It must be
-                contained in the range given by the get_range method
-
-        Returns
-        -------
-            data : np.ndarray
-                the altered data on which the alteration has been applied
-        &#34;&#34;&#34;
-        data = cv2.imread(file_name)
-        assert(isinstance(data, np.ndarray))
-        return self.apply_alteration_data(data, alteration_level)</code></pre>
+        return data</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -2021,8 +1550,8 @@ value_to : float
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="roby.Alterations.Compression.apply_alteration_data"><code class="name flex">
-<span>def <span class="ident">apply_alteration_data</span></span>(<span>self, data: numpy.ndarray, alteration_level: float) ‑> numpy.ndarray</span>
+<dt id="roby.Alterations.Compression.apply_alteration"><code class="name flex">
+<span>def <span class="ident">apply_alteration</span></span>(<span>self, data: numpy.ndarray, alteration_level: float) ‑> numpy.ndarray</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Method that applies the jpeg compression with a given value to the
@@ -2044,8 +1573,8 @@ alteration_level : float
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def apply_alteration_data(self, data: np.ndarray,
-                          alteration_level: float) -&gt; np.ndarray:
+<pre><code class="python">def apply_alteration(self, data: np.ndarray,
+                     alteration_level: float) -&gt; np.ndarray:
     &#34;&#34;&#34;
     Method that applies the jpeg compression with a given value to the
     input data
@@ -2106,7 +1635,6 @@ alteration_level : float
 <ul class="hlist">
 <li><code><b><a title="roby.Alterations.Alteration" href="#roby.Alterations.Alteration">Alteration</a></b></code>:
 <ul class="hlist">
-<li><code><a title="roby.Alterations.Alteration.apply_alteration" href="#roby.Alterations.Alteration.apply_alteration">apply_alteration</a></code></li>
 <li><code><a title="roby.Alterations.Alteration.get_range" href="#roby.Alterations.Alteration.get_range">get_range</a></code></li>
 </ul>
 </li>
@@ -2168,8 +1696,8 @@ variance : float
         &#34;&#34;&#34;
         return &#34;GaussianNoise&#34;
 
-    def apply_alteration_data(self, data: np.ndarray,
-                              alteration_level: float) -&gt; np.ndarray:
+    def apply_alteration(self, data: np.ndarray,
+                         alteration_level: float) -&gt; np.ndarray:
         &#34;&#34;&#34;
         Method that applies the Gaussian Noise with a given value to the input
         data
@@ -2199,32 +1727,7 @@ variance : float
             data = data + gauss
 
         assert(isinstance(data, np.ndarray))
-        return data
-
-    def apply_alteration(self,
-                         file_name: str,
-                         alteration_level: float) -&gt; np.ndarray:
-        &#34;&#34;&#34;
-        Method that applies a given alteration with a given value to the input
-        data, whose fileName is given as a parameter
-
-        Parameters
-        ----------
-            file_name : str
-                the path of the input data on which the alteration should be
-                applied
-            alteration_level : float
-                the level of the alteration that should be applied. It must be
-                contained in the range given by the get_range method
-
-        Returns
-        -------
-            data : np.ndarray
-                the altered data on which the alteration has been applied
-        &#34;&#34;&#34;
-        data = cv2.imread(file_name)
-        assert(isinstance(data, np.ndarray))
-        return self.apply_alteration_data(data, alteration_level)</code></pre>
+        return data</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -2233,8 +1736,8 @@ variance : float
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="roby.Alterations.GaussianNoise.apply_alteration_data"><code class="name flex">
-<span>def <span class="ident">apply_alteration_data</span></span>(<span>self, data: numpy.ndarray, alteration_level: float) ‑> numpy.ndarray</span>
+<dt id="roby.Alterations.GaussianNoise.apply_alteration"><code class="name flex">
+<span>def <span class="ident">apply_alteration</span></span>(<span>self, data: numpy.ndarray, alteration_level: float) ‑> numpy.ndarray</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Method that applies the Gaussian Noise with a given value to the input
@@ -2255,8 +1758,8 @@ alteration_level : float
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def apply_alteration_data(self, data: np.ndarray,
-                          alteration_level: float) -&gt; np.ndarray:
+<pre><code class="python">def apply_alteration(self, data: np.ndarray,
+                     alteration_level: float) -&gt; np.ndarray:
     &#34;&#34;&#34;
     Method that applies the Gaussian Noise with a given value to the input
     data
@@ -2319,7 +1822,6 @@ alteration_level : float
 <ul class="hlist">
 <li><code><b><a title="roby.Alterations.Alteration" href="#roby.Alterations.Alteration">Alteration</a></b></code>:
 <ul class="hlist">
-<li><code><a title="roby.Alterations.Alteration.apply_alteration" href="#roby.Alterations.Alteration.apply_alteration">apply_alteration</a></code></li>
 <li><code><a title="roby.Alterations.Alteration.get_range" href="#roby.Alterations.Alteration.get_range">get_range</a></code></li>
 </ul>
 </li>
@@ -2361,8 +1863,8 @@ value_to : float
         &#34;&#34;&#34;
         return &#34;HorizontalTranslation&#34;
 
-    def apply_alteration_data(self, data: np.ndarray,
-                              alteration_level: float) -&gt; np.ndarray:
+    def apply_alteration(self, data: np.ndarray,
+                         alteration_level: float) -&gt; np.ndarray:
         &#34;&#34;&#34;
         Method that applies the horizontal translation with a given value to
         the input data.
@@ -2394,32 +1896,7 @@ value_to : float
             data = cv2.resize(data, (old_rows, old_cols))
 
         assert(isinstance(data, np.ndarray))
-        return data
-
-    def apply_alteration(self,
-                         file_name: str,
-                         alteration_level: float) -&gt; np.ndarray:
-        &#34;&#34;&#34;
-        Method that applies a given alteration with a given value to the input
-        data, whose fileName is given as a parameter
-
-        Parameters
-        ----------
-            file_name : str
-                the path of the input data on which the alteration should be
-                applied
-            alteration_level : float
-                the level of the alteration that should be applied. It must be
-                contained in the range given by the get_range method
-
-        Returns
-        -------
-            data : np.ndarray
-                the altered data on which the alteration has been applied
-        &#34;&#34;&#34;
-        data = cv2.imread(file_name)
-        assert(isinstance(data, np.ndarray))
-        return self.apply_alteration_data(data, alteration_level)</code></pre>
+        return data</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -2428,8 +1905,8 @@ value_to : float
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="roby.Alterations.HorizontalTranslation.apply_alteration_data"><code class="name flex">
-<span>def <span class="ident">apply_alteration_data</span></span>(<span>self, data: numpy.ndarray, alteration_level: float) ‑> numpy.ndarray</span>
+<dt id="roby.Alterations.HorizontalTranslation.apply_alteration"><code class="name flex">
+<span>def <span class="ident">apply_alteration</span></span>(<span>self, data: numpy.ndarray, alteration_level: float) ‑> numpy.ndarray</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Method that applies the horizontal translation with a given value to
@@ -2452,8 +1929,8 @@ alteration_level : float
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def apply_alteration_data(self, data: np.ndarray,
-                          alteration_level: float) -&gt; np.ndarray:
+<pre><code class="python">def apply_alteration(self, data: np.ndarray,
+                     alteration_level: float) -&gt; np.ndarray:
     &#34;&#34;&#34;
     Method that applies the horizontal translation with a given value to
     the input data.
@@ -2518,7 +1995,6 @@ alteration_level : float
 <ul class="hlist">
 <li><code><b><a title="roby.Alterations.Alteration" href="#roby.Alterations.Alteration">Alteration</a></b></code>:
 <ul class="hlist">
-<li><code><a title="roby.Alterations.Alteration.apply_alteration" href="#roby.Alterations.Alteration.apply_alteration">apply_alteration</a></code></li>
 <li><code><a title="roby.Alterations.Alteration.get_range" href="#roby.Alterations.Alteration.get_range">get_range</a></code></li>
 </ul>
 </li>
@@ -2560,8 +2036,8 @@ value_to : float
         &#34;&#34;&#34;
         return &#34;VerticalTranslation&#34;
 
-    def apply_alteration_data(self, data: np.ndarray,
-                              alteration_level: float) -&gt; np.ndarray:
+    def apply_alteration(self, data: np.ndarray,
+                         alteration_level: float) -&gt; np.ndarray:
         &#34;&#34;&#34;
         Method that applies the vertical translation with a given value to the
         inptu data
@@ -2593,32 +2069,7 @@ value_to : float
             data = cv2.resize(data, (old_rows, old_cols))
 
         assert(isinstance(data, np.ndarray))
-        return data
-
-    def apply_alteration(self,
-                         file_name: str,
-                         alteration_level: float) -&gt; np.ndarray:
-        &#34;&#34;&#34;
-        Method that applies a given alteration with a given value to the input
-        data, whose fileName is given as a parameter
-
-        Parameters
-        ----------
-            file_name : str
-                the path of the input data on which the alteration should be
-                applied
-            alteration_level : float
-                the level of the alteration that should be applied. It must be
-                contained in the range given by the get_range method
-
-        Returns
-        -------
-            data : np.ndarray
-                the altered data on which the alteration has been applied
-        &#34;&#34;&#34;
-        data = cv2.imread(file_name)
-        assert(isinstance(data, np.ndarray))
-        return self.apply_alteration_data(data, alteration_level)</code></pre>
+        return data</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -2627,8 +2078,8 @@ value_to : float
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="roby.Alterations.VerticalTranslation.apply_alteration_data"><code class="name flex">
-<span>def <span class="ident">apply_alteration_data</span></span>(<span>self, data: numpy.ndarray, alteration_level: float) ‑> numpy.ndarray</span>
+<dt id="roby.Alterations.VerticalTranslation.apply_alteration"><code class="name flex">
+<span>def <span class="ident">apply_alteration</span></span>(<span>self, data: numpy.ndarray, alteration_level: float) ‑> numpy.ndarray</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Method that applies the vertical translation with a given value to the
@@ -2651,8 +2102,8 @@ alteration_level : float
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def apply_alteration_data(self, data: np.ndarray,
-                          alteration_level: float) -&gt; np.ndarray:
+<pre><code class="python">def apply_alteration(self, data: np.ndarray,
+                     alteration_level: float) -&gt; np.ndarray:
     &#34;&#34;&#34;
     Method that applies the vertical translation with a given value to the
     inptu data
@@ -2717,7 +2168,6 @@ alteration_level : float
 <ul class="hlist">
 <li><code><b><a title="roby.Alterations.Alteration" href="#roby.Alterations.Alteration">Alteration</a></b></code>:
 <ul class="hlist">
-<li><code><a title="roby.Alterations.Alteration.apply_alteration" href="#roby.Alterations.Alteration.apply_alteration">apply_alteration</a></code></li>
 <li><code><a title="roby.Alterations.Alteration.get_range" href="#roby.Alterations.Alteration.get_range">get_range</a></code></li>
 </ul>
 </li>
@@ -2763,8 +2213,8 @@ value_to : float
         &#34;&#34;&#34;
         return &#34;Zoom&#34;
 
-    def apply_alteration_data(self, data: np.ndarray,
-                              alteration_level: float) -&gt; np.ndarray:
+    def apply_alteration(self, data: np.ndarray,
+                         alteration_level: float) -&gt; np.ndarray:
         &#34;&#34;&#34;
         Method that applies the Zoom with a given value to the data
 
@@ -2809,32 +2259,7 @@ value_to : float
         data = out
 
         assert(isinstance(data, np.ndarray))
-        return data
-
-    def apply_alteration(self,
-                         file_name: str,
-                         alteration_level: float) -&gt; np.ndarray:
-        &#34;&#34;&#34;
-        Method that applies a given alteration with a given value to the input
-        data, whose fileName is given as a parameter
-
-        Parameters
-        ----------
-            file_name : str
-                the path of the input data on which the alteration should be
-                applied
-            alteration_level : float
-                the level of the alteration that should be applied. It must be
-                contained in the range given by the get_range method
-
-        Returns
-        -------
-            data : np.ndarray
-                the altered data on which the alteration has been applied
-        &#34;&#34;&#34;
-        data = cv2.imread(file_name)
-        assert(isinstance(data, np.ndarray))
-        return self.apply_alteration_data(data, alteration_level)</code></pre>
+        return data</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -2843,8 +2268,8 @@ value_to : float
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="roby.Alterations.Zoom.apply_alteration_data"><code class="name flex">
-<span>def <span class="ident">apply_alteration_data</span></span>(<span>self, data: numpy.ndarray, alteration_level: float) ‑> numpy.ndarray</span>
+<dt id="roby.Alterations.Zoom.apply_alteration"><code class="name flex">
+<span>def <span class="ident">apply_alteration</span></span>(<span>self, data: numpy.ndarray, alteration_level: float) ‑> numpy.ndarray</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Method that applies the Zoom with a given value to the data</p>
@@ -2863,8 +2288,8 @@ alteration_level : float
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def apply_alteration_data(self, data: np.ndarray,
-                          alteration_level: float) -&gt; np.ndarray:
+<pre><code class="python">def apply_alteration(self, data: np.ndarray,
+                     alteration_level: float) -&gt; np.ndarray:
     &#34;&#34;&#34;
     Method that applies the Zoom with a given value to the data
 
@@ -2942,7 +2367,6 @@ alteration_level : float
 <ul class="hlist">
 <li><code><b><a title="roby.Alterations.Alteration" href="#roby.Alterations.Alteration">Alteration</a></b></code>:
 <ul class="hlist">
-<li><code><a title="roby.Alterations.Alteration.apply_alteration" href="#roby.Alterations.Alteration.apply_alteration">apply_alteration</a></code></li>
 <li><code><a title="roby.Alterations.Alteration.get_range" href="#roby.Alterations.Alteration.get_range">get_range</a></code></li>
 </ul>
 </li>
@@ -2968,7 +2392,6 @@ alteration_level : float
 <h4><code><a title="roby.Alterations.Alteration" href="#roby.Alterations.Alteration">Alteration</a></code></h4>
 <ul class="">
 <li><code><a title="roby.Alterations.Alteration.apply_alteration" href="#roby.Alterations.Alteration.apply_alteration">apply_alteration</a></code></li>
-<li><code><a title="roby.Alterations.Alteration.apply_alteration_data" href="#roby.Alterations.Alteration.apply_alteration_data">apply_alteration_data</a></code></li>
 <li><code><a title="roby.Alterations.Alteration.get_range" href="#roby.Alterations.Alteration.get_range">get_range</a></code></li>
 <li><code><a title="roby.Alterations.Alteration.name" href="#roby.Alterations.Alteration.name">name</a></code></li>
 </ul>
@@ -2984,7 +2407,6 @@ alteration_level : float
 <h4><code><a title="roby.Alterations.Blur" href="#roby.Alterations.Blur">Blur</a></code></h4>
 <ul class="">
 <li><code><a title="roby.Alterations.Blur.apply_alteration" href="#roby.Alterations.Blur.apply_alteration">apply_alteration</a></code></li>
-<li><code><a title="roby.Alterations.Blur.apply_alteration_data" href="#roby.Alterations.Blur.apply_alteration_data">apply_alteration_data</a></code></li>
 <li><code><a title="roby.Alterations.Blur.name" href="#roby.Alterations.Blur.name">name</a></code></li>
 </ul>
 </li>
@@ -2992,42 +2414,41 @@ alteration_level : float
 <h4><code><a title="roby.Alterations.Brightness" href="#roby.Alterations.Brightness">Brightness</a></code></h4>
 <ul class="">
 <li><code><a title="roby.Alterations.Brightness.apply_alteration" href="#roby.Alterations.Brightness.apply_alteration">apply_alteration</a></code></li>
-<li><code><a title="roby.Alterations.Brightness.apply_alteration_data" href="#roby.Alterations.Brightness.apply_alteration_data">apply_alteration_data</a></code></li>
 <li><code><a title="roby.Alterations.Brightness.name" href="#roby.Alterations.Brightness.name">name</a></code></li>
 </ul>
 </li>
 <li>
 <h4><code><a title="roby.Alterations.Compression" href="#roby.Alterations.Compression">Compression</a></code></h4>
 <ul class="">
-<li><code><a title="roby.Alterations.Compression.apply_alteration_data" href="#roby.Alterations.Compression.apply_alteration_data">apply_alteration_data</a></code></li>
+<li><code><a title="roby.Alterations.Compression.apply_alteration" href="#roby.Alterations.Compression.apply_alteration">apply_alteration</a></code></li>
 <li><code><a title="roby.Alterations.Compression.name" href="#roby.Alterations.Compression.name">name</a></code></li>
 </ul>
 </li>
 <li>
 <h4><code><a title="roby.Alterations.GaussianNoise" href="#roby.Alterations.GaussianNoise">GaussianNoise</a></code></h4>
 <ul class="">
-<li><code><a title="roby.Alterations.GaussianNoise.apply_alteration_data" href="#roby.Alterations.GaussianNoise.apply_alteration_data">apply_alteration_data</a></code></li>
+<li><code><a title="roby.Alterations.GaussianNoise.apply_alteration" href="#roby.Alterations.GaussianNoise.apply_alteration">apply_alteration</a></code></li>
 <li><code><a title="roby.Alterations.GaussianNoise.name" href="#roby.Alterations.GaussianNoise.name">name</a></code></li>
 </ul>
 </li>
 <li>
 <h4><code><a title="roby.Alterations.HorizontalTranslation" href="#roby.Alterations.HorizontalTranslation">HorizontalTranslation</a></code></h4>
 <ul class="">
-<li><code><a title="roby.Alterations.HorizontalTranslation.apply_alteration_data" href="#roby.Alterations.HorizontalTranslation.apply_alteration_data">apply_alteration_data</a></code></li>
+<li><code><a title="roby.Alterations.HorizontalTranslation.apply_alteration" href="#roby.Alterations.HorizontalTranslation.apply_alteration">apply_alteration</a></code></li>
 <li><code><a title="roby.Alterations.HorizontalTranslation.name" href="#roby.Alterations.HorizontalTranslation.name">name</a></code></li>
 </ul>
 </li>
 <li>
 <h4><code><a title="roby.Alterations.VerticalTranslation" href="#roby.Alterations.VerticalTranslation">VerticalTranslation</a></code></h4>
 <ul class="">
-<li><code><a title="roby.Alterations.VerticalTranslation.apply_alteration_data" href="#roby.Alterations.VerticalTranslation.apply_alteration_data">apply_alteration_data</a></code></li>
+<li><code><a title="roby.Alterations.VerticalTranslation.apply_alteration" href="#roby.Alterations.VerticalTranslation.apply_alteration">apply_alteration</a></code></li>
 <li><code><a title="roby.Alterations.VerticalTranslation.name" href="#roby.Alterations.VerticalTranslation.name">name</a></code></li>
 </ul>
 </li>
 <li>
 <h4><code><a title="roby.Alterations.Zoom" href="#roby.Alterations.Zoom">Zoom</a></code></h4>
 <ul class="">
-<li><code><a title="roby.Alterations.Zoom.apply_alteration_data" href="#roby.Alterations.Zoom.apply_alteration_data">apply_alteration_data</a></code></li>
+<li><code><a title="roby.Alterations.Zoom.apply_alteration" href="#roby.Alterations.Zoom.apply_alteration">apply_alteration</a></code></li>
 <li><code><a title="roby.Alterations.Zoom.name" href="#roby.Alterations.Zoom.name">name</a></code></li>
 </ul>
 </li>
@@ -3037,7 +2458,7 @@ alteration_level : float
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.1</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
 </footer>
 </body>
 </html>
