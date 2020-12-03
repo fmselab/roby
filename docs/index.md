@@ -365,7 +365,13 @@ def labeler(image: np.ndarray):
     ...
     return real_label: str
 ```
-and pass this function when defining the environment
+However, it is even possible to define a `labeler` receiving a `str` (for example, the file path) as input
+```python
+def labeler(image: str):
+    ...
+    return real_label: str
+```
+This function has to be passed when defining the environment
 ```python
 env = EnvironmentRTest.EnvironmentRTest(model, file_list, classes,
                                    labeler_f=labeler)
