@@ -24,8 +24,11 @@ In details, the following data are required:
 @author: Andrea Bombarda
 """
 from keras import Model   # type: ignore
-from typing import Callable, List
+from typing import Callable, List, TypeVar, Any
 import numpy as np   # type: ignore
+
+
+ImageFile = TypeVar('ImageFile', np.ndarray, str)
 
 
 class EnvironmentRTest:
@@ -36,7 +39,7 @@ class EnvironmentRTest:
 
     def __init__(self, model: Model, file_list: list, classes: List[str],
                  label_list: List[str]=None,
-                 labeler_f: Callable[[np.ndarray], str]=None,
+                 labeler_f: Callable[[Any], str]=None,
                  preprocess_f: Callable[[np.ndarray], np.ndarray]=None,
                  reader_f: Callable[[str], np.ndarray]=None):
         """
@@ -55,9 +58,10 @@ class EnvironmentRTest:
             label_list: List[str], optional
                 list of all the labels associated to each image - str.
                 It can be None
-            labeler_f : Callable[[np.ndarray], str], optional
+            labeler_f : Callable[[ImageFile], str], optional
                 labeler function used to get the correct label from an image.
-                It can be None
+                The image can be given as a str or np.ndarray
+                It can be None.
             preprocess_f : Callable[[np.ndarray], np.ndarray], optional
                 pre-processing to be executed on the data before the model
                 classification. It can be None
