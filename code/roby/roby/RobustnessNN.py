@@ -14,6 +14,7 @@ The major features offered by this module are the followings:
 import matplotlib.pyplot as plt   # type: ignore
 # Manage csv files
 import csv
+import numpy as np  # type: ignore
 from roby.RobustnessResults import RobustnessResults
 from builtins import isinstance
 from roby import Alterations, EnvironmentRTest
@@ -138,7 +139,6 @@ def display_robustness_results(results: RobustnessResults):
     This methods print the robustness and creates a plot (which is then stored
     in a .jpg image) of the accuracy variation over different
     levels of alteration.
-
     Parameters
     ----------
         results : RobustnessResults
@@ -147,6 +147,8 @@ def display_robustness_results(results: RobustnessResults):
     plt.style.use("ggplot")
     plt.figure()
     plt.plot(results.steps, results.accuracies)
+    thresholds = np.full(len(results.steps), results.threshold)
+    plt.plot(results.steps, thresholds)
     plt.title(results.title)
     plt.xlabel(results.xlabel)
     plt.ylabel(results.ylabel)
