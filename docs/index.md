@@ -72,26 +72,26 @@ In this tutorial, the robustness of a CNN images classifier is analyzed. The exe
   classes = ["0", "1", ...]
   ```
 
-* [OPTIONAL] Define your **pre-processing** and/or **post-processing** function. More details on these two functions are reported in the [How to extend roby](#how-to-extend-roby) section of this documentation.
+* [OPTIONAL] Define your **pre-processing** function. More details on this function are reported in the [How to extend roby](#how-to-extend-roby) section of this documentation.
 
 * Define your **environment**
   ```python
   environment = EnvironmentRTest.EnvironmentRTest(model, file_list, classes, labeler_f=labeler)
   ```
 
-* [OPTIONAL] Check the **accuracy** of your model. This value can be used as a baseline of the nominal behavior of your model when no alteration is applied.
-  ```python
-  accuracy = classification(environment)
-  ```
-
-  Note that, if you have defined your dataset as a list of strings, you must specify for the `classification` function a second parameter representing the function specifying how to open the input data file and convert into a `np.ndarray`. For this tutorial, we define a function
+  Note that, if you have defined your dataset as a list of strings, you must specify a the function specifying how to open the input data file and convert into a `np.ndarray`. For this tutorial, we define a function
   ```python
   def reader(file_name):
     return cv2.imread(file_name)
   ```
-  and we check the accuracy with
+  and we create the environment with
   ```python
-  accuracy = classification(environment, reader)
+  environment = EnvironmentRTest.EnvironmentRTest(model, file_list, classes, labeler_f=labeler, reader_f=reader)
+  ```
+
+* [OPTIONAL] Check the **accuracy** of your model. This value can be used as a baseline of the nominal behavior of your model when no alteration is applied.
+  ```python
+  accuracy = classification(environment)
   ```
 
 * Define the **alteration** against which you want to compute the robustness of your model. For example, if we want to use a _Gaussian Noise_ with variance 200,  we can define:
@@ -157,7 +157,7 @@ This tutorial analyzes the same case study described in the previous tutorial bu
   drive = authenticate()
   ```
 
-* [OPTIONAL] Define your **pre-processing** and/or **post-processing** function. More details on these two functions are reported in the [How to extend roby](#how-to-extend-roby) section of this documentation.
+* [OPTIONAL] Define your **pre-processing** function. More details on this function are reported in the [How to extend roby](#how-to-extend-roby) section of this documentation.
 
 * Since we work with the same dataset of the previous tutorial, we still need a **labeler** function. Define a labeler function, e.g. extracting the label from the file name:
   ```python
@@ -272,7 +272,7 @@ Tutorial 1 and Tutorial 2 were about images classifiers. However, roby is applic
   classes = ["0", "1", ...]
   ```
 
-* [OPTIONAL] Define your **pre-processing** and/or **post-processing** function. More details on these two functions are reported in the [How to extend roby](#how-to-extend-roby) section of this documentation.
+* [OPTIONAL] Define your **pre-processing** function. More details on this function are reported in the [How to extend roby](#how-to-extend-roby) section of this documentation.
 
 * Define your **environment**
   ```python
@@ -316,12 +316,19 @@ path_list : List[np.ndarray] = [...]
 env = EnvironmentRTest.EnvironmentRTest(model, input_dataset, classes,
                                   label_list=label_list)
 ```
-If paths are given, for classification purposes, the User shall specify the way to be used to convert the data in the `np.ndarray` format by declaring a
+If paths are given, the User shall specify the way to be used to convert the data in the `np.ndarray` format by declaring a
 `reader` function:
 ```python
 def reader(file_name: str)
   ...
   return data: np.ndarray
+```
+This function must be passed during the declaration of the environment
+```python
+path_list : List[str] = [...]
+env = EnvironmentRTest.EnvironmentRTest(model, input_dataset, classes,
+                                   label_list=label_list,
+                                   reader_f=reader)
 ```
 
 * **Labeling**: real labels for input data can be given either with a list of all the labels or by giving a `labeler` function. In the former case, the list `label_list` must be of the same size as the input dataset
@@ -350,23 +357,17 @@ that can be extended to create customized alterations. When extending the abstra
   * `apply_alteration_data(data, alteration_level)` receiving the input data in the format of `np.ndarray` and returning the data of the same format with the alteration applied
   * `apply_alteration(file_name, alteration_level)` receiving the path of the input data and returning the data with the applied alteration.
 
-* **Pre/Post-processing**: Users can adapt test input data to the ones used for NN training. During the declaration of the test environment users can specify a pre-processing and/or a post-processing function. The former must follow the pattern
+* **Pre-processing**: Users can adapt test input data to the ones used for NN training. During the declaration of the test environment users can specify a pre-processing function. This must follow the pattern
 ```python
 def pre_processing(image: np.ndarray):
     ...
     return image: np.ndarray
 ```
-and it is applied to each input data before its recognition by the NN. The latter allows the user to scale the probabilities given as output by the NN. It must follow this pattern
-```python
-def post_processing(probabilities: List[float]):
-    ...
-    return new_probabilities:  List[float]
-```
-The declaration of these two functions is not mandatory. If the user has defined one of them, they can be specified in the declaration of the test environment
+and it is applied to each input data before its recognition by the NN.
+The declaration of this function is not mandatory. If the user has defined one, it can be specified in the declaration of the test environment
 ```python
 env = EnvironmentRTest.EnvironmentRTest(model, file_list, classes,
                                    preprocess_f=pre_processing,
-                                   postprocess_f=post_processing,
                                    labeler_f=labeler)
 ```
 When a function is not defined `None` is used as default value.
