@@ -23,7 +23,8 @@ import cv2   # type: ignore
 from keras.preprocessing.image import img_to_array   # type: ignore
 import numpy as np   # type: ignore
 from roby.Alterations import Compression, VerticalTranslation,\
-    HorizontalTranslation, Blur, Zoom, Brightness, Alteration
+    HorizontalTranslation, Blur, Zoom, Brightness, Alteration,\
+    AlterationSequence
 
 
 def reader(file_name):
@@ -65,10 +66,11 @@ if __name__ == '__main__':
     # load the environment
     environment = EnvironmentRTest(model, file_list, classes,
                                    preprocess_f=pre_processing,
-                                   labeler_f=labeler)
+                                   labeler_f=labeler,
+                                   reader_f=reader)
 
     # get the standard behavior of the net
-    accuracy = classification(environment, reader)
+    accuracy = classification(environment)
 
     # create the alteration_type as a GaussianNoise with variance 200
     alteration_type: Alteration = GaussianNoise(0, 1, 200)
@@ -126,6 +128,9 @@ if __name__ == '__main__':
                               accuracy_treshold)
     display_robustness_results(results)
 
-    altseq = AlterationSequence([Zoom(0, 1),Brightness(-0.5, 0.5)])
-    
+    # create the alteration_type as a Sequence of Zoom and Brightness
+    altseq = AlterationSequence([Zoom(0, 1), Brightness(-0.5, 0.5)])
+
+    # perform robustness analysis, with 20 points
     results = robustness_test(environment, altseq, 20, accuracy_treshold)
+    display_robustness_results(results)

@@ -8,7 +8,6 @@ define alterations and provides:
 
 If you want to create your own domain-specific alteration, you have just
 to extend the class _Alteration_ and implement the methods `name(self)`,
-`apply_alteration_data(self, data, alteration_level)` and
 `apply_alteration(self, file_name, alteration_level)` to comply with
 your own alteration.
 
@@ -80,8 +79,8 @@ class Alteration(ABC):
         return np.append(values, self.value_to)
 
     @abstractmethod
-    def apply_alteration_data(self, data: np.ndarray,
-                              alteration_level: float) -> np.ndarray:
+    def apply_alteration(self, data: np.ndarray,
+                         alteration_level: float) -> np.ndarray:
         """
         Abstract method that applies a given alteration with a given value to
         the input data
@@ -90,29 +89,6 @@ class Alteration(ABC):
         ----------
             data : np.ndarray
                 the data on which the alteration should be applied
-            alteration_level : float
-                the level of the alteration that should be applied. It must be
-                contained in the range given by the get_range method
-
-        Returns
-        -------
-            data : np.ndarray
-                the altered data on which the alteration has been applied
-        """
-
-    @abstractmethod
-    def apply_alteration(self,
-                         file_name: str,
-                         alteration_level: float) -> np.ndarray:
-        """
-        Method that applies a given alteration with a given value to the input
-        data, whose fileName is given as a parameter
-
-        Parameters
-        ----------
-            file_name : str
-                the path of the input data on which the alteration should be
-                applied
             alteration_level : float
                 the level of the alteration that should be applied. It must be
                 contained in the range given by the get_range method
@@ -142,8 +118,8 @@ class VerticalTranslation(Alteration):
         """
         return "VerticalTranslation"
 
-    def apply_alteration_data(self, data: np.ndarray,
-                              alteration_level: float) -> np.ndarray:
+    def apply_alteration(self, data: np.ndarray,
+                         alteration_level: float) -> np.ndarray:
         """
         Method that applies the vertical translation with a given value to the
         inptu data
@@ -177,31 +153,6 @@ class VerticalTranslation(Alteration):
         assert(isinstance(data, np.ndarray))
         return data
 
-    def apply_alteration(self,
-                         file_name: str,
-                         alteration_level: float) -> np.ndarray:
-        """
-        Method that applies a given alteration with a given value to the input
-        data, whose fileName is given as a parameter
-
-        Parameters
-        ----------
-            file_name : str
-                the path of the input data on which the alteration should be
-                applied
-            alteration_level : float
-                the level of the alteration that should be applied. It must be
-                contained in the range given by the get_range method
-
-        Returns
-        -------
-            data : np.ndarray
-                the altered data on which the alteration has been applied
-        """
-        data = cv2.imread(file_name)
-        assert(isinstance(data, np.ndarray))
-        return self.apply_alteration_data(data, alteration_level)
-
 
 class HorizontalTranslation(Alteration):
     """
@@ -221,8 +172,8 @@ class HorizontalTranslation(Alteration):
         """
         return "HorizontalTranslation"
 
-    def apply_alteration_data(self, data: np.ndarray,
-                              alteration_level: float) -> np.ndarray:
+    def apply_alteration(self, data: np.ndarray,
+                         alteration_level: float) -> np.ndarray:
         """
         Method that applies the horizontal translation with a given value to
         the input data.
@@ -256,31 +207,6 @@ class HorizontalTranslation(Alteration):
         assert(isinstance(data, np.ndarray))
         return data
 
-    def apply_alteration(self,
-                         file_name: str,
-                         alteration_level: float) -> np.ndarray:
-        """
-        Method that applies a given alteration with a given value to the input
-        data, whose fileName is given as a parameter
-
-        Parameters
-        ----------
-            file_name : str
-                the path of the input data on which the alteration should be
-                applied
-            alteration_level : float
-                the level of the alteration that should be applied. It must be
-                contained in the range given by the get_range method
-
-        Returns
-        -------
-            data : np.ndarray
-                the altered data on which the alteration has been applied
-        """
-        data = cv2.imread(file_name)
-        assert(isinstance(data, np.ndarray))
-        return self.apply_alteration_data(data, alteration_level)
-
 
 class Compression(Alteration):
     """
@@ -300,8 +226,8 @@ class Compression(Alteration):
         """
         return "Compression"
 
-    def apply_alteration_data(self, data: np.ndarray,
-                              alteration_level: float) -> np.ndarray:
+    def apply_alteration(self, data: np.ndarray,
+                         alteration_level: float) -> np.ndarray:
         """
         Method that applies the jpeg compression with a given value to the
         input data
@@ -330,31 +256,6 @@ class Compression(Alteration):
 
         assert(isinstance(data, np.ndarray))
         return data
-
-    def apply_alteration(self,
-                         file_name: str,
-                         alteration_level: float) -> np.ndarray:
-        """
-        Method that applies a given alteration with a given value to the input
-        data, whose fileName is given as a parameter
-
-        Parameters
-        ----------
-            file_name : str
-                the path of the input data on which the alteration should be
-                applied
-            alteration_level : float
-                the level of the alteration that should be applied. It must be
-                contained in the range given by the get_range method
-
-        Returns
-        -------
-            data : np.ndarray
-                the altered data on which the alteration has been applied
-        """
-        data = cv2.imread(file_name)
-        assert(isinstance(data, np.ndarray))
-        return self.apply_alteration_data(data, alteration_level)
 
 
 class GaussianNoise(Alteration):
@@ -392,8 +293,8 @@ class GaussianNoise(Alteration):
         """
         return "GaussianNoise"
 
-    def apply_alteration_data(self, data: np.ndarray,
-                              alteration_level: float) -> np.ndarray:
+    def apply_alteration(self, data: np.ndarray,
+                         alteration_level: float) -> np.ndarray:
         """
         Method that applies the Gaussian Noise with a given value to the input
         data
@@ -424,31 +325,6 @@ class GaussianNoise(Alteration):
 
         assert(isinstance(data, np.ndarray))
         return data
-
-    def apply_alteration(self,
-                         file_name: str,
-                         alteration_level: float) -> np.ndarray:
-        """
-        Method that applies a given alteration with a given value to the input
-        data, whose fileName is given as a parameter
-
-        Parameters
-        ----------
-            file_name : str
-                the path of the input data on which the alteration should be
-                applied
-            alteration_level : float
-                the level of the alteration that should be applied. It must be
-                contained in the range given by the get_range method
-
-        Returns
-        -------
-            data : np.ndarray
-                the altered data on which the alteration has been applied
-        """
-        data = cv2.imread(file_name)
-        assert(isinstance(data, np.ndarray))
-        return self.apply_alteration_data(data, alteration_level)
 
 
 class Blur(Alteration):
@@ -494,8 +370,8 @@ class Blur(Alteration):
         """
         return "Blur"
 
-    def apply_alteration_data(self, data: np.ndarray,
-                              alteration_level: float) -> np.ndarray:
+    def apply_alteration(self, data: np.ndarray,
+                         alteration_level: float) -> np.ndarray:
         """
         Method that applies the Blur with a given value to the data
 
@@ -528,40 +404,9 @@ class Blur(Alteration):
             data = data.filter(ImageFilter.GaussianBlur(radius=self.radius *
                                                         alteration_level))
             data = np.array(data)
-            data = cv2.cvtColor(data, cv2.COLOR_RGB2BGR)
 
         assert(isinstance(data, np.ndarray))
         return data
-
-    def apply_alteration(self,
-                         file_name: str,
-                         alteration_level: float) -> np.ndarray:
-        """
-        Method that applies a blur alteration with a given value to the data,
-        whose fileName is given as a parameter
-
-        Parameters
-        ----------
-            file_name : str
-                the path of the data on which the blur alteration should be
-                applied
-            alteration_level : float
-                the level of the blur alteration that should be applied.
-                It must be contained in the range given by
-                the get_range method
-
-        Returns
-        -------
-            data : np.ndarray
-                the altered data on which the blur alteration has been applied
-        """
-        if alteration_level != 0:
-            data = Image.open(file_name)
-            data = np.asarray(data)
-        else:
-            data = cv2.imread(file_name)
-        assert(isinstance(data, np.ndarray))
-        return self.apply_alteration_data(data, alteration_level)
 
 
 class Brightness(Alteration):
@@ -604,8 +449,8 @@ class Brightness(Alteration):
         """
         return "Brightness"
 
-    def apply_alteration_data(self, data: np.ndarray,
-                              alteration_level: float) -> np.ndarray:
+    def apply_alteration(self, data: np.ndarray,
+                         alteration_level: float) -> np.ndarray:
         """
         Method that applies the Brightness Variation with a given value to the
         data
@@ -639,41 +484,9 @@ class Brightness(Alteration):
             enhancer = ImageEnhance.Brightness(data)
             data = enhancer.enhance(1 + (alteration_level * 0.5))
             data = np.array(data)
-            data = cv2.cvtColor(data, cv2.COLOR_RGB2BGR)
 
         assert(isinstance(data, np.ndarray))
         return data
-
-    def apply_alteration(self,
-                         file_name: str,
-                         alteration_level: float) -> np.ndarray:
-        """
-        Method that applies a Brightness Variation with a given value to the
-        input data, whose fileName is given as a parameter
-
-        Parameters
-        ----------
-            file_name : str
-                the path of the data on which the Brightness Variation should
-                be applied
-            alteration_level : float
-                the level of the Brightness Variation that should be applied.
-                It must be contained in the range given by the get_range method
-
-        Returns
-        -------
-            data : np.ndarray
-                the altered data on which the Brightness Variation has been
-                applied
-        """
-        if not -0.0001 <= float(alteration_level) <= 0.0001:
-            data = Image.open(file_name)
-            data = np.asarray(data)
-        else:
-            data = cv2.imread(file_name)
-            return data
-        assert(isinstance(data, np.ndarray))
-        return self.apply_alteration_data(data, alteration_level)
 
 
 class Zoom(Alteration):
@@ -696,8 +509,8 @@ class Zoom(Alteration):
         """
         return "Zoom"
 
-    def apply_alteration_data(self, data: np.ndarray,
-                              alteration_level: float) -> np.ndarray:
+    def apply_alteration(self, data: np.ndarray,
+                         alteration_level: float) -> np.ndarray:
         """
         Method that applies the Zoom with a given value to the data
 
@@ -744,31 +557,6 @@ class Zoom(Alteration):
         assert(isinstance(data, np.ndarray))
         return data
 
-    def apply_alteration(self,
-                         file_name: str,
-                         alteration_level: float) -> np.ndarray:
-        """
-        Method that applies a given alteration with a given value to the input
-        data, whose fileName is given as a parameter
-
-        Parameters
-        ----------
-            file_name : str
-                the path of the input data on which the alteration should be
-                applied
-            alteration_level : float
-                the level of the alteration that should be applied. It must be
-                contained in the range given by the get_range method
-
-        Returns
-        -------
-            data : np.ndarray
-                the altered data on which the alteration has been applied
-        """
-        data = cv2.imread(file_name)
-        assert(isinstance(data, np.ndarray))
-        return self.apply_alteration_data(data, alteration_level)
-
 
 class AlterationSequence(Alteration):
     """
@@ -784,17 +572,9 @@ class AlterationSequence(Alteration):
         Parameters
         ----------
             alterations : List[Alteration]
-                list of alterations to be applied
-            alteration_levels : List[float]
-                list of alteration levels
-        Raises
-        ------
-            ValueError
-                when alterations and alteration_levels have different sizes
         """
+        super().__init__(-1, 1)
         self.alterations = alterations
-        self.value_from = -1
-        self.value_to = +1
 
     def name(self) -> str:
         """
@@ -805,9 +585,10 @@ class AlterationSequence(Alteration):
             alteration_name : str
                 the name of the alteration type
         """
-        alteration_name = "Seq:"
+        alteration_name = "Seq("
         for a in self.alterations:
-            alteration_name = alteration_name + " " + a.name() + ","
+            alteration_name = alteration_name + a.name() + "-"
+        alteration_name = alteration_name[:len(alteration_name)-1] + ")"
         return alteration_name
 
     def apply_alteration(self, data: np.ndarray,
@@ -820,6 +601,8 @@ class AlterationSequence(Alteration):
         ----------
             data : np.ndarray
                 the data on which the alterations should be applied
+            alteration_level : float
+                the level of alteration that should be applied
 
         Returns
         -------
@@ -827,6 +610,10 @@ class AlterationSequence(Alteration):
                 the altered data on which the alterations have been applied
         """
         for a in self.alterations:
-            # calcola la proporzion eper a
-            data = a.apply_alteration_data(data, a.value_from)
+            # map the interval
+            alteration = ((alteration_level - self.value_from) / (
+                self.value_to - self.value_from)) * (
+                    a.value_to - a.value_from)
+            alteration = alteration + a.value_from
+            data = a.apply_alteration(data, alteration)
         return data

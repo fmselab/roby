@@ -24,8 +24,7 @@ from keras.models import load_model   # type: ignore
 from roby.EnvironmentRTest import EnvironmentRTest
 from roby.RobustnessNN import classification, robustness_test,\
     display_robustness_results
-from roby.Alterations import GaussianNoise, Compression, VerticalTranslation,\
-    HorizontalTranslation, Blur, Brightness, Zoom, Alteration
+from roby.Alterations import Alteration
 from cameraFailures import RainAlteration_1, Condensation_1
 
 
@@ -88,64 +87,6 @@ if __name__ == '__main__':
 
     # create the alteration_type as a Condensation1
     alteration_type = Condensation_1('L')
-
-    # perform robustness analysis, with 20 points
-    results = robustness_test(environment, alteration_type, 20,
-                              accuracy_threshold)
-    display_robustness_results(results)
-
-    # create the alteration_type as a GaussianNoise with variance 0.01
-    alteration_type = GaussianNoise(0, 1, 0.01)
-
-    # perform robustness analysis, with 20 points
-    results = robustness_test(environment, alteration_type, 20,
-                              accuracy_threshold)
-    display_robustness_results(results)
-
-    # create the alteration_type as a Compression
-    alteration_type = Compression(0, 1)
-
-    # perform robustness analysis, with 20 points
-    results = robustness_test(environment, alteration_type, 20,
-                              accuracy_threshold)
-    display_robustness_results(results)
-
-    # create the alteration_type as a Vertical Translation
-    alteration_type = VerticalTranslation(-1, 1)
-
-    # perform robustness analysis, with 20 points
-    results = robustness_test(environment, alteration_type, 20,
-                              accuracy_threshold)
-    display_robustness_results(results)
-
-    # create the alteration_type as a Horizontal Translation
-    alteration_type = HorizontalTranslation(-1, 1)
-
-    # perform robustness analysis, with 20 points
-    results = robustness_test(environment, alteration_type, 20,
-                              accuracy_threshold)
-    display_robustness_results(results)
-
-    # create the alteration_type as a Blur Variation with radius = 2, with
-    # black and white images (L)
-    alteration_type = Blur(0, 1, 1, 'L')
-
-    # perform robustness analysis, with 20 points
-    results = robustness_test(environment, alteration_type, 20,
-                              accuracy_threshold)
-    display_robustness_results(results)
-
-    # create the alteration_type as a Brightness Variation, with black and
-    # white images (L)
-    alteration_type = Brightness(0, 1, 'L')
-
-    # perform robustness analysis, with 20 points
-    results = robustness_test(environment, alteration_type, 20,
-                              accuracy_threshold)
-    display_robustness_results(results)
-
-    # create the alteration_type as a Zoom
-    alteration_type = Zoom(0, 1)
 
     # perform robustness analysis, with 20 points
     results = robustness_test(environment, alteration_type, 20,

@@ -4,10 +4,3 @@ Failures: 5
 Accuracy: 0.975
 Robustness w.r.t Rain_1: 0.047619047619047616
 Robustness w.r.t Condensation_1: 0.047619047619047616
-Robustness w.r.t GaussianNoise: 1.0
-Robustness w.r.t Compression: 0.8571428571428571
-Robustness w.r.t VerticalTranslation: 1.0
-Robustness w.r.t HorizontalTranslation: 1.0
-Robustness w.r.t Blur: 0.047619047619047616
-Robustness w.r.t Brightness: 0.047619047619047616
-Robustness w.r.t Zoom: 0.47619047619047616
