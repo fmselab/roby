@@ -8,7 +8,6 @@ define alterations and provides:
 
 If you want to create your own domain-specific alteration, you have just
 to extend the class _Alteration_ and implement the methods `name(self)`,
-`apply_alteration_data(self, data, alteration_level)` and
 `apply_alteration(self, file_name, alteration_level)` to comply with
 your own alteration.
 

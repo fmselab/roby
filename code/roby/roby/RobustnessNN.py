@@ -192,7 +192,9 @@ def robustness_test(environment: EnvironmentRTest.EnvironmentRTest,
         data_index = 0
         for thisFile in environment.file_list:
             inputFile = thisFile
-            if isinstance(input, str) and environment.reader_f is not None:
+            if isinstance(inputFile, str):
+                if environment.reader_f is None:
+                    raise RuntimeError("A reader function must be defined")
                 inputFile = environment.reader_f(thisFile)
             data = alteration.apply_alteration(inputFile, step)
             # Pre-processing Function
