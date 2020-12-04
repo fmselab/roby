@@ -1,0 +1,3 @@
+[submodule "code/roby_Use/trafficsigns-imagefailures/Python_Image_Failures"]
+	path = code/roby_Use/trafficsigns-imagefailures/Python_Image_Failures
+	url = https://github.com/francescosecci/Python_Image_Failures.git
