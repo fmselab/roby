@@ -199,7 +199,7 @@ def robustness_test(environment: EnvironmentRTest.EnvironmentRTest,
         successes.append(0)
         failures.append(0)   
               
-    for input in environment.file_list:
+    for thisFile in environment.file_list:
         inputFile = thisFile
         if isinstance(inputFile, str):
             if environment.reader_f is None:
