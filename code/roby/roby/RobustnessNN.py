@@ -19,6 +19,7 @@ from roby.RobustnessResults import RobustnessResults
 from builtins import isinstance
 from roby import Alterations, EnvironmentRTest
 from typing import List
+from datetime import datetime
 
 
 def set_classes(filename: str) -> List[str]:
@@ -186,6 +187,9 @@ def robustness_test(environment: EnvironmentRTest.EnvironmentRTest,
     assert 0.0 <= accuracy_threshold <= 1.0
     steps = []
     accuracies = []
+    
+    print ("[" + str(datetime.now()) + "]: Starting alteration")
+    
     for step in alteration.get_range(n_values):
         steps.append(step)
         # Reset the parameters to count
@@ -232,6 +236,8 @@ def robustness_test(environment: EnvironmentRTest.EnvironmentRTest,
     title = 'Accuracy over ' + alteration.name() + ' Alteration'
     xlabel = 'Image Alteration - ' + alteration.name()
     ylabel = 'Accuracy'
+
+    print ("[" + str(datetime.now()) + "]: Ending alteration")
 
     # Robustness computation
     robustness = compute_robustness(accuracies, steps, accuracy_threshold)
