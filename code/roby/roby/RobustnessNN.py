@@ -18,7 +18,7 @@ import numpy as np  # type: ignore
 from roby.RobustnessResults import RobustnessResults
 from builtins import isinstance
 from roby import Alterations, EnvironmentRTest
-from typing import List, Callable
+from typing import List
 from datetime import datetime
 
 
@@ -84,11 +84,6 @@ def classification(environment: EnvironmentRTest.EnvironmentRTest) -> float:
         environment : EnvironmentRTest
             the environment containing all the information used to perform
             robustness analysis
-        reader : Callable[[str], np.ndarray], optional
-            function to be used to load the input data and put it into a
-            np.ndarray.
-            It is mandatory if the input data are given as a list of path
-            in the EnvironmentRTest
 
     Returns
     -------
@@ -112,8 +107,6 @@ def classification(environment: EnvironmentRTest.EnvironmentRTest) -> float:
             data = imgt
         # Classify the input
         proba = environment.model.predict(data)[0]
-        if environment.post_processing is not None:
-            proba = environment.post_processing(proba)
 
         # Get predicted label and real one
         predicted_class = ""
@@ -147,7 +140,6 @@ def display_robustness_results(results: RobustnessResults):
     This methods print the robustness and creates a plot (which is then stored
     in a .jpg image) of the accuracy variation over different
     levels of alteration.
-
     Parameters
     ----------
         results : RobustnessResults
@@ -156,6 +148,8 @@ def display_robustness_results(results: RobustnessResults):
     plt.style.use("ggplot")
     plt.figure()
     plt.plot(results.steps, results.accuracies)
+    thresholds = np.full(len(results.steps), results.threshold)
+    plt.plot(results.steps, thresholds)
     plt.title(results.title)
     plt.xlabel(results.xlabel)
     plt.ylabel(results.ylabel)
@@ -206,20 +200,17 @@ def robustness_test(environment: EnvironmentRTest.EnvironmentRTest,
         failures.append(0)   
               
     for input in environment.file_list:
-        if isinstance(input, str):
-            input = environment.reader_f(input)
+        if isinstance(inputFile, str):
+            if environment.reader_f is None:
+                raise RuntimeError("A reader function must be defined")
+            inputFile = environment.reader_f(thisFile)
         for step_index in range(0,len(steps)):
             step = steps[step_index]
-            # Reset the parameters to count
-            data = alteration.apply_alteration(input, step)
+            data = alteration.apply_alteration(inputFile, step)
             # Pre-processing Function
             if environment.pre_processing is not None:
                 data = environment.pre_processing(data)
             proba = environment.model.predict(data)[0]
-            # Post-processing Function, the probability has to be in the same
-            # order of the classes
-            if environment.post_processing is not None:
-                proba = environment.post_processing(proba)
             # Get predicted label and real one
             predicted_class = ""
             predicted_prob = 0
@@ -254,8 +245,10 @@ def robustness_test(environment: EnvironmentRTest.EnvironmentRTest,
     
     print ("[" + str(datetime.now()) + "]: Ending alteration")
 
+    print ("[" + str(datetime.now()) + "]: Ending alteration")
+
     # Robustness computation
     robustness = compute_robustness(accuracies, steps, accuracy_threshold)
     results = RobustnessResults(steps, accuracies, robustness, title, xlabel,
-                                ylabel, alteration.name())
+                                ylabel, alteration.name(), accuracy_threshold)
     return results

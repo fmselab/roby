@@ -35,7 +35,7 @@ class AudioNoise(Alteration):
         return "AudioNoise"
     
     
-    def apply_alteration_data(self, data, alteration_level):
+    def apply_alteration(self, data, alteration_level):
         """
         Method that applies the rain with a given value to the image
 
@@ -59,26 +59,3 @@ class AudioNoise(Alteration):
 
         assert(isinstance(data, np.ndarray))
         return data
-
-    def apply_alteration(self,
-                         file_name: str,
-                         alteration_level: float) -> np.ndarray:
-        """
-        Method that applies a given alteration with a given value to the input
-        data, whose fileName is given as a parameter
-
-        Parameters
-        ----------
-            file_name : str
-                the path of the input data on which the alteration should be
-                applied
-            alteration_level : float
-                the level of the alteration that should be applied. It must be
-                contained in the range given by the get_range method
-
-        Returns
-        -------
-            data : np.ndarray
-                the altered data on which the alteration has been applied
-        """
-        raise RuntimeError("Method not implemented")

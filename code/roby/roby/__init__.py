@@ -6,7 +6,7 @@ w.r.t. alterations.
 Some of these alterations are provided by the framework, but the user can
 define its own alteration by extending the class _Alteration_ and
 implementing the methods `name(self)` and
-`apply_alteration_data(self, data, alteration_level)`.
+`apply_alteration(self, data, alteration_level)`.
 
 The followings are the alterations provided by **roby**:
 
@@ -32,11 +32,9 @@ the following steps:
 4. Load the labels of your input data. These can be loaded in a list
    of strings (with the same length of the test dataset list), or by
    giving a customized labeler function.
-5. Optionally, define your `pre-processing` and/or `post-processing`
-   functions. The former is used to adapt the input data to the format
-   of those on which the network has been previously trained, while the
-   latter can be used to scale the probability given as output by the
-   NN.
+5. Optionally, define your `pre-processing` function. It is
+   used to adapt the input data to the format
+   of those on which the network has been previously trained.
 6. Define your testing environment.
 7. Define the alteration w.r.t. you want to test the robustness of your
    network.

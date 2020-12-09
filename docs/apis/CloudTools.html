@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.9.1" />
+<meta name="generator" content="pdoc 0.9.2" />
 <title>roby.CloudTools API documentation</title>
 <meta name="description" content="The **CloudTools** module contains useful functions to be used on Google Colab
 to perform robustness analysis on cloud based platform …" />
@@ -111,8 +111,9 @@ def process_config_from_xml(root: Et.Element, drive: GoogleDrive,
                             labeler_f: Callable[[np.ndarray], str]=None,
                             pre_processing_f:
                             Callable[[np.ndarray], np.ndarray]=None,
-                            post_processing_f:
-                            Callable[[float], float]=None) -&gt; EnvironmentRTest:
+                            reader_f:
+                            Callable[[str], np.ndarray]=None) \
+                            -&gt; EnvironmentRTest:
     &#34;&#34;&#34;
     Loads the configuration data from an XML file and builds the environment
 
@@ -128,9 +129,9 @@ def process_config_from_xml(root: Et.Element, drive: GoogleDrive,
         pre_processing_f : Callable[[np.ndarray], np.ndarray], optional
             pre-processing to be executed on the data before the model
             classification. It can be None
-        post_processing_f : Callable[[float], float], optional
-            post-processing to be executed on the output of the model.
-            It can be None
+        reader_f : Callable[[str], np.ndarray], optional
+            optional function used to read the input data from file in a
+            np.ndarray format
 
     Returns
     -------
@@ -160,7 +161,7 @@ def process_config_from_xml(root: Et.Element, drive: GoogleDrive,
 
     return process_config(model_link, link_dataset_dir, classes_link, drive,
                           labels_link, labeler_f,
-                          pre_processing_f, post_processing_f)
+                          pre_processing_f, reader_f)
 
 
 def load_model_from_url(model_link: str, drive: GoogleDrive) -&gt; Model:
@@ -280,8 +281,8 @@ def process_config(model_link: str, link_dataset_dir: str, classes_link: str,
                    label_list_link: str=None,
                    labeler_f: Callable[[np.ndarray], str]=None,
                    pre_processing_f: Callable[[np.ndarray], np.ndarray]=None,
-                   post_processing_f:
-                   Callable[[float], float]=None) -&gt; EnvironmentRTest:
+                   reader_f: Callable[[str], np.ndarray]=None) \
+                   -&gt; EnvironmentRTest:
     &#34;&#34;&#34;
     Loads the configuration data from parameters and builds the enviroment
 
@@ -304,9 +305,9 @@ def process_config(model_link: str, link_dataset_dir: str, classes_link: str,
         pre_processing_f : Callable[[np.ndarray], np.ndarray], optional
             pre-processing to be executed on the data before the model
             classification. It can be None
-        post_processing_f : Callable[[float], float], optional
-            post-processing to be executed on the output of the model.
-            It can be None
+        reader_f : Callable[[str], np.ndarray], optional
+            optional function used to read the input data from file in a
+            np.ndarray format
 
     Returns
     -------
@@ -328,9 +329,7 @@ def process_config(model_link: str, link_dataset_dir: str, classes_link: str,
 
     # Create the object wit all these variables saved
     environment = EnvironmentRTest(model, file_list, classes, labels,
-                                   labeler_f,
-                                   pre_processing_f,
-                                   post_processing_f)
+                                   labeler_f, pre_processing_f, reader_f)
     return environment</code></pre>
 </details>
 </section>
@@ -520,7 +519,7 @@ drive : GoogleDrive
 </details>
 </dd>
 <dt id="roby.CloudTools.load_model_from_url"><code class="name flex">
-<span>def <span class="ident">load_model_from_url</span></span>(<span>model_link: str, drive: pydrive.drive.GoogleDrive) ‑> keras.engine.training.Model</span>
+<span>def <span class="ident">load_model_from_url</span></span>(<span>model_link: str, drive: pydrive.drive.GoogleDrive) ‑> tensorflow.python.keras.engine.training.Model</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Loads the model from a Google Drive URL</p>
@@ -566,7 +565,7 @@ drive : GoogleDrive
 </details>
 </dd>
 <dt id="roby.CloudTools.process_config"><code class="name flex">
-<span>def <span class="ident">process_config</span></span>(<span>model_link: str, link_dataset_dir: str, classes_link: str, drive: pydrive.drive.GoogleDrive, label_list_link: str = None, labeler_f: Callable[[numpy.ndarray], str] = None, pre_processing_f: Callable[[numpy.ndarray], numpy.ndarray] = None, post_processing_f: Callable[[float], float] = None) ‑> <a title="roby.EnvironmentRTest.EnvironmentRTest" href="EnvironmentRTest.html#roby.EnvironmentRTest.EnvironmentRTest">EnvironmentRTest</a></span>
+<span>def <span class="ident">process_config</span></span>(<span>model_link: str, link_dataset_dir: str, classes_link: str, drive: pydrive.drive.GoogleDrive, label_list_link: str = None, labeler_f: Callable[[numpy.ndarray], str] = None, pre_processing_f: Callable[[numpy.ndarray], numpy.ndarray] = None, reader_f: Callable[[str], numpy.ndarray] = None) ‑> <a title="roby.EnvironmentRTest.EnvironmentRTest" href="EnvironmentRTest.html#roby.EnvironmentRTest.EnvironmentRTest">EnvironmentRTest</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Loads the configuration data from parameters and builds the enviroment</p>
@@ -588,9 +587,9 @@ labeler_f : Callable[[np.ndarray], str], optional
 pre_processing_f : Callable[[np.ndarray], np.ndarray], optional
     pre-processing to be executed on the data before the model
     classification. It can be None
-post_processing_f : Callable[[float], float], optional
-    post-processing to be executed on the output of the model.
-    It can be None
+reader_f : Callable[[str], np.ndarray], optional
+    optional function used to read the input data from file in a
+    np.ndarray format
 </code></pre>
 <h2 id="returns">Returns</h2>
 <pre><code>environment : EnvironmentRTest
@@ -606,8 +605,8 @@ post_processing_f : Callable[[float], float], optional
                    label_list_link: str=None,
                    labeler_f: Callable[[np.ndarray], str]=None,
                    pre_processing_f: Callable[[np.ndarray], np.ndarray]=None,
-                   post_processing_f:
-                   Callable[[float], float]=None) -&gt; EnvironmentRTest:
+                   reader_f: Callable[[str], np.ndarray]=None) \
+                   -&gt; EnvironmentRTest:
     &#34;&#34;&#34;
     Loads the configuration data from parameters and builds the enviroment
 
@@ -630,9 +629,9 @@ post_processing_f : Callable[[float], float], optional
         pre_processing_f : Callable[[np.ndarray], np.ndarray], optional
             pre-processing to be executed on the data before the model
             classification. It can be None
-        post_processing_f : Callable[[float], float], optional
-            post-processing to be executed on the output of the model.
-            It can be None
+        reader_f : Callable[[str], np.ndarray], optional
+            optional function used to read the input data from file in a
+            np.ndarray format
 
     Returns
     -------
@@ -654,14 +653,12 @@ post_processing_f : Callable[[float], float], optional
 
     # Create the object wit all these variables saved
     environment = EnvironmentRTest(model, file_list, classes, labels,
-                                   labeler_f,
-                                   pre_processing_f,
-                                   post_processing_f)
+                                   labeler_f, pre_processing_f, reader_f)
     return environment</code></pre>
 </details>
 </dd>
 <dt id="roby.CloudTools.process_config_from_xml"><code class="name flex">
-<span>def <span class="ident">process_config_from_xml</span></span>(<span>root: xml.etree.ElementTree.Element, drive: pydrive.drive.GoogleDrive, labeler_f: Callable[[numpy.ndarray], str] = None, pre_processing_f: Callable[[numpy.ndarray], numpy.ndarray] = None, post_processing_f: Callable[[float], float] = None) ‑> <a title="roby.EnvironmentRTest.EnvironmentRTest" href="EnvironmentRTest.html#roby.EnvironmentRTest.EnvironmentRTest">EnvironmentRTest</a></span>
+<span>def <span class="ident">process_config_from_xml</span></span>(<span>root: xml.etree.ElementTree.Element, drive: pydrive.drive.GoogleDrive, labeler_f: Callable[[numpy.ndarray], str] = None, pre_processing_f: Callable[[numpy.ndarray], numpy.ndarray] = None, reader_f: Callable[[str], numpy.ndarray] = None) ‑> <a title="roby.EnvironmentRTest.EnvironmentRTest" href="EnvironmentRTest.html#roby.EnvironmentRTest.EnvironmentRTest">EnvironmentRTest</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Loads the configuration data from an XML file and builds the environment</p>
@@ -676,9 +673,9 @@ labeler_f : Callable[[np.ndarray], str], optional
 pre_processing_f : Callable[[np.ndarray], np.ndarray], optional
     pre-processing to be executed on the data before the model
     classification. It can be None
-post_processing_f : Callable[[float], float], optional
-    post-processing to be executed on the output of the model.
-    It can be None
+reader_f : Callable[[str], np.ndarray], optional
+    optional function used to read the input data from file in a
+    np.ndarray format
 </code></pre>
 <h2 id="returns">Returns</h2>
 <pre><code>environment : EnvironmentRTest
@@ -693,8 +690,9 @@ post_processing_f : Callable[[float], float], optional
                             labeler_f: Callable[[np.ndarray], str]=None,
                             pre_processing_f:
                             Callable[[np.ndarray], np.ndarray]=None,
-                            post_processing_f:
-                            Callable[[float], float]=None) -&gt; EnvironmentRTest:
+                            reader_f:
+                            Callable[[str], np.ndarray]=None) \
+                            -&gt; EnvironmentRTest:
     &#34;&#34;&#34;
     Loads the configuration data from an XML file and builds the environment
 
@@ -710,9 +708,9 @@ post_processing_f : Callable[[float], float], optional
         pre_processing_f : Callable[[np.ndarray], np.ndarray], optional
             pre-processing to be executed on the data before the model
             classification. It can be None
-        post_processing_f : Callable[[float], float], optional
-            post-processing to be executed on the output of the model.
-            It can be None
+        reader_f : Callable[[str], np.ndarray], optional
+            optional function used to read the input data from file in a
+            np.ndarray format
 
     Returns
     -------
@@ -742,7 +740,7 @@ post_processing_f : Callable[[float], float], optional
 
     return process_config(model_link, link_dataset_dir, classes_link, drive,
                           labels_link, labeler_f,
-                          pre_processing_f, post_processing_f)</code></pre>
+                          pre_processing_f, reader_f)</code></pre>
 </details>
 </dd>
 <dt id="roby.CloudTools.upload_config"><code class="name flex">
@@ -810,7 +808,7 @@ post_processing_f : Callable[[float], float], optional
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.1</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
 </footer>
 </body>
 </html>
