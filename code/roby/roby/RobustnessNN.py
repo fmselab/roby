@@ -200,6 +200,7 @@ def robustness_test(environment: EnvironmentRTest.EnvironmentRTest,
         failures.append(0)   
               
     for input in environment.file_list:
+        inputFile = thisFile
         if isinstance(inputFile, str):
             if environment.reader_f is None:
                 raise RuntimeError("A reader function must be defined")
