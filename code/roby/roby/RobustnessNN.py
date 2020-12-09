@@ -191,16 +191,18 @@ def robustness_test(environment: EnvironmentRTest.EnvironmentRTest,
     """
     assert 0.0 <= accuracy_threshold <= 1.0
     steps = []
-    accuracies = []
     for step in alteration.get_range(n_values):
-        steps.append(step)
-        # Reset the parameters to count
-        successes = 0
-        failures = 0
-        data_index = 0
-        for input in environment.file_list:
-            if isinstance(input, str):
-                input = environment.reader_f(input)
+            steps.append(step)
+    accuracies = []
+    successes = []
+    failures = []
+    data_index = 0            
+    for input in environment.file_list:
+        if isinstance(input, str):
+            input = environment.reader_f(input)
+        for step_index in range(0,len(steps)):
+            step = steps[step_index]
+            # Reset the parameters to count
             data = alteration.apply_alteration(input, step)
             # Pre-processing Function
             if environment.pre_processing is not None:
@@ -225,11 +227,11 @@ def robustness_test(environment: EnvironmentRTest.EnvironmentRTest,
 
             # Classify the type of the classification
             if str(predicted_class) == str(real_label):
-                successes += 1
+                successes[step] += 1
             else:
-                failures += 1
-            data_index = data_index + 1
-
+                failures[step] += 1
+        # 
+        data_index = data_index + 1
         # All of the data have been processed, so we can compute the accuracy
         # for this step value
         accuracy = float(successes) / float(environment.total_data)
