@@ -19,6 +19,7 @@ from roby.RobustnessResults import RobustnessResults
 from builtins import isinstance
 from roby import Alterations, EnvironmentRTest
 from typing import List, Callable
+from datetime import datetime
 
 
 def set_classes(filename: str) -> List[str]:
@@ -196,7 +197,14 @@ def robustness_test(environment: EnvironmentRTest.EnvironmentRTest,
     accuracies = []
     successes = []
     failures = []
-    data_index = 0            
+    data_index = 0  
+    
+    print ("[" + str(datetime.now()) + "]: Starting alteration")
+    
+    for step_index in range(0,len(steps)):  
+        successes.append(0)
+        failures.append(0)   
+              
     for input in environment.file_list:
         if isinstance(input, str):
             input = environment.reader_f(input)
@@ -227,20 +235,24 @@ def robustness_test(environment: EnvironmentRTest.EnvironmentRTest,
 
             # Classify the type of the classification
             if str(predicted_class) == str(real_label):
-                successes[step] += 1
+                successes[step_index] += 1
             else:
-                failures[step] += 1
+                failures[step_index] += 1
         # 
         data_index = data_index + 1
+    
+    for step_index in range(0,len(steps)):    
         # All of the data have been processed, so we can compute the accuracy
         # for this step value
-        accuracy = float(successes) / float(environment.total_data)
+        accuracy = float(successes[step_index]) / float(environment.total_data)
         accuracies.append(accuracy)
 
     # Plot data
     title = 'Accuracy over ' + alteration.name() + ' Alteration'
     xlabel = 'Image Alteration - ' + alteration.name()
     ylabel = 'Accuracy'
+    
+    print ("[" + str(datetime.now()) + "]: Ending alteration")
 
     # Robustness computation
     robustness = compute_robustness(accuracies, steps, accuracy_threshold)
