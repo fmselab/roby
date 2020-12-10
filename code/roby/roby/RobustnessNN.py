@@ -187,25 +187,26 @@ def robustness_test(environment: EnvironmentRTest.EnvironmentRTest,
     assert 0.0 <= accuracy_threshold <= 1.0
     steps = []
     for step in alteration.get_range(n_values):
-            steps.append(step)
+        steps.append(step)
     accuracies = []
     successes = []
     failures = []
-    data_index = 0  
-    
-    print ("[" + str(datetime.now()) + "]: Starting alteration")
-    
-    for step_index in range(0,len(steps)):  
+    data_index = 0
+
+    print ("[" + str(datetime.now()) + "]: Starting alteration " +
+           alteration.name())
+
+    for step_index in range(0, len(steps)):
         successes.append(0)
-        failures.append(0)   
-              
+        failures.append(0)
+
     for thisFile in environment.file_list:
         inputFile = thisFile
         if isinstance(inputFile, str):
             if environment.reader_f is None:
                 raise RuntimeError("A reader function must be defined")
             inputFile = environment.reader_f(thisFile)
-        for step_index in range(0,len(steps)):
+        for step_index in range(0, len(steps)):
             step = steps[step_index]
             data = alteration.apply_alteration(inputFile, step)
             # Pre-processing Function
@@ -230,10 +231,10 @@ def robustness_test(environment: EnvironmentRTest.EnvironmentRTest,
                 successes[step_index] += 1
             else:
                 failures[step_index] += 1
-        # 
+
         data_index = data_index + 1
-    
-    for step_index in range(0,len(steps)):    
+
+    for step_index in range(0, len(steps)):
         # All of the data have been processed, so we can compute the accuracy
         # for this step value
         accuracy = float(successes[step_index]) / float(environment.total_data)
@@ -243,8 +244,9 @@ def robustness_test(environment: EnvironmentRTest.EnvironmentRTest,
     title = 'Accuracy over ' + alteration.name() + ' Alteration'
     xlabel = 'Image Alteration - ' + alteration.name()
     ylabel = 'Accuracy'
-    
-    print ("[" + str(datetime.now()) + "]: Ending alteration")
+
+    print ("[" + str(datetime.now()) + "]: Ending alteration " +
+           alteration.name())
 
     # Robustness computation
     robustness = compute_robustness(accuracies, steps, accuracy_threshold)
