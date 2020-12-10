@@ -1,17 +1,3 @@
-"""
-In this **Breast Cancer identification** example we test the robustness of the
-CNN we presented in
-[this paper](https://ieeexplore.ieee.org/abstract/document/9176802).
-
-In this example:
-
-- The _images_ are loaded as a list of paths, because they are included into
-  the `images` folder.
-- The _classes_ are loaded from a `csv` file.
-- The _labels_ are assigned using a labeler function. In our case study all
-  the images contains `class0` or `class1` in the name of the file.
-- Only _alterations_ plausible for the application domain are applied.
-"""
 from keras.models import load_model   # type: ignore
 from roby.RobustnessNN import robustness_test, set_classes,\
     display_robustness_results, classification
@@ -36,9 +22,10 @@ def pre_processing(image):
     Pre-processes the image for classification, in the same way of the pictures
     used to train the CNN
     """
-    imutils.resize(image, width=50)
-    image = cv2.resize(image, (50, 50))
-    image = image.astype("float") / 255.0
+    imutils.resize(image, width=512)    
+    image = cv2.resize(image, (512, 512))
+    image = image.astype("float32")
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     image = img_to_array(image)
     image = np.expand_dims(image, axis=0)
     return image
@@ -46,22 +33,24 @@ def pre_processing(image):
 
 def labeler(image):
     """
-    Extracts the label from the image file name
+    Extracts the label from the image file path
     """
-    real_label = (image.split('.')[0]).split('_')[-1]
-    return real_label
+    if "POSITIVE" in image:
+        return "1"
+    else:
+        return "0"
 
 
 if __name__ == '__main__':
     # load the model
-    model = load_model('model/Medical.model')
+    model = load_model('model/ModelloFinale.h5')
     # set the accuracy threshold
     accuracy_treshold = 0.8
     # get the images in the test data-set
     file_list = sorted(list(paths.list_images('images')))
 
     # set the classes
-    classes = set_classes('model/Classes.csv')
+    classes = ["0", "1"]
 
     # load the environment
     environment = EnvironmentRTest(model, file_list, classes,
