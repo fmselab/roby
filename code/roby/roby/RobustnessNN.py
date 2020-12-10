@@ -246,8 +246,6 @@ def robustness_test(environment: EnvironmentRTest.EnvironmentRTest,
     
     print ("[" + str(datetime.now()) + "]: Ending alteration")
 
-    print ("[" + str(datetime.now()) + "]: Ending alteration")
-
     # Robustness computation
     robustness = compute_robustness(accuracies, steps, accuracy_threshold)
     results = RobustnessResults(steps, accuracies, robustness, title, xlabel,
