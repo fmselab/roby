@@ -14,7 +14,8 @@ In this example:
 """
 from keras.models import load_model   # type: ignore
 from roby.RobustnessNN import robustness_test, set_classes,\
-    display_robustness_results, classification
+    display_robustness_results, classification,\
+    approximate_robustness_test
 from roby.Alterations import GaussianNoise
 from roby.EnvironmentRTest import EnvironmentRTest
 from imutils import paths   # type: ignore
@@ -75,16 +76,16 @@ if __name__ == '__main__':
     # create the alteration_type as a GaussianNoise with variance 200
     alteration_type: Alteration = GaussianNoise(0, 1, 200)
 
-    # perform robustness analysis, with 20 points
-    results = robustness_test(environment, alteration_type, 20,
+    # perform robustness analysis, with 200 points
+    results = robustness_test(environment, alteration_type, 200,
                               accuracy_treshold)
     display_robustness_results(results)
 
     # create the alteration_type as a Compression
     alteration_type = Compression(0, 1)
 
-    # perform robustness analysis, with 20 points
-    results = robustness_test(environment, alteration_type, 20,
+    # perform robustness analysis, with 200 points
+    results = robustness_test(environment, alteration_type, 200,
                               accuracy_treshold)
     display_robustness_results(results)
 
@@ -99,9 +100,19 @@ if __name__ == '__main__':
     # create the alteration_type as a Horizontal Translation
     alteration_type = HorizontalTranslation(-1, 1)
 
-    # perform robustness analysis, with 20 points
-    results = robustness_test(environment, alteration_type, 20,
+    # perform robustness analysis, with 200 points
+    results = robustness_test(environment, alteration_type, 200,
                               accuracy_treshold)
+    display_robustness_results(results)
+
+    # perform approximate robustness analysis, with 200 points
+    results = approximate_robustness_test(environment, alteration_type, 200,
+                                          accuracy_treshold, 2, "real")
+    display_robustness_results(results)
+
+    # perform approximate robustness analysis, with 200 points
+    results = approximate_robustness_test(environment, alteration_type, 200,
+                                          accuracy_treshold, 2, "appr")
     display_robustness_results(results)
 
     # create the alteration_type as a Blur Variation, with radius = 2
