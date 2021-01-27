@@ -1,7 +1,7 @@
 # roby
 ROBustness analYzer for neural networks
 
-All the needed information can be found in the wiki
+All the information can be found in the wiki
 
 https://github.com/fmselab/roby/wiki
 
