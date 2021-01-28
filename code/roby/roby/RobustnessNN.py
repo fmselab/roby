@@ -182,8 +182,7 @@ def display_robustness_results(results: RobustnessResults):
 def robustness_test(environment: EnvironmentRTest.EnvironmentRTest,
                     alteration: Alterations.Alteration,
                     n_values: int,
-                    accuracy_threshold: float,
-                    debug: bool = False) -> RobustnessResults:
+                    accuracy_threshold: float) -> RobustnessResults:
     """
     Executes robustness analysis on a given alteration.
 
@@ -200,9 +199,6 @@ def robustness_test(environment: EnvironmentRTest.EnvironmentRTest,
             analysis
         accuracy_threshold : float
             acceptable limit of accuracy to calculate the robustness
-        debug: bool
-            a boolean value True when the pickle file has to be stored, False
-            otherwise
 
     Returns
     -------
@@ -216,7 +212,7 @@ def robustness_test(environment: EnvironmentRTest.EnvironmentRTest,
     accuracies = []
     successes = []
     failures = []
-    partial_results: List[Tuple[str, np.ndarray, float, str, float]] = []
+    times: List[float] = []
     data_index = 0
 
     print ("[" + str(datetime.now()) + "]: Starting alteration " +
@@ -225,6 +221,7 @@ def robustness_test(environment: EnvironmentRTest.EnvironmentRTest,
     for step_index in range(0, len(steps)):
         successes.append(0)
         failures.append(0)
+        times.append(0.0)
 
     for thisFile in environment.file_list:
         inputFile = thisFile
@@ -236,6 +233,7 @@ def robustness_test(environment: EnvironmentRTest.EnvironmentRTest,
         end_loading_time = datetime.now()
         total_loading_time = \
             (end_loading_time - start_loading_time).total_seconds()
+
         for step_index in range(0, len(steps)):
             start_time = datetime.now()
             step = steps[step_index]
@@ -252,14 +250,6 @@ def robustness_test(environment: EnvironmentRTest.EnvironmentRTest,
                     predicted_class = str(label)
                     predicted_prob = p
 
-            end_time = datetime.now()
-            # Store the partial results
-            if (debug):
-                partial_results.append((alteration.name(), inputFile, step,
-                                        predicted_class,
-                                        (end_time-start_time).total_seconds() +
-                                        total_loading_time))
-
             if environment.label_list is not None:
                 real_label = environment.label_list[data_index]
             else:
@@ -270,6 +260,12 @@ def robustness_test(environment: EnvironmentRTest.EnvironmentRTest,
                 successes[step_index] += 1
             else:
                 failures[step_index] += 1
+
+            # Record the time
+            end_time = datetime.now()
+            times[step_index] = times[step_index] + \
+                (end_time - start_time).total_seconds() + \
+                total_loading_time
 
         data_index = data_index + 1
 
@@ -291,7 +287,7 @@ def robustness_test(environment: EnvironmentRTest.EnvironmentRTest,
     robustness = compute_robustness(accuracies, steps, accuracy_threshold)
     results = RobustnessResults(steps, accuracies, robustness, title, xlabel,
                                 ylabel, alteration.name(), accuracy_threshold,
-                                partial_results)
+                                times)
     return results
 
 
@@ -299,10 +295,7 @@ def eval_parabola(x1: float, x2: float, threshold: float, minstep: float,
                   environment: EnvironmentRTest.EnvironmentRTest,
                   alteration: Alterations.Alteration,
                   a_threshold: float, ptype: str,
-                  result_list: List[Tuple[float, float]],
-                  partial_results:
-                  List[Tuple[str, np.ndarray, float, str, float]],
-                  debug: bool):
+                  result_list: List[Tuple[float, float, float]]):
     """
     Recursively evaluates the accuracy depending on the parabola approximation
 
@@ -330,14 +323,8 @@ def eval_parabola(x1: float, x2: float, threshold: float, minstep: float,
             The former gives better results, in terms of accuracy, while the
             latter guarantees better performances. However, the difference
             in terms of accuracy between the two types is very low
-        result_list : List[Tuple[float, float]]
-            the list of entries [x, accuracy]
-        partial_results : List[Tuple[str, np.ndarray, float, str, float]]
-                the list of the partial results
-                [alteration, input, level, class, time]
-        debug: bool
-            a boolean value True when the pickle file has to be stored, False
-            otherwise
+        result_list : List[Tuple[float, float, float]]
+            the list of entries [x, accuracy, time]
     """
     assert 0.0 <= threshold <= 1.0
     assert (ptype == "real" or ptype == "appr")
@@ -349,23 +336,21 @@ def eval_parabola(x1: float, x2: float, threshold: float, minstep: float,
     # Computes the two accuracies
     x1 = float(x1)
     x2 = float(x2)
-    y1 = get_accuracy(environment, alteration, x1, partial_results, debug)
-    y2 = get_accuracy(environment, alteration, x2, partial_results, debug)
+    y1, time1 = get_accuracy(environment, alteration, x1)
+    y2, time2 = get_accuracy(environment, alteration, x2)
 
     # Check whether the two points are already in the dictionary or not
     if len(list(filter(lambda a: a[0] == x1, result_list))) == 0:
-        result_list.append((x1, y1))
+        result_list.append((x1, y1, time1))
     if len(list(filter(lambda a: a[0] == x2, result_list))) == 0:
-        result_list.append((x2, y2))
+        result_list.append((x2, y2, time2))
 
     # If a point is above the threshold and the other is under
     if ((y1-threshold) * (y2-threshold) <= 0):
         eval_parabola(x1, (x2+x1)/2, threshold, minstep, environment,
-                      alteration, a_threshold, ptype, result_list,
-                      partial_results, debug)
+                      alteration, a_threshold, ptype, result_list)
         eval_parabola((x2+x1)/2, x2, threshold, minstep, environment,
-                      alteration, a_threshold, ptype, result_list,
-                      partial_results, debug)
+                      alteration, a_threshold, ptype, result_list)
         return
 
     if ptype == "real":
@@ -393,11 +378,9 @@ def eval_parabola(x1: float, x2: float, threshold: float, minstep: float,
         return
     else:
         eval_parabola(x1, (x2+x1)/2, threshold, minstep, environment,
-                      alteration, a_threshold, ptype, result_list,
-                      partial_results, debug)
+                      alteration, a_threshold, ptype, result_list)
         eval_parabola((x2+x1)/2, x2, threshold, minstep, environment,
-                      alteration, a_threshold, ptype, result_list,
-                      partial_results, debug)
+                      alteration, a_threshold, ptype, result_list)
         return
 
 
@@ -406,8 +389,7 @@ def approximate_robustness_test(environment: EnvironmentRTest.EnvironmentRTest,
                                 n_values: int,
                                 accuracy_threshold: float,
                                 a: float,
-                                ptype: str,
-                                debug: bool=False) -> RobustnessResults:
+                                ptype: str) -> RobustnessResults:
     """
     Executes robustness analysis on a given alteration.
 
@@ -432,9 +414,6 @@ def approximate_robustness_test(environment: EnvironmentRTest.EnvironmentRTest,
             The former gives better results, in terms of accuracy, while the
             latter guarantees better performances. However, the difference
             in terms of accuracy between the two types is very low
-        debug: bool
-            a boolean value True when the pickle file has to be stored, False
-            otherwise
 
     Returns
     -------
@@ -450,18 +429,19 @@ def approximate_robustness_test(environment: EnvironmentRTest.EnvironmentRTest,
     lower_bound = alteration.get_range(n_values).min()
     upper_bound = alteration.get_range(n_values).max()
     minstep = float(upper_bound - lower_bound) / float(n_values)
-    result_list: List[Tuple[float, float]] = []
+    result_list: List[Tuple[float, float, float]] = []
     partial_results: List[Tuple[str, np.ndarray, float, str, float]] = []
 
     eval_parabola(lower_bound, upper_bound, accuracy_threshold, minstep,
                   environment, alteration, a, ptype,
-                  result_list, partial_results, debug)
+                  result_list)
 
     # Sort the list by key (x values)
     result_list = sorted(result_list, key=lambda i: i[0])
     partial_results = sorted(partial_results, key=lambda i: i[1])
     steps = list(elem[0] for elem in result_list)
     accuracies = list(elem[1] for elem in result_list)
+    times = list(elem[1] for elem in result_list)
 
     # Plot data
     title = 'Accuracy over ' + alteration.name() + ' Alteration'
@@ -476,16 +456,13 @@ def approximate_robustness_test(environment: EnvironmentRTest.EnvironmentRTest,
                                     lower_bound, upper_bound)
     results = RobustnessResults(steps, accuracies, robustness, title, xlabel,
                                 ylabel, alteration.name(), accuracy_threshold,
-                                partial_results)
+                                times)
     return results
 
 
 def get_accuracy(environment: EnvironmentRTest.EnvironmentRTest,
                  alteration: Alterations.Alteration,
-                 level: float,
-                 partial_res:
-                 List[Tuple[str, np.ndarray, float, str, float]],
-                 debug: bool) -> float:
+                 level: float) -> Tuple[float, float]:
     """
     Compute the accuracy of the model when an alteration of a defined level is
     applied
@@ -500,26 +477,20 @@ def get_accuracy(environment: EnvironmentRTest.EnvironmentRTest,
             the NN
         level : float
             the level of the alteration to be applied
-        partial_res : List[Tuple[str, np.ndarray, float, str, float]]
-            the list of the partial results
-            [alteration, input, level, class, time]
-        debug: bool
-            a boolean value True when the pickle file has to be stored, False
-            otherwise
 
     Returns
     -------
-        accuracy : float
+        accuracy, time : float, float
             the accuracy of the network and the time required for applying
             the desired alteration level
     """
     successes = 0
     failures = 0
     data_index = 0
+    start_time = datetime.now()
 
     # Fetch all the files
     for thisFile in environment.file_list:
-        start_time = datetime.now()
         inputFile = thisFile
         if isinstance(inputFile, str):
             if environment.reader_f is None:
@@ -538,13 +509,6 @@ def get_accuracy(environment: EnvironmentRTest.EnvironmentRTest,
             if float(p) > float(predicted_prob):
                 predicted_class = str(label)
                 predicted_prob = p
-        end_time = datetime.now()
-
-        # Store the partial results
-        if (debug):
-            partial_res.append((alteration.name(), inputFile, level,
-                                predicted_class,
-                                (end_time-start_time).total_seconds()))
 
         # Real label
         if environment.label_list is not None:
@@ -560,4 +524,7 @@ def get_accuracy(environment: EnvironmentRTest.EnvironmentRTest,
 
         data_index = data_index + 1
 
-    return float(successes) / float(data_index)
+    end_time = datetime.now()
+
+    return float(successes) / float(data_index),\
+        (end_time-start_time).total_seconds()

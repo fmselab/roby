@@ -12,8 +12,7 @@ In particular, the following information are stored:
 
 @author: Andrea Bombarda
 """
-from typing import List, Tuple
-import numpy as np   # type: ignore
+from typing import List
 
 
 class RobustnessResults:
@@ -26,8 +25,7 @@ class RobustnessResults:
                  ylabel: str,
                  alteration_name: str,
                  threshold: float,
-                 partial_res:
-                 List[Tuple[str, np.ndarray, float, str, float]]=None):
+                 times: List[float]=None):
         """
         Constructs all the necessary attributes for the RobustnessResult
         object.
@@ -54,9 +52,8 @@ class RobustnessResults:
                 name of the applied alteration
             threshold : float
                 threshold used for robustness computation
-            partial_res : List[Tuple[str, np.ndarray, float, str, float]]
-                the list of the partial results
-                [alteration, input, level, class, time]
+            times : List[float]
+                list of all the computational times requires for each step
         """
         self.steps = steps
         self.accuracies = accuracies
@@ -66,4 +63,4 @@ class RobustnessResults:
         self.ylabel = ylabel
         self.alteration_name = alteration_name
         self.threshold = threshold
-        self.partial_res = partial_res
+        self.times = times
