@@ -22,4 +22,5 @@ setuptools.setup(
         'matplotlib>=3.0.2',
         'protobuf==3.13.0',
         'typing>=3.7.4',
-        'imutils>=0.5.2'])
+        'imutils>=0.5.2',
+        'sympy'])

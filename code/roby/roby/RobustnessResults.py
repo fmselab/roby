@@ -24,7 +24,8 @@ class RobustnessResults:
                  xlabel: str,
                  ylabel: str,
                  alteration_name: str,
-                 threshold: float):
+                 threshold: float,
+                 times: List[float]=None):
         """
         Constructs all the necessary attributes for the RobustnessResult
         object.
@@ -51,6 +52,8 @@ class RobustnessResults:
                 name of the applied alteration
             threshold : float
                 threshold used for robustness computation
+            times : List[float]
+                list of all the computational times requires for each step
         """
         self.steps = steps
         self.accuracies = accuracies
@@ -60,3 +63,4 @@ class RobustnessResults:
         self.ylabel = ylabel
         self.alteration_name = alteration_name
         self.threshold = threshold
+        self.times = times
