@@ -1,0 +1,279 @@
+"""
+In this **cameraFailures** module we create domain specific alterations,
+taken from this
+[paper](https://github.com/francescosecci/Python_Image_Failures/blob/master/Documenti/Paper.pdf).
+"""
+from roby.Alterations import Alteration
+import cv2   # type: ignore
+from PIL import Image   # type: ignore
+import numpy as np   # type: ignore
+
+
+def change_image_size(max_width, max_height, image):
+    """
+    Converts the size of an image to fit inside another image. It is use to
+    blend two images having the same maximum size.
+    """
+    widthRatio = max_width / image.size[0]
+    heightRatio = max_height / image.size[1]
+
+    new_width = int(widthRatio * image.size[0])
+    new_height = int(heightRatio * image.size[1])
+
+    new_image = image.resize((new_width, new_height))
+    return new_image
+
+
+class RainAlteration_1(Alteration):
+
+    def __init__(self, picture_mode):
+        """
+        Constructs all the necessary attributes for the RainAlteration_1
+        object.
+        It is based on the blending technique, thus it is applied in the range
+        (0,1) where 0 means that the original image is kept, 1 means that the
+        alteration image is kept. Numbers between 0 and 1 creates a blending
+        between the two images, based on the blending factor
+
+        Parameters
+        ----------
+            picture_mode : str
+                    the picture mode used to represent the images in the
+                    np.array. It is 'RGB' by default.
+                    Set this value to 'L' if your image is represented using a
+                    np.array with values float32 and scaled within 0 and 1
+        """
+        super().__init__(0, 0.2)
+        self.picture_mode = picture_mode
+
+    def name(self):
+        """
+        Method to get the alteration name
+
+        Returns
+        -------
+            alterationName : str
+                the name of the alteration type
+        """
+        return "Rain_1"
+
+    def apply_alteration(self, data, alteration_level):
+        """
+        Method that applies the rain with a given value to the image
+
+        Parameters
+        ----------
+            data : np.array
+                the data on which the rain should be applied
+            alterationLevel : float
+                the level of the rain that should be applied. It must be
+                contained in the range given by the get_range method
+
+        Returns
+        -------
+            data : np.array
+                the altered data on which the rain has been applied
+        """
+        assert(isinstance(data, np.ndarray))
+        if float(alteration_level) > 0.000001:
+            # Load the image to be altered
+            if isinstance(data, np.ndarray):
+                if (self.picture_mode == 'RGB'):
+                    data = Image.fromarray(data, 'RGB')
+                elif (self.picture_mode == 'L'):
+                    data = Image.fromarray((data[:, :, 0]*255).astype('uint8'),
+                                           'L')
+                else:
+                    raise RuntimeError("pictureMode not supported for " +
+                                       "brightness alteration")
+
+            # Load the alteration image
+            alteration_img = Image.open(
+                "Python_Image_Failures/rain/rain1.png")
+
+            # Resize the alteration image to the same size of the original one
+            alteration_img = change_image_size(data.size[0], data.size[1],
+                                               alteration_img)
+
+            # Make sure images got an alpha channel
+            alteration_img = alteration_img.convert("RGBA")
+            data = data.convert("RGBA")
+
+            # Blend the two images
+            data = Image.blend(data, alteration_img, alteration_level)
+
+            # Convert the resulting image in np.ndarray
+            data = np.array(data)
+            data = cv2.cvtColor(data, cv2.COLOR_RGB2BGR)
+
+        assert(isinstance(data, np.ndarray))
+        return data
+
+
+class Condensation_1(Alteration):
+
+    def __init__(self, picture_mode):
+        """
+        Constructs all the necessary attributes for the Condensation_1 object.
+        It is based on the blending technique, thus it is applied in the range
+        (0,1) where 0 means that the original image is kept, 1 means that the
+        alteration image is kept. Numbers between 0 and 1 creates a blending
+        between the two images, based on the blending factor
+
+        Parameters
+        ----------
+            picture_mode : str
+                    the picture mode used to represent the images in the
+                    np.array. It is 'RGB' by default. Set this value to 'L'
+                    if your image is represented using a np.array with values
+                    float32 and scaled within 0 and 1
+        """
+        super().__init__(0, 0.2)
+        self.picture_mode = picture_mode
+
+    def name(self):
+        """
+        Method to get the alteration name
+
+        Returns
+        -------
+            alterationName : str
+                the name of the alteration type
+        """
+        return "Condensation_1"
+
+    def apply_alteration(self, data, alteration_level):
+        """
+        Method that applies the Condensation with a given value to the image
+
+        Parameters
+        ----------
+            data : np.array
+                the data on which the Condensation should be applied
+            alterationLevel : float
+                the level of the Condensation that should be applied. It must
+                be contained in the range given by the get_range method
+
+        Returns
+        -------
+            data : np.array
+                the altered data on which the Condensation has been applied
+        """
+        assert(isinstance(data, np.ndarray))
+        if float(alteration_level) > 0.000001:
+            # Load the image to be altered
+            if isinstance(data, np.ndarray):
+                if (self.picture_mode == 'RGB'):
+                    data = Image.fromarray(data, 'RGB')
+                elif (self.picture_mode == 'L'):
+                    data = Image.fromarray((data[:, :, 0]*255).astype('uint8'),
+                                           'L')
+                else:
+                    raise RuntimeError("pictureMode not supported for " +
+                                       "brightness alteration")
+
+            # Load the alteration image
+            alteration_img = Image.open(
+                "Python_Image_Failures/condensation/condensation1.png")
+
+            # Resize the alteration image to the same size of the original one
+            alteration_img = change_image_size(data.size[0], data.size[1],
+                                               alteration_img)
+
+            # Make sure images got an alpha channel
+            alteration_img = alteration_img.convert("RGBA")
+            data = data.convert("RGBA")
+
+            # Blend the two images
+            data = Image.blend(data, alteration_img, alteration_level)
+
+            # Convert the resulting image in np.ndarray
+            data = np.array(data)
+            data = cv2.cvtColor(data, cv2.COLOR_RGB2BGR)
+
+        assert(isinstance(data, np.ndarray))
+        return data
+
+class Ice_1(Alteration):
+
+    def __init__(self, picture_mode):
+        """
+        Constructs all the necessary attributes for the Ice_1 object.
+        It is based on the blending technique, thus it is applied in the range
+        (0,1) where 0 means that the original image is kept, 1 means that the
+        alteration image is kept. Numbers between 0 and 1 creates a blending
+        between the two images, based on the blending factor
+
+        Parameters
+        ----------
+            picture_mode : str
+                    the picture mode used to represent the images in the
+                    np.array. It is 'RGB' by default. Set this value to 'L'
+                    if your image is represented using a np.array with values
+                    float32 and scaled within 0 and 1
+        """
+        super().__init__(0, 0.2)
+        self.picture_mode = picture_mode
+
+    def name(self):
+        """
+        Method to get the alteration name
+
+        Returns
+        -------
+            alterationName : str
+                the name of the alteration type
+        """
+        return "Ice_1"
+
+    def apply_alteration(self, data, alteration_level):
+        """
+        Method that applies the Ice alteration with a given value to the image
+
+        Parameters
+        ----------
+            data : np.array
+                the data on which the Ice alteration should be applied
+            alterationLevel : float
+                the level of the Ice alteration that should be applied. It must
+                be contained in the range given by the get_range method
+
+        Returns
+        -------
+            data : np.array
+                the altered data on which the Ice alteration has been applied
+        """
+        assert(isinstance(data, np.ndarray))
+        if float(alteration_level) > 0.000001:
+            # Load the image to be altered
+            if isinstance(data, np.ndarray):
+                if (self.picture_mode == 'RGB'):
+                    data = Image.fromarray(data, 'RGB')
+                elif (self.picture_mode == 'L'):
+                    data = Image.fromarray((data[:, :, 0]*255).astype('uint8'),
+                                           'L')
+                else:
+                    raise RuntimeError("pictureMode not supported for " +
+                                       "Ice alteration")
+
+            # Load the alteration image
+            alteration_img = Image.open(
+                "Python_Image_Failures/ice/ice3.png")
+
+            # Resize the alteration image to the same size of the original one
+            alteration_img = change_image_size(data.size[0], data.size[1],
+                                               alteration_img)
+
+            # Make sure images got an alpha channel
+            alteration_img = alteration_img.convert("RGBA")
+            data = data.convert("RGBA")
+
+            # Blend the two images
+            data = Image.blend(data, alteration_img, alteration_level)
+
+            # Convert the resulting image in np.ndarray
+            data = np.array(data)
+            data = cv2.cvtColor(data, cv2.COLOR_RGB2BGR)
+
+        assert(isinstance(data, np.ndarray))
+        return data
