@@ -63,40 +63,31 @@ if __name__ == '__main__':
     accuracy_treshold = 0.8
     # load images and labels
     h5_test = H5_data('images/test.h5')
-
-    # Lettura immagini OK
-    # plt.imshow(h5_test.image[100])
-    # plt.show() 
-
-    # labels
-    # print(set(map(lambda x: str(x), h5_test.label)))
-
     
     # get the images in the test data-set
     file_list = h5_test.image
 
     # set the classes
     classes = set_classes('model/Classes.csv')
-
+  
     # load the environment
-    environment = EnvironmentRTest(model, file_list[:1000], classes,
-                                   label_list = h5_test.label[:1000],
+    environment = EnvironmentRTest(model, file_list, classes,
+                                   label_list = h5_test.label,
                                    preprocess_f=pre_processing,
                                    reader_f=reader)
 
     # get the standard behavior of the net
-    accuracy = classification(environment)
-
-
-    """
-    # create the alteration_type as a GaussianNoise with variance 200
-    alteration_type: Alteration = GaussianNoise(0, 1, 200)
+    # accuracy = classification(environment)
+    
+    # create the alteration_type as a GaussianNoise with variance 20
+    alteration_type: Alteration = GaussianNoise(0, 1, 20)
 
     # perform robustness analysis, with 20 points
     results = robustness_test(environment, alteration_type, 20,
                               accuracy_treshold)
     display_robustness_results(results)
 
+    """
     # create the alteration_type as a Blur Variation, with radius = 2
     alteration_type = Blur(0, 1, 2)
 
