@@ -30,7 +30,6 @@ def pre_processing(image):
     """
     imutils.resize(image, width=32)
     image = cv2.resize(image, (32, 32))
-    image = image.astype("float") / 255.0
     image = img_to_array(image)
     image = np.expand_dims(image, axis=0)
     return image
@@ -59,23 +58,20 @@ class H5_data():
 
 if __name__ == '__main__':
     # load the model
-    model = load_model('model/repairedModel.h5')
+    model = load_model('model/originalModel.h5')
     # set the accuracy threshold
     accuracy_treshold = 0.8
     # load images and labels
     h5_test = H5_data('images/test.h5')
 
-    plt.imshow(h5_test.image[100])
-    plt.show() 
-    alteration_type = Brightness(-0.5, 0.5, "L")
-    image = alteration_type.apply_alteration(h5_test.image[100],0.2)
-    plt.imshow(image)
-    plt.show()
-    breakpoint()
+    # Lettura immagini OK
+    # plt.imshow(h5_test.image[100])
+    # plt.show() 
 
-    a = set(map(lambda x: str(x), h5_test.label))
-    print (a)
+    # labels
+    # print(set(map(lambda x: str(x), h5_test.label)))
 
+    
     # get the images in the test data-set
     file_list = h5_test.image
 
@@ -83,14 +79,16 @@ if __name__ == '__main__':
     classes = set_classes('model/Classes.csv')
 
     # load the environment
-    environment = EnvironmentRTest(model, file_list[:10], classes,
-                                   label_list = h5_test.label[:10],
+    environment = EnvironmentRTest(model, file_list[:1000], classes,
+                                   label_list = h5_test.label[:1000],
                                    preprocess_f=pre_processing,
                                    reader_f=reader)
 
     # get the standard behavior of the net
     accuracy = classification(environment)
 
+
+    """
     # create the alteration_type as a GaussianNoise with variance 200
     alteration_type: Alteration = GaussianNoise(0, 1, 200)
 
@@ -138,4 +136,4 @@ if __name__ == '__main__':
     results = robustness_test(environment, alteration_type, 20,
                               accuracy_treshold)
     display_robustness_results(results)
-
+    """
