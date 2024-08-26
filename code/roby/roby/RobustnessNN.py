@@ -366,7 +366,7 @@ def eval_parabola(x1: float, x2: float, threshold: float, minstep: float,
             raise RuntimeError("No parabola approximation is possible using" +
                                " these points")
     else:
-        # If the approximation type is "real", then calculate the parabola
+        # If the approximation type is "appr", then calculate the parabola
         # using the mean value between x1 and x2 for the vertex
         y3 = threshold
         x3 = (x1 + x2) / 2

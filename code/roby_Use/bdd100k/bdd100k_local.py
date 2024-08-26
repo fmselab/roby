@@ -3,7 +3,7 @@ In this **BDD100k identification** example we test the robustness of the
 two NNs, i.e., the original one and the one we repaired usng eAI-Repair-Toolkit
 """
 from keras.models import load_model   # type: ignore
-from roby.RobustnessNN import robustness_test, set_classes,\
+from roby.RobustnessNN import approximate_robustness_test, set_classes,\
     display_robustness_results, classification
 from roby.Alterations import GaussianNoise
 from roby.EnvironmentRTest import EnvironmentRTest
@@ -33,14 +33,6 @@ def pre_processing(image):
     image = img_to_array(image)
     image = np.expand_dims(image, axis=0)
     return image
-
-
-def labeler(image):
-    """
-    Extracts the label from the image file name
-    """
-    real_label = (image.split('.')[0]).split('_')[-1]
-    return real_label
 
 
 class H5_data():
@@ -79,12 +71,13 @@ if __name__ == '__main__':
     # get the standard behavior of the net
     # accuracy = classification(environment)
     
+
     # create the alteration_type as a GaussianNoise with variance 20
-    alteration_type: Alteration = GaussianNoise(0, 1, 20)
+    alteration_type: Alteration = GaussianNoise(0, 0.05, 20)
 
     # perform robustness analysis, with 20 points
-    results = robustness_test(environment, alteration_type, 20,
-                              accuracy_treshold)
+    results = approximate_robustness_test(environment, alteration_type, 20,
+                              accuracy_treshold, 128, "real")
     display_robustness_results(results)
 
     """
