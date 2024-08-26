@@ -7,6 +7,8 @@ from roby.Alterations import Alteration
 import cv2   # type: ignore
 from PIL import Image   # type: ignore
 import numpy as np   # type: ignore
+from PIL import Image, ImageEnhance, ImageFilter
+import skimage as ski
 
 
 def change_image_size(max_width, max_height, image):
@@ -190,6 +192,77 @@ class Condensation_1(Alteration):
             # Convert the resulting image in np.ndarray
             data = np.array(data)
             data = cv2.cvtColor(data, cv2.COLOR_RGB2BGR)
+
+        assert(isinstance(data, np.ndarray))
+        return data
+
+class CustomBrightness(Alteration):
+    """
+    Class defining the Brightness Variation alteration.
+    It is defined as a brightness enhancement of 0.5*alteration_level
+
+    In our experiments we have used (-1, 1, 0.05) as usual range
+    """
+
+    def __init__(self, value_from: float, value_to: float,
+                 picture_mode: str='RGB'):
+        """
+        Constructs all the necessary attributes for the Gaussian Noise object.
+
+        Parameters
+        ----------
+            value_from : float
+                the minimum alteration value that can be applied
+            value_to : float
+                the maximum alteration value that can be applied
+            picture_mode : str, optional
+                the picture mode used to represent the images in the
+                np.ndarray.
+                It is 'RGB' by default.
+                Set this value to 'L' if your image is represented using a
+                np.ndarray with values float32 and scaled within 0 and 1
+        """
+        super().__init__(value_from, value_to)
+        self.picture_mode = picture_mode
+
+    def name(self) -> str:
+        """
+        Method to get the alteration name
+
+        Returns
+        -------
+            alterationName : str
+                the name of the alteration type
+        """
+        return "Brightness"
+
+    def apply_alteration(self, data: np.ndarray,
+                         alteration_level: float) -> np.ndarray:
+        """
+        Method that applies the Brightness Variation with a given value to the
+        data
+
+        Parameters
+        ----------
+            data : np.ndarray
+                the data on which the Brightness Variation should be applied
+            alteration_level : float
+                the level of the Brightness Variation that should be applied.
+                It must be contained in the range
+                given by the get_range method
+
+        Returns
+        -------
+            data : np.ndarray
+                the altered data on which the Brightness Variation has been
+                applied
+        """
+        assert(isinstance(data, np.ndarray))
+        if not (-0.0001 <= float(alteration_level) <= 0.0001):
+            if isinstance(data, np.ndarray):
+                data = ski.exposure.adjust_gamma(data, gain=alteration_level + 1)
+            
+            data = np.array(data)
 
         assert(isinstance(data, np.ndarray))
         return data
