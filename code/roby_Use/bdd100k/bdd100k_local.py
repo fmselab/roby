@@ -11,7 +11,7 @@ from imutils import paths   # type: ignore
 import imutils
 import h5py
 from matplotlib import pyplot as plt
-from cameraFailures import RainAlteration_1, Condensation_1, Ice_1, CustomBrightness
+from cameraFailures import RainAlteration_1, Condensation_1, Ice_1, CustomBrightness, CustomBlur
 import cv2   # type: ignore
 from keras.preprocessing.image import img_to_array   # type: ignore
 import numpy as np   # type: ignore
@@ -223,16 +223,16 @@ if __name__ == '__main__':
     display_robustness_results(results)
     """
     
-    """    
+       
     # create the alteration_type as a Blur Variation, with radius = 2
-    alteration_type = Blur(0, 1, 2, "float64")
+    alteration_type = CustomBlur(0, 0.5, 1, "float64")
 
     # perform robustness analysis, with 20 points
     results = robustness_test_batch(environment, alteration_type, 20,
                               accuracy_treshold)
     display_robustness_results(results)
+
     """
-    
     # create the alteration_type as a Brightness Variation
     alteration_type = CustomBrightness(-1, 1, "float64")
 
@@ -240,7 +240,8 @@ if __name__ == '__main__':
     results = robustness_test_batch(environment, alteration_type, 20,
                               accuracy_treshold)
     display_robustness_results(results)
-
+    """
+    
     """
     # create the alteration_type as a RainAlteration1
     alteration_type: Alteration = RainAlteration_1('L')

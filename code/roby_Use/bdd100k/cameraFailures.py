@@ -9,6 +9,7 @@ from PIL import Image   # type: ignore
 import numpy as np   # type: ignore
 from PIL import Image, ImageEnhance, ImageFilter
 import skimage as ski
+from scipy.ndimage import gaussian_filter
 
 
 def change_image_size(max_width, max_height, image):
@@ -262,6 +263,83 @@ class CustomBrightness(Alteration):
             if isinstance(data, np.ndarray):
                 data = ski.exposure.adjust_gamma(data, gain=alteration_level + 1)
             
+            data = np.array(data)
+
+        assert(isinstance(data, np.ndarray))
+        return data
+
+class CustomBlur(Alteration):
+    """
+    Class defining the blur alteration.
+    The Blur is defined with radius 2 * alteration_level
+
+    In our experiments we have used (0, 1, 0.025) as usual range
+    """
+
+    def __init__(self, value_from: float, value_to: float, radius: float=2,
+                 picture_mode: str='RGB'):
+        """
+        Constructs all the necessary attributes for the Gaussian Noise object.
+
+        Parameters
+        ----------
+            value_from : float
+                the minimum alteration value that can be applied
+            value_to : float
+                the maximum alteration value that can be applied
+            radius : float, optional
+                the radius to be used to apply the blur. Equals to 2 by default
+            picture_mode : str, optional
+                the picture mode used to represent the images in the
+                np.ndarray.
+                It is 'RGB' by default. Set this value to 'L' if your image is
+                represented using a np.ndarray with values float32
+                and scaled within 0 and 1
+        """
+        super().__init__(value_from, value_to)
+        self.radius = radius
+        self.picture_mode = picture_mode
+
+    def name(self) -> str:
+        """
+        Method to get the alteration name
+
+        Returns
+        -------
+            alterationName : str
+                the name of the alteration type
+        """
+        return "Blur"
+
+    def apply_alteration(self, data: np.ndarray,
+                         alteration_level: float) -> np.ndarray:
+        """
+        Method that applies the Blur with a given value to the data
+
+        Parameters
+        ----------
+            data : np.ndarray
+                the data on which the Blur should be applied
+            alteration_level : float
+                the level of the Blur that should be applied. It must be
+                contained in the range given by the
+                get_range method
+
+        Returns
+        -------
+            data : np.ndarray
+                the altered data on which the Blur has been applied
+        """
+        assert(isinstance(data, np.ndarray))
+        if alteration_level != 0.0:
+            if isinstance(data, np.ndarray):
+                if self.picture_mode == 'float64':
+                    data = gaussian_filter(data, sigma=self.radius *
+                                                        alteration_level)
+                else:
+                    raise RuntimeError("pictureMode not supported for blur " +
+                                       "alteration")
+
             data = np.array(data)
 
         assert(isinstance(data, np.ndarray))
