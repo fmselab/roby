@@ -170,14 +170,17 @@ class Condensation_1(Alteration):
                     "condensation alteration")
 
             # Load the alteration image
-            alteration_img = Image.open(
+            alteration_img = cv2.imread(
                 "Python_Image_Failures/condensation/condensation1.png")
+            breakpoint()
 
             # Resize the alteration image to the same size of the original one
-            alteration_img = change_image_size(data.shape[0], data.shape[1],
+            alteration_img = change_image_size(data.size[0], data.size[1],
                                                alteration_img)
-            alteration_img = alteration_img.convert("RGB")
+            #alteration_img = alteration_img.convert("RGB")
             alteration_img = np.array(alteration_img)
+            print (alteration_img.dtype)
+            print (data.dtype)
 
             # Blend the two images
             data = cv2.addWeighted(data, 1, alteration_img, alteration_level, 0)

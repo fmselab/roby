@@ -227,7 +227,7 @@ if __name__ == '__main__':
     evaluate_network = False
     evaluate_robustness = True
     show_preview = True
-    alterations = ["GN"]
+    alterations = ["CO"]
         #["GN", "BL", "BR", "RA", "CO", "IC"]
 
     # load the model
