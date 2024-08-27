@@ -1,21 +1,23 @@
 """
 In this **BDD100k identification** example we test the robustness of the
 two NNs, i.e., the original one and the one we repaired usng eAI-Repair-Toolkit
+
+The test dataset is contained into a ".h5" file, which is loaded and used to
+test the robustness of the two NNs. Input pictures are stored into a np.ndarray
+with shape (n, 32, 32, 3), where n is the number of pictures in the dataset, and
+each element is float64.
 """
 from keras.models import load_model   # type: ignore
-from roby.RobustnessNN import approximate_robustness_test, set_classes,\
-    display_robustness_results, classification, compute_robustness
+from roby.RobustnessNN import set_classes,\
+    display_robustness_results, compute_robustness
 from roby.Alterations import GaussianNoise
 from roby.EnvironmentRTest import EnvironmentRTest
-from imutils import paths   # type: ignore
 import imutils
 import h5py
 from matplotlib import pyplot as plt
 from cameraFailures import RainAlteration_1, Condensation_1, Ice_1, CustomBrightness, CustomBlur
 import cv2   # type: ignore
-from keras.preprocessing.image import img_to_array   # type: ignore
 import numpy as np   # type: ignore
-from roby.Alterations import Blur, Brightness, Alteration
 from typing import List, Tuple
 from datetime import datetime
 from roby.RobustnessResults import RobustnessResults
@@ -79,19 +81,35 @@ def _parse_test_results(test_images, test_labels, results):
     return successes, failures
 
 
-def batch_classification(file_list, model, label_list) -> float:
+def batch_classification(environment: EnvironmentRTest, input_set: np.ndarray) -> float:
+    """
+    Performs a batch classification on a test set with a given model and returns
+    the measured accuracy. It uses a batch size of 1000.
+
+    Parameters
+    ----------
+        environment : EnvironmentRTest
+            the environment containing all the information used to perform
+            robustness analysis
+        input_set : np.ndarray
+            the input set. We do not use that in the environment, since we could
+            apply the alteration to the input set
+
+    Returns
+    -------
+        accuracy : float
+            the accuracy computed with the given model
+    """
     successes = 0
-    failures = 0
-
+    # Predict the test set using a batch size of 1000
     results = model.predict(file_list, verbose=1, batch_size=1000)
-    successes, failures = _parse_test_results(file_list, label_list, results)
-
+    successes, failures = _parse_test_results(input_set, environment.label_list, results)
     n_successes = 0
-
+    # Count the number of successes
     for key in successes.keys():
             n_successes += len(successes[key])
-
-    accuracy = n_successes / file_list.__len__()
+    # Compute the accuracy
+    accuracy = n_successes / input_set.__len__()
     return accuracy
 
 def robustness_test_batch(environment,
@@ -128,7 +146,6 @@ def robustness_test_batch(environment,
     successes = []
     failures = []
     times = []
-    data_index = 0
 
     print ("[" + str(datetime.now()) + "]: Starting alteration " +
            alteration.name())
@@ -139,11 +156,10 @@ def robustness_test_batch(environment,
         times.append(0.0)
 
         step = steps[step_index]   
-        print(environment.file_list.shape) 
         file_list = [alteration.apply_alteration(x, step) for x in environment.file_list]
         file_list = np.array(file_list)
 
-        accuracy = batch_classification(file_list, environment.model, environment.label_list)
+        accuracy = batch_classification(environment, file_list)
         accuracies.append(accuracy)
         
     # Plot data
@@ -162,18 +178,6 @@ def robustness_test_batch(environment,
     return results
 
 
-def pre_processing(image):
-    """
-    Pre-processes the image for classification, in the same way of the pictures
-    used to train the CNN
-    """
-    imutils.resize(image, width=32)
-    image = cv2.resize(image, (32, 32))
-    image = img_to_array(image)
-    image = np.expand_dims(image, axis=0)
-    return image
-
-
 class H5_data():
     def __init__(self, path): 
         self.path = path
@@ -189,17 +193,11 @@ class H5_data():
 
 if __name__ == '__main__':
     # load the model
-    model = load_model('model/originalModel.h5')
+    model = load_model('model/repairedModel.h5')
     # set the accuracy threshold
     accuracy_treshold = 0.8
     # load images and labels
     h5_test = H5_data('images/test.h5')
-
-    # Classification test
-    # print (batch_classification(h5_test.image, model, h5_test.label))
-    
-    # get the images in the test data-set
-    file_list = h5_test.image
 
     # set the classes
     classes = set_classes('model/Classes.csv')
@@ -207,8 +205,10 @@ if __name__ == '__main__':
     # load the environment
     environment = EnvironmentRTest(model, h5_test.image, classes,
                                    label_list = h5_test.label,
-                                   preprocess_f=pre_processing,
                                    reader_f=reader)
+    
+    # get the standard behavior of the net
+    # print (batch_classification(environment, h5_test.image))
 
     # get the standard behavior of the net
     # accuracy = classification(environment)
@@ -223,7 +223,7 @@ if __name__ == '__main__':
     display_robustness_results(results)
     """
     
-       
+    """
     # create the alteration_type as a Blur Variation, with radius = 2
     alteration_type = CustomBlur(0, 0.5, 1, "float64")
 
@@ -231,7 +231,8 @@ if __name__ == '__main__':
     results = robustness_test_batch(environment, alteration_type, 20,
                               accuracy_treshold)
     display_robustness_results(results)
-
+    """   
+    
     """
     # create the alteration_type as a Brightness Variation
     alteration_type = CustomBrightness(-1, 1, "float64")
@@ -250,15 +251,17 @@ if __name__ == '__main__':
     results = robustness_test(environment, alteration_type, 20,
                               accuracy_treshold)
     display_robustness_results(results)
-
+    """
+    
     # create the alteration_type as a Condensation1
     alteration_type = Condensation_1('L')
 
     # perform robustness analysis, with 20 points
-    results = robustness_test(environment, alteration_type, 20,
+    results = robustness_test_batch(environment, alteration_type, 20,
                               accuracy_treshold)
     display_robustness_results(results)
 
+    """
     # create the alteration_type as a Ice1
     alteration_type = Ice_1('L')
 
