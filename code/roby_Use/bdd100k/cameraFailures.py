@@ -165,34 +165,22 @@ class Condensation_1(Alteration):
         assert(isinstance(data, np.ndarray))
         if float(alteration_level) > 0.000001:
             # Load the image to be altered
-            if isinstance(data, np.ndarray):
-                if (self.picture_mode == 'RGB'):
-                    data = Image.fromarray(data, 'RGB')
-                elif (self.picture_mode == 'L'):
-                    data = Image.fromarray((data[:, :, 0]*255).astype('uint8'),
-                                           'L')
-                else:
-                    raise RuntimeError("pictureMode not supported for " +
-                                       "brightness alteration")
+            if not isinstance(data, np.ndarray):
+                raise RuntimeError("pictureMode not supported for " +
+                    "condensation alteration")
 
             # Load the alteration image
             alteration_img = Image.open(
                 "Python_Image_Failures/condensation/condensation1.png")
 
             # Resize the alteration image to the same size of the original one
-            alteration_img = change_image_size(data.size[0], data.size[1],
+            alteration_img = change_image_size(data.shape[0], data.shape[1],
                                                alteration_img)
-
-            # Make sure images got an alpha channel
-            alteration_img = alteration_img.convert("RGBA")
-            data = data.convert("RGBA")
+            alteration_img = alteration_img.convert("RGB")
+            alteration_img = np.array(alteration_img)
 
             # Blend the two images
-            data = Image.blend(data, alteration_img, alteration_level)
-
-            # Convert the resulting image in np.ndarray
-            data = np.array(data)
-            data = cv2.cvtColor(data, cv2.COLOR_RGB2BGR)
+            data = cv2.addWeighted(data, 1, alteration_img, alteration_level, 0)
 
         assert(isinstance(data, np.ndarray))
         return data
