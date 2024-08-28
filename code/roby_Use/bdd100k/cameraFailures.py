@@ -10,6 +10,7 @@ import numpy as np   # type: ignore
 from PIL import Image, ImageEnhance, ImageFilter
 import skimage as ski
 from scipy.ndimage import gaussian_filter
+from keras.preprocessing.image import img_to_array, load_img
 
 
 def change_image_size(max_width, max_height, image):
@@ -17,13 +18,13 @@ def change_image_size(max_width, max_height, image):
     Converts the size of an image to fit inside another image. It is use to
     blend two images having the same maximum size.
     """
-    widthRatio = max_width / image.size[0]
-    heightRatio = max_height / image.size[1]
+    widthRatio = max_width / image.shape[0]
+    heightRatio = max_height / image.shape[1]
 
-    new_width = int(widthRatio * image.size[0])
-    new_height = int(heightRatio * image.size[1])
+    new_width = int(widthRatio * image.shape[0])
+    new_height = int(heightRatio * image.shape[1])
 
-    new_image = image.resize((new_width, new_height))
+    new_image = cv2.resize(image, dsize=(new_width, new_height), interpolation=cv2.INTER_CUBIC)
     return new_image
 
 
@@ -133,6 +134,8 @@ class Condensation_1(Alteration):
         """
         super().__init__(0, 0.2)
         self.picture_mode = picture_mode
+        self.alteration_img = load_img(
+                "Python_Image_Failures/condensation/condensation1.png")
 
     def name(self):
         """
@@ -170,20 +173,15 @@ class Condensation_1(Alteration):
                     "condensation alteration")
 
             # Load the alteration image
-            alteration_img = cv2.imread(
-                "Python_Image_Failures/condensation/condensation1.png")
-            breakpoint()
+            alteration_img = img_to_array(self.alteration_img)
 
             # Resize the alteration image to the same size of the original one
-            alteration_img = change_image_size(data.size[0], data.size[1],
+            alteration_img = change_image_size(data.shape[0], data.shape[1],
                                                alteration_img)
-            #alteration_img = alteration_img.convert("RGB")
-            alteration_img = np.array(alteration_img)
-            print (alteration_img.dtype)
-            print (data.dtype)
+            alteration_img = np.float64(alteration_img)
 
             # Blend the two images
-            data = cv2.addWeighted(data, 1, alteration_img, alteration_level, 0)
+            data = cv2.addWeighted(data, 1 - alteration_level, alteration_img, alteration_level, 0)
 
         assert(isinstance(data, np.ndarray))
         return data

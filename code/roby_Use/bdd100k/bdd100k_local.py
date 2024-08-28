@@ -220,10 +220,12 @@ class H5_data():
 
 if __name__ == '__main__':
     # parameter setting
-    model_name = 'model/originalModel.h5'
+    model_name = 'model/repairedModel.h5'
+                # 'model/originalModel.h5'
     input_set = 'images/test.h5'
     classes_file = 'model/Classes.csv'
-    accuracy_treshold = 0.8
+    label = "[0. 0. 0. 0. 0. 0. 1. 0. 0. 0. 0. 0. 0.]"
+    accuracy_treshold = 0.7
     evaluate_network = False
     evaluate_robustness = True
     show_preview = True
@@ -238,10 +240,22 @@ if __name__ == '__main__':
 
     # set the classes
     classes = set_classes(classes_file)
+
+    # Extract from the test set only images apartaining to the pedestrian category
+    input_set = []
+    labels = []
+    if label is not None:
+        for i in range(len(h5_test.label)):
+            if str(h5_test.label[i]) == label:
+                input_set.append(h5_test.image[i])
+                labels.append(h5_test.label[i])
+    else:
+        input_set = h5_test.image
+        labels = h5_test.label
   
     # load the environment
-    environment = EnvironmentRTest(model, h5_test.image, classes,
-                                   label_list = h5_test.label,
+    environment = EnvironmentRTest(model, input_set, classes,
+                                   label_list = labels,
                                    reader_f=reader)
     
     if evaluate_network:
