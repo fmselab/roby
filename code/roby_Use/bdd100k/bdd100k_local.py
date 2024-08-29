@@ -221,7 +221,7 @@ class H5_data():
 if __name__ == '__main__':
     # parameter setting
     model_name = 'model/repairedModel.h5'
-                # 'model/originalModel.h5'
+        # 'model/originalModel.h5'
     input_set = 'images/test.h5'
     classes_file = 'model/Classes.csv'
     label = "[0. 0. 0. 0. 0. 0. 1. 0. 0. 0. 0. 0. 0.]"
@@ -229,7 +229,7 @@ if __name__ == '__main__':
     evaluate_network = False
     evaluate_robustness = True
     show_preview = True
-    alterations = ["CO"]
+    alterations = ["RA"]
         #["GN", "BL", "BR", "RA", "CO", "IC"]
 
     # load the model
@@ -261,7 +261,7 @@ if __name__ == '__main__':
     if evaluate_network:
         # get the standard behavior of the net
         print("Evaluating network performance on nominal data")
-        accuracy = batch_classification(environment, h5_test.image)
+        accuracy = batch_classification(environment, np.array(input_set))
         print("Accuracy: ", accuracy)
 
     if evaluate_robustness:
