@@ -218,9 +218,162 @@ class H5_data():
             return image, label
 
 
+def tolerance(accuracy: float, threshold: float) -> float:
+    """
+    Computes the tolerance of the error in accuracy w.r.t. the threshold.
+
+    Parameters
+    ----------
+        accuracy : float
+            the accuracy of the model
+        threshold : float
+            the threshold of the accuracy
+
+    Returns
+    -------
+        tolerance : float
+            the tolerance of the accuracy
+    """
+    return 1 if threshold <= accuracy <= 1 else 0
+
+
+def probability(alteration_level: float, la: float, ua: float) -> float:
+    """
+    Computes the probability of the alteration level with a 
+    linear interpolation.
+
+    Parameters
+    ----------
+        alteration_level : float
+            the alteration level
+        la : float
+            the lower bound of the alteration level
+        ua : float
+            the upper bound of the alteration level
+
+    Returns
+    -------
+        probability : float
+            the probability of the alteration level
+    """
+    return 2/((ua - la)**2) * (ua - alteration_level) if la <= alteration_level <= ua else 0
+
+
+def rob_function(accuracy: float, threshold: float, alteration_level: float, la: int, ua: int) -> float:
+    """
+    Computes the robustness function.
+
+    Parameters
+    ----------
+        accuracy : float
+            the accuracy of the model
+        threshold : float
+            the threshold of the accuracy
+        alteration_level : float
+            the alteration level
+        la : float  
+            the lower bound of the alteration level
+        ua : float 
+            the upper bound of the alteration level
+
+    Returns
+    -------
+        rob_function : float
+            the robustness function
+    """
+    return tolerance(accuracy, threshold) * probability(alteration_level, la, ua)
+
+
+def robustness_test_batch_tol_prob(environment: EnvironmentRTest,
+                    alteration: Alteration,
+                    n_values: int,
+                    accuracy_threshold: float):
+    """
+    Executes robustness analysis on a given alteration.
+    It uses a batch classification in order to speed up the robustness computation.
+
+    Parameters
+    ----------
+        environment : EnvironmentRTest
+            the environment containing all the information used to perform
+            robustness analysis
+        alteration : Alteration
+            the alteration w.r.t. the user wants to compute the robustness of
+            the NN
+        n_values : int
+            the number of points in the interval to be used for robustness
+            analysis
+        accuracy_threshold : float
+            acceptable limit of accuracy to calculate the robustness
+    """
+    assert 0.0 <= accuracy_threshold <= 1.0
+    steps = []
+    for step in alteration.get_range(n_values):
+        steps.append(step)
+    accuracies = []
+    successes = []
+    failures = []
+    times = []
+
+    print ("[" + str(datetime.now()) + "]: Starting alteration " +
+           alteration.name())
+
+    for step_index in range(0, len(steps)):
+        successes.append(0)
+        failures.append(0)
+        times.append(0.0)
+
+        step = steps[step_index]   
+        file_list = [alteration.apply_alteration(x, step) for x in environment.file_list]
+        file_list = np.array(file_list)
+
+        accuracy = batch_classification(environment, file_list)
+        accuracies.append(accuracy)
+        
+    print ("[" + str(datetime.now()) + "]: Ending alteration " +
+           alteration.name())
+    
+    # Robustness computation
+    robustness = trap(rob_function, accuracies, accuracy_threshold, steps, 
+                      alteration.value_from, alteration.value_to)
+    print ("Robustness w.r.t. " + alteration.name() + " is: " + str(robustness))
+
+
+def trap(f, accuracies: List[float], threshold: float, steps: List[float], la: float, ua: float) -> float:
+        """
+        Trapezoidal rule for numerical integration.
+
+        Parameters
+        ----------
+            f : function
+                the function to be integrated
+            accuracies : List[float]
+                the accuracies of the model
+            threshold : float
+                the threshold of the accuracy
+            steps : List[float]
+                the steps of the alteration
+            la : float
+                the lower bound of the alteration level
+            ua : float
+                the upper bound of the alteration level
+
+        Returns
+        -------
+            intgr : float
+                the integral of the function
+        """
+        intgr = 0
+        for i in range(0, len(accuracies) - 1):
+            robustess_a = rob_function(accuracies[i], threshold, steps[i], la, ua)
+            robustess_b = rob_function(accuracies[i+1], threshold, steps[i+1], la, ua)
+            intgr = intgr + (0.5 * (robustess_a+robustess_b)*(steps[i+1]-steps[i]))
+        return intgr
+
+
 if __name__ == '__main__':
     # parameter setting
-    model_name = 'model/repairedModel.h5'
+    model_name = 'model/originalModel.h5' # 'model/repairedModel.h5'
         # 'model/originalModel.h5'
     input_set = 'images/test.h5'
     classes_file = 'model/Classes.csv'
@@ -229,7 +382,8 @@ if __name__ == '__main__':
     evaluate_network = False
     evaluate_robustness = True
     show_preview = True
-    alterations = ["RA"]
+
+    alterations = ["GN"]
         #["GN", "BL", "BR", "RA", "CO", "IC"]
 
     # load the model
@@ -297,3 +451,7 @@ if __name__ == '__main__':
             results = robustness_test_batch(environment, alteration_type, 20,
                                     accuracy_treshold)
             display_robustness_results(results)
+
+            # perform robustness analysis using tolerance and probability functions
+            robustness_test_batch_tol_prob(environment, alteration_type, 20,
+                                    0)
