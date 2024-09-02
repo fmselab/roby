@@ -19,6 +19,7 @@ import numpy as np   # type: ignore
 from typing import List, Tuple
 from datetime import datetime
 from roby.RobustnessResults import RobustnessResults
+from typing import Callable
     
 
 def reader(file_name: np.ndarray) -> np.ndarray:
@@ -218,7 +219,27 @@ class H5_data():
             return image, label
 
 
-def tolerance(accuracy: float, threshold: float) -> float:
+def uniform_tolerance(accuracy: float, threshold: float) -> float:
+    """
+    Computes the tolerance of the error in accuracy w.r.t. the threshold,
+    in a uniform way
+
+    Parameters
+    ----------
+        accuracy : float
+            the accuracy of the model
+        threshold : float
+            the threshold of the accuracy
+
+    Returns
+    -------
+        tolerance : float
+            the tolerance of the accuracy
+    """
+    return 1 if threshold <= accuracy <= 1 else 0
+
+
+def linear_tolerance(accuracy: float, threshold: float) -> float:
     """
     Computes the tolerance of the error in accuracy w.r.t. the threshold.
 
@@ -234,7 +255,8 @@ def tolerance(accuracy: float, threshold: float) -> float:
         tolerance : float
             the tolerance of the accuracy
     """
-    return 1 if threshold <= accuracy <= 1 else 0
+    #return 1 if threshold <= accuracy <= 1 else 0
+    return 0 if accuracy > (1 - threshold) else 1 - (accuracy / (1 - threshold))
 
 
 def probability(alteration_level: float, la: float, ua: float) -> float:
@@ -256,10 +278,11 @@ def probability(alteration_level: float, la: float, ua: float) -> float:
         probability : float
             the probability of the alteration level
     """
-    return 2/((ua - la)**2) * (ua - alteration_level) if la <= alteration_level <= ua else 0
+    #return 2/((ua - la)**2) * (ua - abs(alteration_level)) if la <= alteration_level <= ua else 0
+    return 1/(ua - la) if la <= alteration_level <= ua else 0
 
-
-def rob_function(accuracy: float, threshold: float, alteration_level: float, la: int, ua: int) -> float:
+def rob_function(accuracy: float, threshold: float, alteration_level: float, la: int, ua: int, 
+                 probability_function: Callable) -> float:
     """
     Computes the robustness function.
 
@@ -275,19 +298,22 @@ def rob_function(accuracy: float, threshold: float, alteration_level: float, la:
             the lower bound of the alteration level
         ua : float 
             the upper bound of the alteration level
+        probability_function : Callable
+            the probability function to be used for the robustness computation
 
     Returns
     -------
         rob_function : float
             the robustness function
     """
-    return tolerance(accuracy, threshold) * probability(alteration_level, la, ua)
+    return linear_tolerance(accuracy, threshold) * probability_function(alteration_level, la, ua)
 
 
 def robustness_test_batch_tol_prob(environment: EnvironmentRTest,
                     alteration: Alteration,
                     n_values: int,
-                    accuracy_threshold: float):
+                    accuracy_threshold: float,
+                    probability_function: Callable) -> float:
     """
     Executes robustness analysis on a given alteration.
     It uses a batch classification in order to speed up the robustness computation.
@@ -305,6 +331,13 @@ def robustness_test_batch_tol_prob(environment: EnvironmentRTest,
             analysis
         accuracy_threshold : float
             acceptable limit of accuracy to calculate the robustness
+        probability_function : Callable
+            the probability function to be used for the robustness computation
+
+    Returns
+    -------
+        robustness : float
+            the robustness w.r.t. the alteration
     """
     assert 0.0 <= accuracy_threshold <= 1.0
     steps = []
@@ -335,17 +368,18 @@ def robustness_test_batch_tol_prob(environment: EnvironmentRTest,
     
     # Robustness computation
     robustness = trap(rob_function, accuracies, accuracy_threshold, steps, 
-                      alteration.value_from, alteration.value_to)
-    print ("Robustness w.r.t. " + alteration.name() + " is: " + str(robustness))
+                      alteration.value_from, alteration.value_to, probability_function)
+    return robustness
 
 
-def trap(f, accuracies: List[float], threshold: float, steps: List[float], la: float, ua: float) -> float:
+def trap(f: Callable, accuracies: List[float], threshold: float, 
+         steps: List[float], la: float, ua: float, probability_function: Callable) -> float:
         """
         Trapezoidal rule for numerical integration.
 
         Parameters
         ----------
-            f : function
+            f : Callable
                 the function to be integrated
             accuracies : List[float]
                 the accuracies of the model
@@ -357,6 +391,8 @@ def trap(f, accuracies: List[float], threshold: float, steps: List[float], la: f
                 the lower bound of the alteration level
             ua : float
                 the upper bound of the alteration level
+            probability_function : Callable
+                the probability function to be used for the robustness computation
 
         Returns
         -------
@@ -365,26 +401,34 @@ def trap(f, accuracies: List[float], threshold: float, steps: List[float], la: f
         """
         intgr = 0
         for i in range(0, len(accuracies) - 1):
-            robustess_a = rob_function(accuracies[i], threshold, steps[i], la, ua)
-            robustess_b = rob_function(accuracies[i+1], threshold, steps[i+1], la, ua)
+            robustess_a = rob_function(accuracies[i], threshold, steps[i], la, ua, probability_function)
+            robustess_b = rob_function(accuracies[i+1], threshold, steps[i+1], la, ua, probability_function)
             intgr = intgr + (0.5 * (robustess_a+robustess_b)*(steps[i+1]-steps[i]))
         return intgr
 
 
 if __name__ == '__main__':
     # parameter setting
-    model_name = 'model/originalModel.h5' # 'model/repairedModel.h5'
-        # 'model/originalModel.h5'
+    model_name = 'model/originalModel.h5'
+        #'model/originalModel.h5'
     input_set = 'images/test.h5'
     classes_file = 'model/Classes.csv'
-    label = "[0. 0. 0. 0. 0. 0. 1. 0. 0. 0. 0. 0. 0.]"
+    # label = "[0. 0. 0. 0. 0. 0. 1. 0. 0. 0. 0. 0. 0.]"
+    label = None
     accuracy_treshold = 0.7
     evaluate_network = False
     evaluate_robustness = True
-    show_preview = True
+    show_preview = False
 
-    alterations = ["GN"]
+    alterations = ["GN", "BL", "BR", "RA", "CO", "IC"]
         #["GN", "BL", "BR", "RA", "CO", "IC"]
+
+    probability_functions = {"BR": probability,
+                             "GN": probability,
+                             "BL": probability,
+                             "RA": probability,
+                             "CO": probability,
+                             "IC": probability}
 
     # load the model
     model = load_model(model_name)
@@ -448,10 +492,13 @@ if __name__ == '__main__':
                 plt.show()
 
             # perform robustness analysis, with 20 points
+            """
             results = robustness_test_batch(environment, alteration_type, 20,
                                     accuracy_treshold)
             display_robustness_results(results)
+            """
 
             # perform robustness analysis using tolerance and probability functions
-            robustness_test_batch_tol_prob(environment, alteration_type, 20,
-                                    0)
+            robustness = robustness_test_batch_tol_prob(environment, alteration_type, 20,
+                                    0, probability_functions[alt])
+            print("Robustness w.r.t. " + alteration_type.name() + ": " + str(1 - robustness))
